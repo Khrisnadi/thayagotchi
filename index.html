@@ -104,13 +104,17 @@ button{font:inherit;color:inherit}
 .mini-bar b.on{background:var(--mc)}
 .status{margin:2px 0 0;font-size:14px;border-top:2px dashed #ecdff0;padding-top:8px}
 .status b{font-weight:700}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.actions .px-btn{width:calc(100% - var(--b) * 2);min-height:58px;justify-content:flex-start;font-size:16px;padding:8px 10px;gap:8px}
+.actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 2px}
+.actions .px-btn{width:calc(100% - var(--b) * 2);min-height:66px;flex-direction:column;justify-content:center;text-align:center;font-size:15px;padding:8px 4px;gap:4px}
 .actions .px-btn svg{width:26px;height:26px}
 .a-pet{--bg:var(--pink-soft)}
 .a-snack{--bg:var(--butter)}
 .a-nap{--bg:var(--lilac)}
 .a-inbox{--bg:var(--blue-soft)}
+.a-games{--bg:#c9f0dc}
+.a-gym{--bg:#e8e4ee;color:var(--ink-soft)}
+.a-gym svg{opacity:.65}
+.px-btn .badge.wip{background:#f2c94c;color:var(--ink);font-size:9px;min-width:0;padding:0 4px;height:18px;top:-7px;right:-6px}
 .px-btn .badge{position:absolute;top:-8px;right:-8px;min-width:22px;height:22px;padding:0 5px;display:flex;align-items:center;justify-content:center;background:#ff5c93;color:#fff;font-family:var(--font-display);font-size:11px;box-shadow:0 0 0 2px var(--ink)}
 .px-btn .badge[hidden]{display:none}
 .px-btn.need{animation:needpulse 1.2s steps(2) infinite}
@@ -122,7 +126,7 @@ button{font:inherit;color:inherit}
 @media (min-width:901px) and (max-height:760px){
   .side{gap:8px}
   .mood{gap:6px;padding:10px 12px}
-  .actions{grid-template-columns:repeat(4,minmax(0,1fr));gap:2px}
+  .actions{gap:4px 2px}
   .actions .px-btn{flex-direction:column;justify-content:center;gap:4px;min-height:66px;font-size:14px;padding:8px 4px;text-align:center}
   .actions .px-btn svg{width:24px;height:24px}
   .tip{display:none}
@@ -130,8 +134,8 @@ button{font:inherit;color:inherit}
 @media (max-width:900px){
   .stage{grid-template-columns:minmax(0,1fr);gap:12px}
   .side{display:contents}
-  .screen{order:1}.actions{order:2;grid-template-columns:repeat(4,minmax(0,1fr))}.mood{order:3}.tip{order:4}
-  .actions .px-btn{justify-content:center;font-size:16px;min-height:56px}
+  .screen{order:1}.actions{order:2;grid-template-columns:repeat(3,minmax(0,1fr))}.mood{order:3}.tip{order:4}
+  .actions .px-btn{font-size:15px;min-height:60px}
 }
 @media (max-width:480px){.actions .px-btn{flex-direction:column;gap:4px;font-size:14px;padding:8px 4px;min-height:64px}.actions .px-btn svg{width:22px;height:22px}}
 
@@ -268,6 +272,47 @@ button{font:inherit;color:inherit}
 .ib-tab:focus-visible,.ib-btn:focus-visible,.msg-row:focus-visible{outline:3px dashed var(--pink);outline-offset:3px}
 @media (prefers-reduced-motion:reduce){.inbox-panel{transition:none}}
 @media (max-width:480px){.cb{font-size:14px}.msg-row{font-size:13px}.ib-tab,.ib-btn{font-size:12px;padding:5px 7px}}
+.gm-score{font-family:var(--font-display);font-size:10px;color:var(--ink-soft);margin-right:4px;white-space:nowrap}
+.gm-body{gap:10px}
+.gm-menu{display:grid;gap:8px}
+.gm-pick{display:flex;align-items:center;gap:10px;width:100%;border:0;cursor:pointer;text-align:left;background:#fff;color:var(--ink);padding:10px;font-family:var(--font-body);box-shadow:0 0 0 2px var(--ink),0 4px 0 0 var(--ink)}
+.gm-pick:hover{background:#fff6fa}
+.gm-pick:active{transform:translateY(3px);box-shadow:0 0 0 2px var(--ink),0 1px 0 0 var(--ink)}
+.gm-pick svg{flex:none;width:36px;height:30px}
+.gm-pick b{display:block;font-size:15px}
+.gm-pick small{display:block;font-size:12px;color:var(--ink-soft);margin-top:2px}
+.gm-hint{margin:0;font-size:14px;color:var(--ink-soft);text-align:center}
+.rps-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.rps-btn{display:flex;flex-direction:column;align-items:center;gap:4px;border:0;cursor:pointer;background:#fff;color:var(--ink);padding:9px 4px 7px;font-family:var(--font-body);font-weight:700;font-size:13px;box-shadow:0 0 0 2px var(--ink),0 4px 0 0 var(--ink)}
+.rps-btn svg{width:38px;height:34px}
+.rps-btn:hover{background:#fff6fa}
+.rps-btn:disabled{cursor:default;opacity:.55}
+.rps-btn.chosen{background:var(--pink-soft);opacity:1}
+.vs{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;text-align:center}
+.vs .side{display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--font-display);font-size:10px;letter-spacing:1px}
+.vs .side svg{width:52px;height:46px}
+.vs .side.shake svg{animation:rpsshake .3s steps(2) 3}
+.vs .mid{font-family:var(--font-display);font-size:13px}
+@keyframes rpsshake{50%{transform:translateY(-6px)}}
+.gm-result{margin:0;text-align:center;font-family:var(--font-display);font-size:14px;letter-spacing:1px;min-height:1.4em}
+.gm-result.win{color:#2f9a6a}.gm-result.lose{color:#d6456a}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%;max-width:270px;margin:0 auto}
+.card{position:relative;aspect-ratio:3/4;border:0;cursor:pointer;padding:0;background:transparent;font-family:var(--font-display)}
+.card .face,.card .back{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px var(--ink),0 4px 0 0 var(--ink)}
+.card .back{background:repeating-linear-gradient(45deg,#ff9cbc 0 6px,#ffb3cd 6px 12px);}
+.card .back::after{content:'♥';color:#fff;font-size:20px}
+.card .face{background:#fff;flex-direction:column;gap:2px;font-size:22px;display:none}
+.card .face small{font-size:10px;letter-spacing:1px;color:var(--ink-soft)}
+.card.up .face{display:flex}
+.card.up .back{display:none}
+.card.mine .face{box-shadow:0 0 0 2px var(--ink),inset 0 0 0 3px #7d9df0,0 4px 0 0 var(--ink)}
+.card.hers .face{box-shadow:0 0 0 2px var(--ink),inset 0 0 0 3px var(--pink),0 4px 0 0 var(--ink)}
+.card:disabled{cursor:default}
+.card:not(:disabled):hover .back{filter:brightness(1.06)}
+.card.flip{animation:cardflip .35s steps(3)}
+@keyframes cardflip{50%{transform:scaleX(.1)}}
+.rps-btn:focus-visible,.gm-pick:focus-visible,.card:focus-visible{outline:3px dashed var(--pink);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){.vs .side.shake svg,.card.flip{animation:none}}
 .closet-panel{position:absolute;left:50%;top:calc(var(--px) * 15);z-index:44;width:min(330px,calc(100% - 20px));transform:translate(-50%,-12px);opacity:0;transition:transform .2s steps(3),opacity .2s steps(3);
   background:var(--paper);padding:10px 10px 12px;display:grid;gap:8px;
   box-shadow:0 -3px 0 0 var(--ink),0 3px 0 0 var(--ink),-3px 0 0 0 var(--ink),3px 0 0 0 var(--ink),0 9px 0 0 rgba(61,43,79,.22)}
@@ -455,6 +500,11 @@ button{font:inherit;color:inherit}
             <div class="pv-head"><span>PHOTOBOOTH · JOGJA</span><button class="cp-x" id="photoClose" type="button" aria-label="Close photo">&#x2715;</button></div>
             <div class="pv-body"><img id="photoFull" alt="Photobooth strip: Thaya and Kidi in six poses, taken when Thaya visited Kidi in Jogja"></div>
           </div>
+          <div class="inbox-panel game-panel" id="gamePanel" role="dialog" aria-labelledby="gmTitle" hidden>
+            <div class="ib-head"><span class="ib-title" id="gmTitle"><svg viewBox="0 0 9 7" data-icon="pad" aria-hidden="true"></svg>PLAY WITH THAYA</span><span class="gm-score" id="gmScore">YOU 0 · 0 THAYA</span><button class="cp-x" id="gmClose" type="button" aria-label="Close games">&#x2715;</button></div>
+            <div class="ib-body gm-body" id="gmBody" aria-live="polite"></div>
+            <div class="ib-foot" id="gmFoot"></div>
+          </div>
           <div class="inbox-panel" id="inboxPanel" role="dialog" aria-labelledby="ibTitle" hidden>
             <div class="ib-head"><span class="ib-title" id="ibTitle"><svg viewBox="0 0 8 7" data-icon="mail" aria-hidden="true"></svg>THAYA'S PHONE</span><button class="cp-x" id="ibClose" type="button" aria-label="Close inbox">&#x2715;</button></div>
             <div class="ib-tabs" role="tablist" aria-label="Inbox sections"><button class="ib-tab" id="ibTabInbox" role="tab" type="button" aria-selected="true">Messages</button><button class="ib-tab" id="ibTabMem" role="tab" type="button" aria-selected="false">Memories</button></div>
@@ -482,6 +532,8 @@ button{font:inherit;color:inherit}
           <button class="px-btn a-snack" id="actSnack" type="button"><svg viewBox="0 0 8 8" data-icon="cookie"></svg><span>Give Snack</span></button>
           <button class="px-btn a-inbox" id="actInbox" type="button" aria-label="Inbox"><svg viewBox="0 0 8 7" data-icon="mail"></svg><span>Inbox</span><b class="badge" id="inboxBadge" hidden>0</b></button>
           <button class="px-btn a-nap" id="actNap" type="button"><svg viewBox="0 0 8 8" data-icon="moon"></svg><span id="napLabel">Take a Nap</span></button>
+          <button class="px-btn a-games" id="actGames" type="button"><svg viewBox="0 0 9 7" data-icon="pad"></svg><span>Games</span></button>
+          <button class="px-btn a-gym" id="actGym" type="button" aria-label="Gym, work in progress"><svg viewBox="0 0 9 7" data-icon="dumbbell"></svg><span>Gym</span><b class="badge wip" aria-hidden="true">WIP</b></button>
         </div>
         <p class="tip">Tap Thaya to chat, or tap anything in her room to hear its story. Press Pet to cheer her up. The wardrobe changes her outfit.</p>
       </aside>
@@ -529,6 +581,8 @@ const ICONS = {
   anger: { rows: ['XX.XX', 'X...X', '.....', 'X...X', 'XX.XX'], pal: { X: '#e2334f' } },
   drop: { rows: ['..X..', '.XXX.', 'XXXXX', 'XXoXX', '.XXX.'], pal: { X: '#5f9be8', o: '#d8ecff' } },
   phone: { rows: ['XXXXX', 'XoooX', 'XoooX', 'XoooX', 'XoooX', 'XXoXX', 'XXXXX'], pal: { X: '#3d2b4f', o: '#ffc0d3' } },
+  pad: { rows: ['.XXXXXXX.', 'XoooooooX', 'XoXoooaoX', 'XXXXoobbX', 'XoXoooooX', 'XoooXXooX', '.XXX..XX.'], pal: { X: '#2f7d5b', o: '#9be3bf', a: '#ff7fab', b: '#ffd36e' } },
+  dumbbell: { rows: ['XX.....XX', 'XXX...XXX', 'XXXXXXXXX', 'XXX...XXX', 'XX.....XX', '.........', '.........'], pal: { X: '#8f86a3' } },
   mail: { rows: ['XXXXXXXX', 'XooooooX', 'XXooooXX', 'XoXooXoX', 'XooXXooX', 'XooooooX', 'XXXXXXXX'], pal: { X: '#3d6fbf', o: '#ffffff' } },
   logo: { rows: ['...XXXXX...', '..XoooooX..', '.XoXoooXoX.', 'XooooooooX.', 'XoppooopoX.', 'XooohhooooX', '.XoooooooX.', '..XXoooXX..', '....XXX....', '...........', '...........'], pal: { X: '#3d2b4f', o: '#ecd4b6', p: '#ff9cbc', h: '#c2477a' } },
 };
@@ -1325,6 +1379,19 @@ const L = {
     "Kidi, bring cake next time you visit. Yui rules. Not my rules. Okay, my rules.",
   ],
   yuiSnack: ["Yataaa! Snack time is tea time! Thank you~", "Cake? No? Still yummy! Ehehe~ Yataaa!", "Mugi-chan would be proud of this snack. Yataaa!", "Tea time~! Ehehe. This is the best part of band practice."],
+  gameStart: ["Games? Yes! Fair warning: I'm VERY competitive.", "Okay, let's play! Loser buys matcha.", "A challenger appears! Hehe, bring it on.", "Play with me? Finally. I was getting bored."],
+  rpsWin: ["HAH! I win! Bow down.", "Easy. Too easy. Again?", "Yes! Victory dance time!", "I knew you'd pick that. I can read minds. Kidding. Maybe.", "Winner winner, rendang dinner!"],
+  rpsLose: ["Wait, what? No. Rematch. NOW.", "Hmph. You got lucky.", "I let you win. Obviously.", "This game is rigged. I'm telling Mama.", "Okay, okay, you win this one. THIS one."],
+  rpsDraw: ["Same! Great minds think alike. Again!", "A draw?! Okay, again, again!", "Copycat. Again!"],
+  cardPick: ["Hmm... this one. It looks lucky.", "Eeny, meeny, miny... this one!", "I'll take... THIS one.", "My instinct says this card. My instinct is never wrong. Usually."],
+  cardWin: ["My card is bigger! Ha! Bow down.", "Lucky pick! Told you I have the magic touch.", "Higher card wins, and that's ME. Hehe.", "The cards love me. Unlike my thesis."],
+  cardLose: ["Your card is bigger? Cheater. ...Okay, fine, you won.", "Hmph. My cards hate me today.", "That's it, I'm shuffling with my eyes open next time.", "Noooo, so close! Rematch!"],
+  loseStreak: ["Three losses in a row?! Okay, I'm sulking. ...One more game. I WILL win.", "I'm not playing anymore. ...Okay, one more. Just one."],
+  winStreak: ["Three in a row! Call me the champion of Bogor.", "Undefeated! Someone get me a trophy. Or a matcha."],
+  gameBusy: ["Not now, I'm in the middle of something!", "Later, okay? Then I'll destroy you at games. Hehe."],
+  rageGame: ["I don't want to play.", "No games. I'm ANGRY.", "Play by yourself."],
+  gameEnd: ["Good game! Okay, back to my life.", "That was fun. Same time tomorrow?", "GG! I'll train for the rematch."],
+  gymWip: ["The gym? Me? ...Coming soon. Very soon. Maybe.", "Gym is under construction. Like my motivation.", "Work in progress! I'm stretching first. For like a month.", "Gym later. Snacks now. That's the plan."],
   mamaHangUp: ["Kidi, Mama's calling me! I'll call you back, okay? Bye!", "Wait, Mama's calling. Sorry Kidi, gotta go! Bye bye!", "Kidi, hold on, Mama needs me. I'll call you later! Bye!", "Uh oh, Mama's calling. Talk later, Kidi! Bye!"],
   mamaCallBack: ["I should call Kidi back. ...Later. He'll survive.", "Poor Kidi, I hung up on him. I'll text him sorry.", "Okay, Kidi, I'm back. ...Oh right, I hung up. Oops."],
   mamaCall: ["Dedeee!", "Dede! Come here for a sec!", "Dedeee, help Mama for a minute!", "Dede! Where are you?", "Dedeee! Mama needs you!", "Dede, come here, quick!"],
@@ -1750,7 +1817,7 @@ const SNACKS = [
 ];
 const recentLines = [];
 function isYui() { try { return S.outfit === 'yui'; } catch (e) { return false; } }
-const YUI_POOLS = new Set(['happy', 'lovely', 'tapHappy', 'tapLovely', 'attention', 'kidi', 'kidiText', 'callEnd', 'wake', 'greet', 'popculture', 'anime', 'favs', 'cats', 'invite', 'inboxNew']);
+const YUI_POOLS = new Set(['rpsWin', 'cardWin', 'winStreak', 'gameStart', 'happy', 'lovely', 'tapHappy', 'tapLovely', 'attention', 'kidi', 'kidiText', 'callEnd', 'wake', 'greet', 'popculture', 'anime', 'favs', 'cats', 'invite', 'inboxNew']);
 function line(pool, vars) {
   const arr = Array.isArray(pool) ? pool : (L[pool] || L.happy);
   let c = arr.filter((t) => !recentLines.includes(t)); if (!c.length) c = arr;
@@ -2448,6 +2515,7 @@ function updateHud() {
    Activities & behaviour
    ========================================================= */
 let act = { type: 'idle' };
+const GM = { open: false, busy: false, view: 'menu', you: 0, thaya: 0, streak: 0, deck: [], mine: null };
 let poseUntil = 0, nextBehaviorAt = now() + 3000, nextChatAt = now() + 9000, lastHobbyAt = now() - 15000, lastTagSayAt = 0;
 let snackTimes = [], insecureUntil = 0, nextCallAt = now() + rand(45000, 90000), callStartedAt = 0;
 let nextSwingAt = now() + rand(18000, 32000), nextThunderAt = now() + rand(40000, 90000), nextKidiTextAt = now() + rand(150000, 240000);
@@ -2475,6 +2543,7 @@ function statusText() {
     case 'hobby': return act.hobby === 'music' && nowPlaying ? `Listening to ${nowPlaying.title ? '"' + nowPlaying.title + '"' : nowPlaying.artist}` : HOBBY[act.hobby].status;
     case 'sing': return 'Singing along';
     case 'inbox': return 'Reading messages from Kidi';
+    case 'game': return 'Playing games with you';
     case 'bathroom': return bath && bath.kind === 'mama' ? (bath.phase === 'back' ? 'Back from helping Mama' : 'Mama called her ("Dedeee!")') : !bath ? 'Back from the bathroom' : bath.phase === 'back' ? 'Back from the bathroom' : bath.kind === 'poop' ? 'In the bathroom (poop break)' : 'In the bathroom (pee break)';
     case 'startle': return 'Startled';
     case 'dizzy': return 'Dizzy from all the poking';
@@ -2708,6 +2777,7 @@ function pet() {
 }
 function giveSnack(auto) {
   if (!auto) touch();
+  if (GM.open) { if (!auto) say("Snacks after the game! Focus, focus."); return; }
   if (bath) { if (!auto) toast(awayMsg()); return; }
   if (act.type === 'call') { say(line('callBusy')); return; }
   if (rage.active) { SFX.play('angry'); say(line('rageSnack')); return; }
@@ -2773,12 +2843,13 @@ const MAMA_ERRANDS = [
   { t: "Mama just wanted a hug. Okay, that was actually nice.", m: 5 },
 ];
 let lastErrand = -1;
-const mamaOK = () => !rage.active && !bath && !IB.open && !IB.pending && !sleepingNow() && ['idle', 'react', 'hobby'].includes(act.type);
+const mamaOK = () => !rage.active && !bath && !IB.open && !IB.pending && !sleepingNow() && ['idle', 'react', 'hobby', 'game'].includes(act.type);
 // Mama can also call while Thaya is on the phone with Kidi: she hangs up right away and goes
-const mamaDuringCallOK = () => act.type === 'call' && !act.fought && !rage.active && !bath && !IB.open && !IB.pending;
+const mamaDuringCallOK = () => act.type === 'call' && !act.fought && !rage.active && !bath && !IB.open && !IB.pending && !GM.open;
 function mamaCall() {
   const onCall = mamaDuringCallOK();
   if (!onCall && !mamaOK()) return false;
+  if (GM.open) { closeGames(false, false, true); toast('Game paused: Mama is calling!'); }
   if (act.type === 'hobby') act = { type: 'idle' };
   walk.active = false;
   $('#mamaText').textContent = line('mamaCall');
@@ -2803,8 +2874,9 @@ function mamaCall() {
   }, 900);
   return true;
 }
-function canGoBathroom() { return !rage.active && !bath && !IB.open && !IB.pending && ['idle', 'react', 'event', 'refuse'].includes(act.type); }
+function canGoBathroom() { return !rage.active && !bath && !IB.open && !IB.pending && ['idle', 'react', 'event', 'refuse', 'game'].includes(act.type); }
 function startBathroom(kind) {
+  if (GM.open) { closeGames(false, false, true); if (kind !== 'mama') toast('Game paused: bathroom break!'); }
   if (act.type === 'hobby') act = { type: 'idle' };
   bath = { kind, phase: 'out', dur: kind === 'poop' ? 10000 : kind === 'mama' ? rand(5000, 10000) : 5000 };
   startAct('bathroom', 60000, [kind === 'poop' ? pick(F.panic) : pick(F.calm)], 60000, () => { bath = null; $('#brb').classList.remove('show'); thaya.style.visibility = ''; });
@@ -2959,7 +3031,7 @@ function eventPose(name) {
 const EVENT_STATUS = { cringe: 'Cringing at a memory', panic: 'Panicking', furious: 'Angry at the news', sad: 'Feeling down', sulky: 'Grumpy', gesture: 'Excited', lovely: 'Touched', happy: 'Happy news' };
 let lastEventId = '';
 function randomEvent() {
-  const busy = rage.active || !!bath || IB.open || IB.pending || ['sleep', 'sleepin', 'eat', 'call', 'rant', 'dizzy', 'startle', 'refuse', 'event', 'kidi', 'rage', 'sing', 'bathroom', 'inbox'].includes(act.type);
+  const busy = rage.active || !!bath || IB.open || IB.pending || GM.open || ['sleep', 'sleepin', 'eat', 'call', 'rant', 'dizzy', 'startle', 'refuse', 'event', 'kidi', 'rage', 'sing', 'bathroom', 'inbox'].includes(act.type);
   if (busy || Bubble.reading()) { nextSwingAt = now() + rand(6000, 10000); return; }
   if (Math.random() < 0.05 && mamaCall()) return;
   if (Math.random() < 0.10) { enterRage('sudden'); return; }
@@ -3008,7 +3080,7 @@ function singEvent() {
   say(text);
 }
 function kidiCall() {
-  if (rage.active || bath || IB.open || IB.pending || closetOpen || ['call', 'eat', 'rant', 'dizzy', 'startle', 'refuse', 'rage', 'bathroom', 'inbox'].includes(act.type) || Bubble.reading()) { nextCallAt = now() + rand(8000, 14000); return; }
+  if (rage.active || bath || IB.open || IB.pending || GM.open || closetOpen || ['call', 'eat', 'rant', 'dizzy', 'startle', 'refuse', 'rage', 'bathroom', 'inbox'].includes(act.type) || Bubble.reading()) { nextCallAt = now() + rand(8000, 14000); return; }
   const ph = $('#phone'); ph.classList.add('ring'); SFX.play('ring');
   const wasAsleep = sleepingNow();
   if (wasAsleep) setNap(false);
@@ -3076,7 +3148,7 @@ function animTick() {
     }
     if (act.type === 'sleep' && !sleepTalked && t > act.until - 6000 && Math.random() < 0.02) { sleepTalked = true; say(line('sleepTalk')); }
   } else if (t >= poseUntil) { showFrame(idlePose()); poseUntil = t + rand(1800, 4200); }
-  if (isStarving() && !sleepingNow() && !rage.active && !bath && !IB.open && !['call', 'eat', 'bathroom', 'inbox'].includes(act.type) && t >= nextStarveAt) {
+  if (isStarving() && !sleepingNow() && !rage.active && !bath && !IB.open && !GM.open && !['call', 'eat', 'bathroom', 'inbox', 'game'].includes(act.type) && t >= nextStarveAt) {
     nextStarveAt = t + rand(6000, 9000);
     if (act.type === 'hobby') act = { type: 'idle' };
     walk.active = false; hop(14); SFX.play('growl'); SFX.play('angry');
@@ -3086,13 +3158,14 @@ function animTick() {
   } else if (isHungry() && !isStarving() && !sleepingNow() && t - lastGrowlAt > 20000 && Math.random() < 0.02) { lastGrowlAt = t; SFX.play('growl'); }
   if (act.type === 'idle' && !walk.active && t >= nextBehaviorAt) doBehavior();
   if (Bubble.visible && t >= Bubble.hideAt) Bubble.hide();
-  if (!Bubble.visible && t >= nextChatAt && !sleepingNow() && act.type !== 'hobby' && act.type !== 'inbox' && !IB.open && !bath) { nextChatAt = t + rand(9000, 16000); say(poolLine(chatterPool())); }
+  if (!Bubble.visible && t >= nextChatAt && !sleepingNow() && act.type !== 'hobby' && act.type !== 'inbox' && !IB.open && !GM.open && !bath) { nextChatAt = t + rand(9000, 16000); say(poolLine(chatterPool())); }
 }
 function logicTick() {
   if (!F.happy) return;
   const t = now(), ign = (t - lastInteraction) / 1000;
   if (rage.active) { S.mood = Math.min(S.mood, 12); S.tummy -= 0.1; S.energy -= 0.05; }
   else if (act.type === 'call') { S.mood += 2; S.energy -= 0.02; if (Math.random() < 0.004 && t - callStartedAt > 3000) mamaCall(); }
+  if (GM.open && !GM.busy && Math.random() < 0.004) mamaCall();
   else if (act.type === 'sleep') { S.energy += 5; S.mood += 0.25; S.tummy -= 0.05; }
   else if (act.type === 'hobby') {
     S.mood += act.hobby === 'work' ? -0.05 : 0.2; S.energy -= act.hobby === 'work' ? 0.3 : 0.06; S.tummy -= 0.1;
@@ -3105,16 +3178,16 @@ function logicTick() {
     const k = tierOf(S.mood).key;
     if (k === 'sad' || k === 'crying') {
       if (!sadSince) sadSince = t;
-      else if (t - sadSince > 45000 && !['sleep', 'sleepin', 'call', 'eat', 'bathroom', 'inbox'].includes(act.type)) enterRage('sad');
+      else if (t - sadSince > 45000 && !GM.open && !['sleep', 'sleepin', 'call', 'eat', 'bathroom', 'inbox', 'game'].includes(act.type)) enterRage('sad');
     } else sadSince = 0;
   }
-  if (S.energy < 5 && t >= collapseBlockUntil && !sleepingNow() && !rage.active && !bath && !IB.open && !['call', 'eat', 'bathroom', 'inbox'].includes(act.type)) startNap(true);
+  if (S.energy < 5 && t >= collapseBlockUntil && !sleepingNow() && !rage.active && !bath && !IB.open && !GM.open && !['call', 'eat', 'bathroom', 'inbox', 'game'].includes(act.type)) startNap(true);
   if (t >= nextSwingAt) { nextSwingAt = t + rand(18000, 32000); randomEvent(); }
   if (t >= nextMeowAt) { nextMeowAt = t + rand(18000, 45000); greyMeow(false); }
   if (t >= nextVisitAt) { nextVisitAt = t + rand(70000, 150000); catVisit(); }
   if (t >= nextCallAt) { nextCallAt = t + rand(55000, 110000); kidiCall(); }
   if (t >= nextThunderAt) { nextThunderAt = t + rand(45000, 110000); thunder(); }
-  if (t >= nextKidiTextAt) { nextKidiTextAt = t + rand(200000, 320000); if (!kidiSends() && !IB.open) kidiTexts(); }
+  if (t >= nextKidiTextAt) { nextKidiTextAt = t + rand(200000, 320000); if (!kidiSends() && !IB.open && !GM.open) kidiTexts(); }
 }
 
 /* ---------- wardrobe (the closet under the shelf) ---------- */
@@ -3872,7 +3945,7 @@ function kidiSends() {
   deliver(m.id); buzzPhone();
   if (rage.active) { if (!Bubble.reading()) say(line('rageText')); return true; }
   if (sleepingNow()) { if (!Bubble.visible) say('...Kidiii...? ...hehe... zzz...'); return true; }
-  if (!bath && act.type !== 'call' && act.type !== 'inbox' && !Bubble.reading()) { hop(10); say(line('inboxNew')); }
+  if (!bath && !GM.open && act.type !== 'call' && act.type !== 'inbox' && !Bubble.reading()) { hop(10); say(line('inboxNew')); }
   return true;
 }
 // first visit and coming back after a while: messages that arrived "while you were away"
@@ -3964,6 +4037,7 @@ function openInbox() {
   if (act.type === 'call') { say(line('callBusy')); return; }
   if (act.type === 'eat') { say("Let me finish eating first! Then I'll check my phone."); return; }
   if (closetOpen) closeCloset(false);
+  if (GM.open) closeGames(false);
   if (act.type !== 'idle') act = { type: 'idle' };
   // walk over to the phone on the desk, pick it up, then open the inbox
   const ph = $('#phone'), r = ph.getBoundingClientRect(), rr = room.getBoundingClientRect();
@@ -3995,6 +4069,166 @@ function closeInbox(returnFocus) {
   if (returnFocus) $('#actInbox').focus({ preventScroll: true });
 }
 $('#actInbox').addEventListener('click', openInbox);
+/* ---------- games: rock-paper-scissors and higher card ---------- */
+const GM_ICONS = {
+  rock: { rows: ['...XXX...', '.XXoooXX.', 'XoooooxoX', 'XooxooooX', 'XoooooxxX', '.XxooxxX.', '..XXXXX..'], pal: { X: '#5b4f6e', o: '#c6bfd3', x: '#9d94ae' } },
+  paper: { rows: ['.XXXXXXX.', '.XoooooXX', '.XollloXX', '.XoooooX.', '.XollloX.', '.XoooooX.', '.XXXXXXX.'], pal: { X: '#7f9fe0', o: '#ffffff', l: '#c7d6f5' } },
+  scissors: { rows: ['X.....X..', '.X...X...', '..X.X....', '...X.....', '.XXXXX...', 'XooXooX..', '.XX.XX...'], pal: { X: '#d6456a', o: '#ffd6e4' } },
+  cards: { rows: ['.XXXX....', '.XooXXXX.', '.XoXXooX.', '.XoXoXoX.', '.XXXoooX.', '...XoXoX.', '...XXXXX.'], pal: { X: '#3d2b4f', o: '#ff9cbc' } },
+};
+const gmIcon = (k) => `<svg viewBox="0 0 ${GM_ICONS[k].rows[0].length} ${GM_ICONS[k].rows.length}" shape-rendering="crispEdges" aria-hidden="true">${pixelSVG(GM_ICONS[k].rows, GM_ICONS[k].pal)}</svg>`;
+const RPS = ['rock', 'paper', 'scissors'], RPS_BEATS = { rock: 'scissors', paper: 'rock', scissors: 'paper' };
+const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'], SUITS = [['♥', '#e2335f'], ['♦', '#e2335f'], ['♣', '#3d2b4f'], ['♠', '#3d2b4f']];
+const gmPanel = $('#gamePanel'), gmBody = $('#gmBody'), gmFoot = $('#gmFoot');
+function gmScore() { $('#gmScore').textContent = `YOU ${GM.you} · ${GM.thaya} THAYA`; }
+function gmFocus(sel) { setTimeout(() => { const el = gmPanel.querySelector(sel); if (el) el.focus({ preventScroll: true }); }, 30); }
+function gmMenu() {
+  GM.view = 'menu'; GM.busy = false;
+  gmBody.innerHTML = `<div class="gm-menu">
+    <button class="gm-pick" type="button" data-game="rps">${gmIcon('rock')}<span><b>Rock, Paper, Scissors</b><small>Pick your hand. Thaya picks hers.</small></span></button>
+    <button class="gm-pick" type="button" data-game="cards">${gmIcon('cards')}<span><b>Higher Card</b><small>You pick a card, Thaya picks a card. Bigger card wins.</small></span></button>
+  </div><p class="gm-hint">When Thaya wins, her mood goes up. When she loses, it goes down.</p>`;
+  gmFoot.innerHTML = '';
+  gmFocus('.gm-pick');
+}
+// a finished round: update score, mood, Thaya's reaction
+function gmRound(outcome, game) {
+  if (outcome === 'thaya') { GM.thaya++; GM.streak = GM.streak > 0 ? GM.streak + 1 : 1; }
+  else if (outcome === 'you') { GM.you++; GM.streak = GM.streak < 0 ? GM.streak - 1 : -1; }
+  gmScore();
+  const d = outcome === 'thaya' ? Math.round(rand(4, 7)) : outcome === 'you' ? -Math.round(rand(3, 6)) : 1;
+  S.mood += d; S.energy -= 0.6; flashMood(d);
+  const hp = headPoint();
+  let pool;
+  if (outcome === 'thaya') {
+    pool = GM.streak >= 3 ? 'winStreak' : game === 'rps' ? 'rpsWin' : 'cardWin';
+    SFX.play('yay'); hop(16);
+    spawn('star', hp.x, hp.y - M.charH * 0.2, 4, { spread: 40, rise: 50, size: 4 });
+    spawn('heart', hp.x, hp.y - M.charH * 0.1, 2, { spread: 30, rise: 70 });
+    gmPose([pick(F.gesture), pick(F.happy)]);
+  } else if (outcome === 'you') {
+    pool = GM.streak <= -3 ? 'loseStreak' : game === 'rps' ? 'rpsLose' : 'cardLose';
+    SFX.play('sad'); hop(6);
+    if (GM.streak <= -3) spawn('cloud', hp.x + M.charW * 0.32, hp.y - M.charH * 0.25, 1, { spread: 6, rise: 35, drift: 10, dur: 2000, size: 7 });
+    gmPose([pick(GM.streak <= -3 ? F.furious : F.sulky), pick(F.sulky)]);
+  } else { pool = 'rpsDraw'; SFX.play('tap'); hop(8); gmPose([pick(F.surprised), pick(F.calm)]); }
+  if (GM.streak >= 3 || GM.streak <= -3) GM.streak = 0;
+  say(line(pool));
+}
+function gmPose(seq) { if (act.type === 'game') { act.seq = seq; act.i = 0; act.nextFrameAt = 0; } }
+/* rock, paper, scissors */
+function gmRps() {
+  GM.view = 'rps'; GM.busy = false;
+  gmBody.innerHTML = `<p class="gm-hint">Rock, paper, scissors... shoot!</p>
+    <div class="rps-row">${RPS.map((k) => `<button class="rps-btn" type="button" data-rps="${k}">${gmIcon(k)}<span>${k[0].toUpperCase() + k.slice(1)}</span></button>`).join('')}</div>
+    <div class="vs" id="rpsVs" hidden><div class="side" id="rpsYou"></div><div class="mid">VS</div><div class="side" id="rpsHer"></div></div>
+    <p class="gm-result" id="gmResult"></p>`;
+  gmFoot.innerHTML = '<button class="ib-btn" type="button" id="gmBack">‹ Games</button><span></span>';
+  gmFocus('.rps-btn');
+}
+function gmRpsPlay(you) {
+  if (GM.busy) return; GM.busy = true; touch();
+  const her = pick(RPS);
+  gmBody.querySelectorAll('.rps-btn').forEach((b) => { b.disabled = true; b.classList.toggle('chosen', b.dataset.rps === you); });
+  const vs = $('#rpsVs'); vs.hidden = false;
+  $('#rpsYou').innerHTML = `${gmIcon('rock')}<span>YOU</span>`; $('#rpsHer').innerHTML = `${gmIcon('rock')}<span>THAYA</span>`;
+  $('#rpsYou').classList.add('shake'); $('#rpsHer').classList.add('shake');
+  SFX.play('click'); gmPose([pick(F.calm)]);
+  setTimeout(() => {
+    if (!GM.open || GM.view !== 'rps') return;
+    $('#rpsYou').classList.remove('shake'); $('#rpsHer').classList.remove('shake');
+    $('#rpsYou').innerHTML = `${gmIcon(you)}<span>YOU · ${you.toUpperCase()}</span>`;
+    $('#rpsHer').innerHTML = `${gmIcon(her)}<span>THAYA · ${her.toUpperCase()}</span>`;
+    const outcome = you === her ? 'draw' : RPS_BEATS[her] === you ? 'thaya' : 'you';
+    const r = $('#gmResult');
+    r.textContent = outcome === 'draw' ? "IT'S A DRAW!" : outcome === 'you' ? 'YOU WIN!' : 'THAYA WINS!';
+    r.className = 'gm-result ' + (outcome === 'you' ? 'win' : outcome === 'thaya' ? 'lose' : '');
+    gmRound(outcome, 'rps');
+    gmFoot.innerHTML = '<button class="ib-btn" type="button" id="gmBack">‹ Games</button><button class="ib-btn primary" type="button" id="gmAgain">Play again</button>';
+    GM.busy = false; gmFocus('#gmAgain');
+  }, reduceMotion ? 300 : 1000);
+}
+/* higher card */
+function gmCards() {
+  GM.view = 'cards'; GM.busy = false; GM.mine = null;
+  const ranks = shuffle([...Array(13).keys()]).slice(0, 6);
+  GM.deck = ranks.map((v) => ({ v, suit: pick(SUITS) }));
+  gmBody.innerHTML = `<p class="gm-hint" id="cardHint">Pick a card. Thaya picks after you. Bigger card wins!</p>
+    <div class="cards">${GM.deck.map((c, i) => `<button class="card" type="button" data-card="${i}" aria-label="Face-down card ${i + 1}"><span class="back"></span><span class="face" style="color:${c.suit[1]}">${RANKS[c.v]}<span>${c.suit[0]}</span><small></small></span></button>`).join('')}</div>
+    <p class="gm-result" id="gmResult"></p>`;
+  gmFoot.innerHTML = '<button class="ib-btn" type="button" id="gmBack">‹ Games</button><span></span>';
+  gmFocus('.card');
+}
+function flipCard(i, who) {
+  const el = gmBody.querySelector(`[data-card="${i}"]`), c = GM.deck[i];
+  el.classList.add('up', 'flip', who === 'you' ? 'mine' : 'hers'); el.querySelector('small').textContent = who === 'you' ? 'YOU' : 'THAYA';
+  el.setAttribute('aria-label', `${who === 'you' ? 'Your' : "Thaya's"} card: ${RANKS[c.v]} of ${c.suit[0]}`);
+  setTimeout(() => el.classList.remove('flip'), 400); SFX.play('click');
+}
+function gmCardPick(i) {
+  if (GM.busy || GM.mine != null) return; GM.busy = true; touch();
+  GM.mine = i; flipCard(i, 'you');
+  gmBody.querySelectorAll('.card').forEach((b) => { b.disabled = true; });
+  $('#cardHint').textContent = 'Thaya is picking...';
+  gmPose([pick(F.calm)]);
+  setTimeout(() => { if (GM.open && GM.view === 'cards') say(line('cardPick')); }, 300);
+  setTimeout(() => {
+    if (!GM.open || GM.view !== 'cards') return;
+    const rest = GM.deck.map((_, k) => k).filter((k) => k !== i), j = pick(rest);
+    flipCard(j, 'her');
+    setTimeout(() => {
+      if (!GM.open || GM.view !== 'cards') return;
+      const mine = GM.deck[i].v, hers = GM.deck[j].v, outcome = mine > hers ? 'you' : 'thaya';
+      $('#cardHint').textContent = `You: ${RANKS[mine]} · Thaya: ${RANKS[hers]}`;
+      const r = $('#gmResult'); r.textContent = outcome === 'you' ? 'YOU WIN!' : 'THAYA WINS!'; r.className = 'gm-result ' + (outcome === 'you' ? 'win' : 'lose');
+      gmBody.querySelectorAll('.card').forEach((b, k) => { if (k !== i && k !== j) { b.classList.add('up'); b.style.opacity = '.45'; } });
+      gmRound(outcome, 'cards');
+      gmFoot.innerHTML = '<button class="ib-btn" type="button" id="gmBack">‹ Games</button><button class="ib-btn primary" type="button" id="gmAgain">Play again</button>';
+      GM.busy = false; gmFocus('#gmAgain');
+    }, 700);
+  }, 1500);
+}
+function openGames() {
+  touch(); SFX.init();
+  if (GM.open) { closeGames(true); return; }
+  if (!F.happy) return;
+  if (bath) { toast(awayMsg()); return; }
+  if (sleepingNow()) { toast('Thaya is asleep. Play with her after her nap!'); return; }
+  if (rage.active) { SFX.play('angry'); say(line('rageGame')); return; }
+  if (act.type === 'call') { say(line('callBusy')); return; }
+  if (act.type === 'eat' || IB.open || IB.pending) { say(line('gameBusy')); return; }
+  if (closetOpen) closeCloset(false);
+  if (!photoView.hidden) closePhoto(false);
+  walk.active = false;
+  startAct('game', 30 * 60000, [pick(F.happy)], 2200, () => { GM.open && closeGames(false, true); });
+  GM.open = true; gmScore(); gmMenu();
+  gmPanel.hidden = false; requestAnimationFrame(() => gmPanel.classList.add('show'));
+  hop(12); SFX.play('tune'); say(line('gameStart'));
+}
+function closeGames(returnFocus, fromAct, quiet) {
+  if (!GM.open) return;
+  GM.open = false; GM.busy = false; gmPanel.classList.remove('show'); gmPanel.hidden = true;
+  if (!fromAct && act.type === 'game') { act.onEnd = null; endAct(); }
+  if (!quiet && GM.you + GM.thaya > 0 && !Bubble.reading() && !rage.active) say(line('gameEnd'));
+  if (returnFocus) $('#actGames').focus({ preventScroll: true });
+}
+$('#actGames').addEventListener('click', openGames);
+$('#gmClose').addEventListener('click', () => closeGames(true));
+gmPanel.addEventListener('click', (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.game) { touch(); SFX.play('click'); (b.dataset.game === 'rps' ? gmRps : gmCards)(); }
+  else if (b.dataset.rps) gmRpsPlay(b.dataset.rps);
+  else if (b.dataset.card != null && b.classList.contains('card')) gmCardPick(+b.dataset.card);
+  else if (b.id === 'gmBack') { touch(); gmMenu(); gmPose([pick(F.calm)]); }
+  else if (b.id === 'gmAgain') { touch(); (GM.view === 'rps' ? gmRps : gmCards)(); }
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && GM.open) { e.preventDefault(); if (GM.view !== 'menu' && !GM.busy) gmMenu(); else if (!GM.busy) closeGames(true); } });
+$('#actGym').addEventListener('click', () => {
+  touch(); SFX.init(); SFX.play('click');
+  toast('Gym is coming soon! (Work in progress)');
+  if (!bath && !sleepingNow() && !rage.active && act.type !== 'call' && !Bubble.reading()) say(line('gymWip'));
+});
+
 $('#ibClose').addEventListener('click', () => closeInbox(true));
 $('#ibTabInbox').addEventListener('click', () => { IB.tab = 'inbox'; IB.view = 'list'; ibRender(); });
 $('#ibTabMem').addEventListener('click', () => { IB.tab = 'mem'; IB.view = 'list'; ibRender(); });
@@ -4048,7 +4282,7 @@ function fmtAway(ms) { const m = Math.round(ms / 60000); if (m < 60) return `${m
   setTimeout(() => { hop(14); say(greeting); }, 400);
   setInterval(animTick, 100); setInterval(logicTick, 1000); setInterval(save, 5000);
   setTimeout(async () => { const g0 = curGroup(), ak = GROUP_KEYS[g0][1]; try { await loadSheet(ak, SHEET_SRC[ak]); SETS[g0].A = A = buildActSets(ak); } catch (e) { SETS[g0].A = A = null; } sheetsReady = true; }, 600);
-  window.Thaya = { state: S, sheets: Sheets, startHobby: (k) => startHobby(k), event: () => randomEvent(), call: () => kidiCall(), sing: () => singEvent(), rage: () => enterRage('sudden'), bathroom: (k) => startBathroom(k || 'pee'), act: () => act.type, say: (t) => say(t), bgmObj: () => BGM, bgm: () => BGM.ctx && { state: BGM.ctx.state, mode: S.bgm, out: BGM.out.gain.value, rain: BGM.rainBus.gain.value, lofi: BGM.lofiBus.gain.value, step: BGM.step }, meow: () => greyMeow(false), wear: (id) => wearOutfit(id), outfit: () => S.outfit, ready: () => sheetsReady, loadGroup: (g) => ensureGroup(g), sets: SETS, show: (f) => { act = { type: 'idle' }; poseUntil = now() + 4000; showFrame(f); }, visit: (id) => catVisit(id), mama: () => mamaCall(), callNow: () => { nextCallAt = 0; kidiCall(); }, inbox: () => openInbox(), ibState: () => IBS, kidiSends: () => kidiSends(), obj: (id) => { const el = document.querySelector(`[data-obj="${id}"]`); if (el) objTap(id, el); }, visitor: () => visitor && { id: visitor.id, pose: visitor.pose, leaving: !!visitor.leaving } };
+  window.Thaya = { state: S, sheets: Sheets, startHobby: (k) => startHobby(k), event: () => randomEvent(), call: () => kidiCall(), sing: () => singEvent(), rage: () => enterRage('sudden'), bathroom: (k) => startBathroom(k || 'pee'), act: () => act.type, say: (t) => say(t), bgmObj: () => BGM, bgm: () => BGM.ctx && { state: BGM.ctx.state, mode: S.bgm, out: BGM.out.gain.value, rain: BGM.rainBus.gain.value, lofi: BGM.lofiBus.gain.value, step: BGM.step }, meow: () => greyMeow(false), wear: (id) => wearOutfit(id), outfit: () => S.outfit, ready: () => sheetsReady, loadGroup: (g) => ensureGroup(g), sets: SETS, show: (f) => { act = { type: 'idle' }; poseUntil = now() + 4000; showFrame(f); }, visit: (id) => catVisit(id), mama: () => mamaCall(), callNow: () => { nextCallAt = 0; kidiCall(); }, callState: () => act.type, inbox: () => openInbox(), games: () => openGames(), gm: () => GM, ibState: () => IBS, kidiSends: () => kidiSends(), obj: (id) => { const el = document.querySelector(`[data-obj="${id}"]`); if (el) objTap(id, el); }, visitor: () => visitor && { id: visitor.id, pose: visitor.pose, leaving: !!visitor.leaving } };
 })();
 })();
 </script>
