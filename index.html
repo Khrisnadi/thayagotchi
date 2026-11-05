@@ -3426,7 +3426,7 @@ let photoIdx = 0;
     if (document.hidden) return;
     img.classList.add('fade');
     setTimeout(() => { photoIdx = (photoIdx + 1) % PHOTO_TILES.length; img.src = PHOTO_TILES[photoIdx]; img.classList.remove('fade'); }, reduceMotion ? 0 : 500);
-  }, 6000);
+  }, 5 * 60000); // a new photo every 5 minutes
 })();
 const photoView = $('#photoView');
 function openPhoto() {
