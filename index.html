@@ -272,6 +272,14 @@ button{font:inherit;color:inherit}
 .ib-tab:focus-visible,.ib-btn:focus-visible,.msg-row:focus-visible{outline:3px dashed var(--pink);outline-offset:3px}
 @media (prefers-reduced-motion:reduce){.inbox-panel{transition:none}}
 @media (max-width:480px){.cb{font-size:14px}.msg-row{font-size:13px}.ib-tab,.ib-btn{font-size:12px;padding:5px 7px}}
+.fp-body{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:10px 8px 12px}
+.food-opt{display:flex;flex-direction:column;align-items:center;gap:6px;border:0;cursor:pointer;background:#fff;color:var(--ink);padding:10px 4px 9px;font-family:var(--font-body);font-weight:700;font-size:13px;line-height:1.15;text-align:center;box-shadow:0 0 0 2px var(--ink),0 4px 0 0 var(--ink)}
+.food-opt svg{width:64px;height:56px}
+.food-opt:hover{background:#fff6fa}
+.food-opt:active{transform:translateY(3px);box-shadow:0 0 0 2px var(--ink),0 1px 0 0 var(--ink)}
+.food-opt:focus-visible{outline:3px dashed var(--pink);outline-offset:3px}
+.px-btn.refused{filter:grayscale(.85) opacity(.7)}
+@media (max-width:480px){.food-opt svg{width:48px;height:42px}.food-opt{font-size:12px}}
 .gm-score{font-family:var(--font-display);font-size:10px;color:var(--ink-soft);margin-right:4px;white-space:nowrap}
 .gm-body{gap:10px}
 .gm-menu{display:grid;gap:8px}
@@ -501,6 +509,10 @@ button{font:inherit;color:inherit}
           <div class="photo-view" id="photoView" role="dialog" aria-label="Photobooth with Kidi, Jogja" hidden>
             <div class="pv-head"><span>PHOTOBOOTH · JOGJA</span><button class="cp-x" id="photoClose" type="button" aria-label="Close photo">&#x2715;</button></div>
             <div class="pv-body"><img id="photoFull" alt="Photobooth strip: Thaya and Kidi in six poses, taken when Thaya visited Kidi in Jogja"></div>
+          </div>
+          <div class="inbox-panel food-panel" id="foodPanel" role="dialog" aria-labelledby="fpTitle" hidden>
+            <div class="ib-head"><span class="ib-title" id="fpTitle"><svg viewBox="0 0 8 8" data-icon="cookie" aria-hidden="true"></svg>WHAT SHOULD THAYA EAT?</span><button class="cp-x" id="fpClose" type="button" aria-label="Close food menu">&#x2715;</button></div>
+            <div class="fp-body" id="fpBody" role="group" aria-label="Pick a food"></div>
           </div>
           <div class="inbox-panel game-panel" id="gamePanel" role="dialog" aria-labelledby="gmTitle" hidden>
             <div class="ib-head"><span class="ib-title" id="gmTitle"><svg viewBox="0 0 9 7" data-icon="pad" aria-hidden="true"></svg>PLAY WITH THAYA</span><span class="gm-score" id="gmScore">YOU 0 · 0 THAYA</span><button class="cp-x" id="gmClose" type="button" aria-label="Close games">&#x2715;</button></div>
@@ -1394,6 +1406,9 @@ const L = {
   rageGame: ["I don't want to play.", "No games. I'm ANGRY.", "Play by yourself."],
   gameEnd: ["Good game! Okay, back to my life.", "That was fun. Same time tomorrow?", "GG! I'll train for the rematch."],
   gymWip: ["The gym? Me? ...Coming soon. Very soon. Maybe.", "Gym is under construction. Like my motivation.", "Work in progress! I'm stretching first. For like a month.", "Gym later. Snacks now. That's the plan."],
+  foodAsk: ["Food?! Yes! What did you bring?", "Ooh, snack time! Show me the menu.", "Feed me! ...Please. Hehe.", "What are we eating? Choose wisely."],
+  hateFollow: ["Not hungry anymore. Thanks a lot.", "I'm not eating anything from you for a while.", "Hmph. Peanut traitor."],
+  refuseFood: ["No. I'm still mad about the peanuts.", "Not hungry. For you. Give me five seconds.", "Hmph! Ask me again in a bit.", "I'm on a food strike. A short one."],
   mamaHangUp: ["Kidi, Mama's calling me! I'll call you back, okay? Bye!", "Wait, Mama's calling. Sorry Kidi, gotta go! Bye bye!", "Kidi, hold on, Mama needs me. I'll call you later! Bye!", "Uh oh, Mama's calling. Talk later, Kidi! Bye!"],
   mamaCallBack: ["I should call Kidi back. ...Later. He'll survive.", "Poor Kidi, I hung up on him. I'll text him sorry.", "Okay, Kidi, I'm back. ...Oh right, I hung up. Oops."],
   mamaCall: ["Dedeee!", "Dede! Come here for a sec!", "Dedeee, help Mama for a minute!", "Dede! Where are you?", "Dedeee! Mama needs you!", "Dede, come here, quick!"],
@@ -1805,18 +1820,6 @@ function setNowPlaying(tr) {
   scr.style.setProperty('--dur', Math.max(8, t.length * 0.22) + 's');
   scr.classList.add('scroll');
 }
-const SNACKS = [
-  { name: 'matcha latte', kind: 'drink', w: 1.2, boost: 12, line: "MATCHA!! You know me sooo well. I appreciate you a lot." },
-  { name: 'milk tea', kind: 'drink', w: 1.2, boost: 10, line: "Milk tea! Less ice, extra happiness. How did you know??" },
-  { name: 'rendang', kind: 'plate', w: 1, boost: 15, line: "RENDANG?! My favorite food in the whole universe. Okay, I'm emotional now." },
-  { name: 'sushi', kind: 'plate', w: 1, boost: 10, line: "Sushi!! One piece for you, five for me. That's fair." },
-  { name: 'sardines on rice', kind: 'plate', w: 0.8, boost: 8, line: "Sardines on warm rice! Simple, cheap, elite. Don't judge." },
-  { name: 'seblak', kind: 'bowl', w: 1, boost: 9, line: "Seblak! Extra spicy. If I'm not crying, it's not spicy enough." },
-  { name: 'spicy ramen', kind: 'bowl', w: 1, boost: 9, line: "Spicy ramen! My mouth is on fire and I've never been happier." },
-  { name: 'ayam geprek', kind: 'plate', w: 0.8, boost: 9, line: "Ayam geprek, level five. Spicy food is self-care, actually." },
-  { name: 'iced coffee', kind: 'drink', w: 0.6, dislike: true, line: "Coffee? Hmm... no thanks. Matcha is my coffee. Try again 🥲" },
-  { name: 'peanuts', kind: 'bread', w: 0.6, dislike: true, line: "Peanuts?? You KNOW I don't like peanuts. Hmph." },
-];
 const recentLines = [];
 function isYui() { try { return S.outfit === 'yui'; } catch (e) { return false; } }
 const YUI_POOLS = new Set(['rpsWin', 'cardWin', 'winStreak', 'gameStart', 'happy', 'lovely', 'tapHappy', 'tapLovely', 'attention', 'kidi', 'kidiText', 'callEnd', 'wake', 'greet', 'popculture', 'anime', 'favs', 'cats', 'invite', 'inboxNew']);
@@ -2498,7 +2501,7 @@ let hudCache = '';
 function updateHud() {
   S.mood = clamp(S.mood, 0, 100); S.tummy = clamp(S.tummy, 0, 100); S.energy = clamp(S.energy, 0, 100);
   const m = Math.round(S.mood), t = tierOf(S.mood), st = statusText();
-  const key = [m, Math.round(S.tummy / 10), Math.round(S.energy / 10), st, rage.active, act.type === 'sleep' || act.type === 'sleepin'].join('|'); if (key === hudCache) return; hudCache = key;
+  const key = [m, Math.round(S.tummy / 10), Math.round(S.energy / 10), st, rage.active, act.type === 'sleep' || act.type === 'sleepin', now() < refuseFoodUntil].join('|'); if (key === hudCache) return; hudCache = key;
   const on = Math.ceil(m / 5);
   moodSegs.forEach((s, i) => { s.classList.toggle('on', i < on); s.classList.toggle('cur', i === on - 1); });
   $('#moodbar').setAttribute('aria-valuenow', m); $('#moodbar').setAttribute('aria-valuetext', `${m}% ${t.label.toLowerCase()}`);
@@ -2510,6 +2513,7 @@ function updateHud() {
   $('#napLabel').textContent = (act.type === 'sleep' || act.type === 'sleepin') ? 'Wake Her Up' : 'Take a Nap';
   $('#actSnack').classList.toggle('need', isHungry() && !isStarving());
   $('#actSnack').classList.toggle('urgent', isStarving());
+  $('#actSnack').classList.toggle('refused', now() < refuseFoodUntil);
   $('#actNap').classList.toggle('need', isSleepy() && !sleepingNow());
 }
 
@@ -2777,12 +2781,15 @@ function pet() {
   const pool = (prev === 'sulking' || prev === 'fuming') ? 'tapSulky' : (prev === 'sad' || prev === 'crying') ? 'tapSad' : (Math.random() < 0.65 ? 'attention' : (tierNow === 'lovely' ? 'tapLovely' : 'tapHappy'));
   say(line(pool));
 }
-function giveSnack(auto) {
+function giveSnack(auto, food) {
   if (!auto) touch();
+  if (!food && FP.open) { closeFoodPicker(true); return; }
   if (GM.open) { if (!auto) say("Snacks after the game! Focus, focus."); return; }
   if (bath) { if (!auto) toast(awayMsg()); return; }
   if (act.type === 'call') { say(line('callBusy')); return; }
   if (rage.active) { SFX.play('angry'); say(line('rageSnack')); return; }
+  if (now() < refuseFoodUntil) { SFX.play('angry'); hop(4); say(line('refuseFood')); return; }
+  if (IB.open || IB.pending) { say("Let me finish reading first! Then food."); return; }
   const tnow = now();
   snackTimes = snackTimes.filter((x) => tnow - x < 120000);
   if (!auto && snackTimes.length >= 3) {
@@ -2792,15 +2799,20 @@ function giveSnack(auto) {
     startAct('event', 2800, [pick(F.sad)], 2800); act.status = 'Too full';
     say(line('tooFull')); return;
   }
+  if (!food) { if (closetOpen) closeCloset(false); openFoodPicker(); return; }
   const wasAsleep = sleepingNow(); if (wasAsleep) setNap(false);
   if (act.type === 'hobby') act = { type: 'idle' };
   walk.active = false;
-  let snack;
-  { let tot = 0; SNACKS.forEach((s) => { tot += auto && s.dislike ? 0 : s.w; }); let r = Math.random() * tot; snack = SNACKS.find((s) => { r -= auto && s.dislike ? 0 : s.w; return r <= 0; }) || SNACKS[0]; }
-  if (snack.dislike) {
-    S.mood -= 5; SFX.play('sad'); hop(6);
-    startAct('refuse', 2600, [pick(F.sulky)], 2600, () => { poseUntil = 0; });
-    say(snack.line); return;
+  const snack = food;
+  if (snack.hated) {
+    // peanuts: a big mood drop and no food for five seconds
+    const d = -Math.round(rand(18, 26)); S.mood += d; flashMood(d);
+    refuseFoodUntil = now() + 5000;
+    SFX.play('angry'); hop(14);
+    const hp = headPoint(); spawn('anger', hp.x + M.charW * 0.3, hp.y - M.charH * 0.25, 2, { spread: 16, rise: 40, dur: 1300 });
+    startAct('refuse', 3200, [pick(F.furious), pick(F.sulky)], 1600, () => { poseUntil = 0; });
+    act.status = `Refusing the ${snack.name}`;
+    say(snack.line + (wasAsleep ? '' : ' ' + line('hateFollow'))); return;
   }
   const wasStarving = isStarving();
   currentSnack = snack.name;
@@ -2822,7 +2834,7 @@ function giveSnack(auto) {
   if (wasStarving) say(line('saved'), true);
   else if (wasAsleep) say(line('wokeForFood') + ' ' + snack.line);
   else if (auto) say(line('autoSnack'));
-  else if (S.outfit === 'yui' && !snack.dislike && Math.random() < 0.5) say(line('yuiSnack'));
+  else if (S.outfit === 'yui' && Math.random() < 0.5) say(line('yuiSnack'));
   else say(Math.random() < 0.7 ? snack.line : cap + '! ' + line('eatGeneric'));
 }
 function setNap(on) { $('#dim').classList.toggle('on', on); }
@@ -3033,7 +3045,7 @@ function eventPose(name) {
 const EVENT_STATUS = { cringe: 'Cringing at a memory', panic: 'Panicking', furious: 'Angry at the news', sad: 'Feeling down', sulky: 'Grumpy', gesture: 'Excited', lovely: 'Touched', happy: 'Happy news' };
 let lastEventId = '';
 function randomEvent() {
-  const busy = rage.active || !!bath || IB.open || IB.pending || GM.open || ['sleep', 'sleepin', 'eat', 'call', 'rant', 'dizzy', 'startle', 'refuse', 'event', 'kidi', 'rage', 'sing', 'bathroom', 'inbox'].includes(act.type);
+  const busy = rage.active || !!bath || IB.open || IB.pending || GM.open || FP.open || ['sleep', 'sleepin', 'eat', 'call', 'rant', 'dizzy', 'startle', 'refuse', 'event', 'kidi', 'rage', 'sing', 'bathroom', 'inbox'].includes(act.type);
   if (busy || Bubble.reading()) { nextSwingAt = now() + rand(6000, 10000); return; }
   if (Math.random() < 0.05 && mamaCall()) return;
   if (Math.random() < 0.10) { enterRage('sudden'); return; }
@@ -3082,7 +3094,7 @@ function singEvent() {
   say(text);
 }
 function kidiCall() {
-  if (rage.active || bath || IB.open || IB.pending || GM.open || closetOpen || ['call', 'eat', 'rant', 'dizzy', 'startle', 'refuse', 'rage', 'bathroom', 'inbox'].includes(act.type) || Bubble.reading()) { nextCallAt = now() + rand(8000, 14000); return; }
+  if (rage.active || bath || IB.open || IB.pending || GM.open || FP.open || closetOpen || ['call', 'eat', 'rant', 'dizzy', 'startle', 'refuse', 'rage', 'bathroom', 'inbox'].includes(act.type) || Bubble.reading()) { nextCallAt = now() + rand(8000, 14000); return; }
   const ph = $('#phone'); ph.classList.add('ring'); SFX.play('ring');
   const wasAsleep = sleepingNow();
   if (wasAsleep) setNap(false);
@@ -4225,6 +4237,94 @@ gmPanel.addEventListener('click', (e) => {
   else if (b.id === 'gmAgain') { touch(); (GM.view === 'rps' ? gmRps : gmCards)(); }
 });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && GM.open) { e.preventDefault(); if (GM.view !== 'menu' && !GM.busy) gmMenu(); else if (!GM.busy) closeGames(true); } });
+/* ---------- food: three choices every time (two she loves, one she hates) ---------- */
+// little pixel pictures, 16x14
+const FI = {
+  plate: () => P(1, 11, 14, 1, '#dfe6f5') + P(0, 12, 16, 1, '#c3cde3') + P(2, 13, 12, 1, '#9fabc6'),
+  rice: (x = 3) => P(x, 8, 6, 3, '#fbfbf5') + P(x + 1, 7, 4, 1, '#fbfbf5') + P(x, 10, 6, 1, '#e3dfcf') + P(x + 4, 8, 1, 1, '#ece9dc'),
+  bowl: (soup, rim = '#ffffff', body = '#f2f4fa', shade = '#c3cbe0') => P(1, 6, 14, 1, rim) + P(2, 6, 12, 1, soup) + P(1, 7, 14, 2, body) + P(2, 9, 12, 1, body) + P(3, 10, 10, 1, shade) + P(5, 11, 6, 1, shade) + P(4, 12, 8, 1, '#aeb8cf'),
+  glass: (liq, foam, straw = '#ff7fab') => P(4, 2, 1, 11, '#bcd6f5') + P(11, 2, 1, 11, '#bcd6f5') + P(5, 12, 6, 1, '#bcd6f5') + P(5, 4, 6, 8, liq) + P(5, 3, 6, 1, foam) + P(9, 0, 1, 5, straw) + P(10, 0, 1, 1, straw),
+  sauce: (x, y, w) => P(x, y, w, 1, '#a0682e') + P(x + 1, y + 1, w - 2, 1, '#b97d3e') + P(x + 2, y - 1, 1, 1, '#c98f4f'),
+};
+const FOODS = [
+  { name: 'milk tea', kind: 'drink', boost: 12, icon: () => FI.glass('#c79a6b', '#f3e6d6') + P(5, 10, 1, 1, '#3a2a20') + P(7, 11, 1, 1, '#3a2a20') + P(9, 10, 1, 1, '#3a2a20') + P(6, 9, 1, 1, '#3a2a20'), line: "Milk tea! Less ice, extra happiness. How did you know??" },
+  { name: 'matcha latte', kind: 'drink', boost: 14, icon: () => FI.glass('#8fc27a', '#f6f9f0', '#7f9fe0') + P(5, 7, 6, 1, '#a6d391'), line: "MATCHA LATTE!! Milky, green, perfect. You know me sooo well." },
+  { name: 'fresh milk', kind: 'drink', boost: 10, icon: () => FI.glass('#fbfbfb', '#ffffff', '#8db6ef') + P(5, 6, 1, 4, '#eef2f8'), line: "Milk! Cold, fresh milk. Honestly I'm basically a cat." },
+  { name: 'cheesecake', kind: 'bread', boost: 13, icon: () => FI.plate() + P(3, 6, 10, 4, '#f6e3a8') + P(3, 10, 10, 1, '#d9a066') + P(3, 5, 10, 1, '#fff3cf') + P(6, 3, 3, 2, '#e2335f') + P(7, 2, 1, 1, '#4f9d6f'), line: "Cheesecake!! Milk, cheese, and sugar in one slice. This is love." },
+  { name: 'rendang', kind: 'plate', boost: 16, icon: () => FI.plate() + FI.rice(2) + P(9, 8, 3, 3, '#5a2e1a') + P(11, 7, 3, 3, '#6b3a22') + P(10, 7, 1, 1, '#8a4b2a') + P(12, 10, 2, 1, '#4a2414'), line: "RENDANG?! My favorite food in the whole universe. Okay, I'm emotional now." },
+  { name: 'sushi', kind: 'plate', boost: 11, icon: () => FI.plate() + [2, 6, 10].map((x) => P(x, 8, 4, 3, '#fbfbf5') + P(x, 7, 4, 2, '#ff8f6b') + P(x + 1, 7, 1, 1, '#ffd0bd')).join('') + P(2, 10, 12, 1, '#2d3a2e'), line: "Sushi!! One piece for you, five for me. That's fair." },
+  { name: 'sardines on rice', kind: 'plate', boost: 9, icon: () => FI.plate() + FI.rice(2) + P(9, 8, 5, 2, '#d0402f') + P(9, 7, 4, 1, '#9aa4b8') + P(13, 7, 1, 1, '#6f7a90') + P(10, 10, 4, 1, '#b03424'), line: "Sardines on warm rice! Simple, cheap, elite. Don't judge." },
+  { name: 'soto ayam', kind: 'bowl', boost: 12, icon: () => FI.bowl('#f2c94c') + P(3, 5, 3, 2, '#ffffff') + P(4, 5, 1, 1, '#f5b13d') + P(8, 5, 2, 1, '#e8d9b8') + P(11, 5, 1, 1, '#4f9d6f') + P(12, 6, 1, 1, '#4f9d6f') + P(6, 6, 1, 1, '#4f9d6f'), line: "Soto ayam! Warm, yellow, comforting. Rainy Bogor plus soto equals perfection." },
+  { name: 'nasi + petai', kind: 'plate', boost: 10, icon: () => FI.plate() + FI.rice(2) + P(9, 9, 5, 1, '#3f8f4d') + P(9, 8, 5, 1, '#63b25f') + [10, 12].map((x) => P(x, 8, 1, 1, '#b8e07a')).join('') + P(10, 6, 3, 1, '#d0402f'), line: "Petai!! Yes, petai. Don't make that face. It's delicious." },
+  { name: 'semur jengkol', kind: 'plate', boost: 10, icon: () => FI.plate() + FI.rice(2) + [9, 11].map((x) => P(x, 8, 2, 2, '#e8dcc0') + P(x, 7, 2, 1, '#5a3a22')).join('') + P(9, 10, 5, 1, '#4a2a16'), line: "Jengkol! I know, I know. Don't comment on the smell. Just let me be happy." },
+  { name: 'nasi + sambal', kind: 'plate', boost: 11, icon: () => FI.plate() + FI.rice(2) + P(10, 8, 4, 3, '#d63a2a') + P(11, 7, 2, 1, '#e8573f') + P(10, 9, 1, 1, '#f08a3a') + P(8, 9, 2, 2, '#f7d26a'), line: "Rice and sambal. Simple. Perfect. Spicy. That's all I need in life." },
+  { name: 'seblak', kind: 'bowl', boost: 10, icon: () => FI.bowl('#d94a2a') + P(4, 5, 2, 1, '#f0b07a') + P(8, 5, 3, 1, '#f6e3a8') + P(12, 6, 1, 1, '#f2c94c') + P(6, 6, 1, 1, '#ffffff'), line: "Seblak! Extra spicy. If I'm not crying, it's not spicy enough." },
+  { name: 'spicy ramen', kind: 'bowl', boost: 10, icon: () => FI.bowl('#e8693a') + P(3, 5, 9, 1, '#f6d77a') + P(4, 4, 6, 1, '#f6d77a') + P(11, 4, 2, 2, '#ffffff') + P(12, 4, 1, 1, '#f5b13d') + P(13, 0, 1, 6, '#c9a26b') + P(14, 0, 1, 6, '#c9a26b'), line: "Spicy ramen! My mouth is on fire and I've never been happier." },
+  { name: 'ayam geprek', kind: 'plate', boost: 10, icon: () => FI.plate() + FI.rice(2) + P(8, 7, 6, 4, '#d99a3e') + P(9, 6, 4, 1, '#e8b05a') + P(9, 8, 4, 2, '#d63a2a') + P(10, 8, 1, 1, '#f08a3a'), line: "Ayam geprek, level five. Spicy food is self-care, actually." },
+];
+// anything with peanuts or peanut sauce: hard no
+const HATED = [
+  { name: 'batagor', icon: () => FI.plate() + P(2, 8, 4, 3, '#d9a75e') + P(6, 7, 4, 4, '#c98f4f') + P(10, 8, 4, 3, '#d9a75e') + FI.sauce(2, 7, 12), line: "BATAGOR?! With PEANUT sauce?! Are you trying to end me?!" },
+  { name: 'sate ayam bumbu kacang', icon: () => FI.plate() + P(0, 7, 16, 1, '#c9a26b') + [2, 6, 10].map((x) => P(x, 5, 3, 4, '#b8763e')).join('') + FI.sauce(2, 9, 12), line: "Sate with peanut sauce? You know I hate peanuts. You KNOW." },
+  { name: 'gado-gado', icon: () => FI.plate() + P(2, 8, 5, 3, '#63b25f') + P(7, 7, 3, 3, '#f7d26a') + P(7, 7, 3, 1, '#ffffff') + P(10, 8, 4, 3, '#e8dcc0') + FI.sauce(2, 7, 12), line: "Gado-gado?? It's literally vegetables DROWNING in peanut sauce. No. Absolutely not." },
+  { name: 'siomay', icon: () => FI.plate() + [2, 6, 10].map((x) => P(x, 7, 4, 4, '#d9d3c4') + P(x + 1, 6, 2, 1, '#e8e2d4')).join('') + FI.sauce(2, 8, 12), line: "Siomay with peanut sauce... Why would you do this to me." },
+  { name: 'pecel', icon: () => FI.plate() + FI.rice(2) + P(9, 8, 5, 3, '#4f9d6f') + P(9, 7, 4, 1, '#7cc36a') + FI.sauce(8, 8, 6), line: "Pecel? That's peanut sauce with extra steps. Hard pass." },
+  { name: 'ketoprak', icon: () => FI.plate() + P(2, 8, 4, 3, '#f3efe2') + P(6, 7, 4, 3, '#e8c98a') + P(10, 8, 4, 3, '#d9c26a') + FI.sauce(2, 7, 12), line: "Ketoprak?! Peanut sauce again?! Is this a conspiracy?" },
+  { name: 'peanut butter toast', icon: () => FI.plate() + P(3, 4, 10, 7, '#e0b070') + P(4, 5, 8, 5, '#a0682e') + P(3, 3, 3, 1, '#e0b070') + P(10, 3, 3, 1, '#e0b070'), line: "Peanut butter? On toast? In front of me? The audacity." },
+  { name: 'kacang rebus', icon: () => FI.plate() + [2, 5, 8, 11].map((x, i) => P(x, 8 - (i % 2), 3, 2, '#c9a26b') + P(x, 9 - (i % 2), 3, 1, '#a07a45')).join(''), line: "Boiled peanuts?? Who do you think I am?! Hmph!" },
+  { name: 'rempeyek kacang', icon: () => FI.plate() + P(2, 7, 12, 3, '#e8c98a') + [3, 6, 9, 12].map((x) => P(x, 8, 2, 1, '#a0682e')).join(''), line: "Rempeyek... with PEANUTS on it. Crunchy betrayal." },
+];
+// paint food pictures on a small grid, then trace a dark outline around them so they read on white
+let FCAN = null;
+function P(x, y, w, h, c) { for (let j = y; j < y + h; j++) for (let k = x; k < x + w; k++) if (j >= 0 && j < 14 && k >= 0 && k < 16) FCAN[j + 1][k + 1] = c; return ''; }
+const FOOD_SVG_CACHE = {};
+function foodSVG(f) {
+  if (!FOOD_SVG_CACHE[f.name]) {
+    FCAN = Array.from({ length: 16 }, () => Array(18).fill(null));
+    f.icon();
+    const out = FCAN.map((row) => row.slice());
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 18; x++) {
+      if (FCAN[y][x]) continue;
+      if ([[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => FCAN[y + dy] && FCAN[y + dy][x + dx])) out[y][x] = '#3d2b4f';
+    }
+    let svg = '';
+    for (let y = 0; y < 16; y++) { let x = 0; while (x < 18) { const c = out[y][x]; if (!c) { x++; continue; } let e = x; while (e + 1 < 18 && out[y][e + 1] === c) e++; svg += `<rect x="${x}" y="${y}" width="${e - x + 1}" height="1" fill="${c}"/>`; x = e + 1; } }
+    FOOD_SVG_CACHE[f.name] = svg;
+  }
+  return `<svg viewBox="0 0 18 16" shape-rendering="crispEdges" aria-hidden="true">${FOOD_SVG_CACHE[f.name]}</svg>`;
+}
+let FP = { open: false, opts: [], lastNames: [] };
+let refuseFoodUntil = 0;
+function freshPick(list, n, avoid) {
+  const pool = shuffle(list.filter((f) => !avoid.includes(f.name)));
+  return (pool.length >= n ? pool : shuffle(list)).slice(0, n);
+}
+function openFoodPicker() {
+  const liked = freshPick(FOODS, 2, FP.lastNames), hated = freshPick(HATED, 1, FP.lastNames)[0];
+  FP.opts = shuffle([...liked.map((f) => ({ f, hated: false })), { f: hated, hated: true }]);
+  FP.lastNames = FP.opts.map((o) => o.f.name);
+  const body = $('#fpBody');
+  body.innerHTML = FP.opts.map((o, i) => `<button class="food-opt" type="button" data-food="${i}">${foodSVG(o.f)}<span>${o.f.name.replace(/\b\w/g, (c) => c.toUpperCase())}</span></button>`).join('');
+  FP.open = true;
+  const p = $('#foodPanel'); p.hidden = false; requestAnimationFrame(() => p.classList.add('show'));
+  SFX.play('click');
+  if (!Bubble.reading()) say(line('foodAsk'));
+  setTimeout(() => { const b = body.querySelector('.food-opt'); if (b) b.focus({ preventScroll: true }); }, 30);
+}
+function closeFoodPicker(returnFocus) {
+  if (!FP.open) return;
+  FP.open = false; const p = $('#foodPanel'); p.classList.remove('show'); p.hidden = true;
+  if (returnFocus) $('#actSnack').focus({ preventScroll: true });
+}
+$('#fpClose').addEventListener('click', () => closeFoodPicker(true));
+$('#fpBody').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-food]'); if (!b) return;
+  const o = FP.opts[+b.dataset.food]; closeFoodPicker(false);
+  if (o) giveSnack(false, o.hated ? Object.assign({ hated: true }, o.f) : o.f);
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && FP.open) { e.preventDefault(); closeFoodPicker(true); } });
+document.addEventListener('pointerdown', (e) => { if (FP.open && !e.target.closest('#foodPanel, #actSnack')) closeFoodPicker(false); });
+
 $('#actGym').addEventListener('click', () => {
   touch(); SFX.init(); SFX.play('click');
   toast('Gym is coming soon! (Work in progress)');
@@ -4284,7 +4384,7 @@ function fmtAway(ms) { const m = Math.round(ms / 60000); if (m < 60) return `${m
   setTimeout(() => { hop(14); say(greeting); }, 400);
   setInterval(animTick, 100); setInterval(logicTick, 1000); setInterval(save, 5000);
   setTimeout(async () => { const g0 = curGroup(), ak = GROUP_KEYS[g0][1]; try { await loadSheet(ak, SHEET_SRC[ak]); SETS[g0].A = A = buildActSets(ak); } catch (e) { SETS[g0].A = A = null; } sheetsReady = true; }, 600);
-  window.Thaya = { state: S, sheets: Sheets, startHobby: (k) => startHobby(k), event: () => randomEvent(), call: () => kidiCall(), sing: () => singEvent(), rage: () => enterRage('sudden'), bathroom: (k) => startBathroom(k || 'pee'), act: () => act.type, say: (t) => say(t), bgmObj: () => BGM, bgm: () => BGM.ctx && { state: BGM.ctx.state, mode: S.bgm, out: BGM.out.gain.value, rain: BGM.rainBus.gain.value, lofi: BGM.lofiBus.gain.value, step: BGM.step }, meow: () => greyMeow(false), wear: (id) => wearOutfit(id), outfit: () => S.outfit, ready: () => sheetsReady, loadGroup: (g) => ensureGroup(g), sets: SETS, show: (f) => { act = { type: 'idle' }; poseUntil = now() + 4000; showFrame(f); }, visit: (id) => catVisit(id), mama: () => mamaCall(), callNow: () => { nextCallAt = 0; kidiCall(); }, callState: () => act.type, inbox: () => openInbox(), games: () => openGames(), gm: () => GM, ibState: () => IBS, kidiSends: () => kidiSends(), obj: (id) => { const el = document.querySelector(`[data-obj="${id}"]`); if (el) objTap(id, el); }, visitor: () => visitor && { id: visitor.id, pose: visitor.pose, leaving: !!visitor.leaving } };
+  window.Thaya = { state: S, sheets: Sheets, startHobby: (k) => startHobby(k), event: () => randomEvent(), call: () => kidiCall(), sing: () => singEvent(), rage: () => enterRage('sudden'), bathroom: (k) => startBathroom(k || 'pee'), act: () => act.type, say: (t) => say(t), bgmObj: () => BGM, bgm: () => BGM.ctx && { state: BGM.ctx.state, mode: S.bgm, out: BGM.out.gain.value, rain: BGM.rainBus.gain.value, lofi: BGM.lofiBus.gain.value, step: BGM.step }, meow: () => greyMeow(false), wear: (id) => wearOutfit(id), outfit: () => S.outfit, ready: () => sheetsReady, loadGroup: (g) => ensureGroup(g), sets: SETS, show: (f) => { act = { type: 'idle' }; poseUntil = now() + 4000; showFrame(f); }, visit: (id) => catVisit(id), mama: () => mamaCall(), callNow: () => { nextCallAt = 0; kidiCall(); }, callState: () => act.type, inbox: () => openInbox(), fp: () => FP, allFoods: () => [...FOODS, ...HATED].map((f) => `<div style="width:96px;text-align:center;font:11px monospace">${foodSVG(f).replace('<svg ', '<svg width="80" height="70" ')}<br>${f.name}</div>`).join(''), games: () => openGames(), gm: () => GM, ibState: () => IBS, kidiSends: () => kidiSends(), obj: (id) => { const el = document.querySelector(`[data-obj="${id}"]`); if (el) objTap(id, el); }, visitor: () => visitor && { id: visitor.id, pose: visitor.pose, leaving: !!visitor.leaving } };
 })();
 })();
 </script>
