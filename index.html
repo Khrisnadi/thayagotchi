@@ -55,6 +55,8 @@ button{font:inherit;color:inherit}
 
 .wrap{max-width:1240px;margin:0 auto;padding:14px 18px 28px;display:grid;gap:12px}
 .top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.top-btns{display:flex;flex-wrap:wrap;gap:4px}
+#btnBgm{min-width:13.5em}
 .logo{display:flex;align-items:center;gap:12px}
 .logo-mark{width:44px;height:44px;flex:none}
 .logo h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:clamp(22px,4vw,32px);letter-spacing:1px;line-height:1}
@@ -87,12 +89,15 @@ button{font:inherit;color:inherit}
 .mini-bar b.on{background:var(--mc)}
 .status{margin:2px 0 0;font-size:14px;border-top:2px dashed #ecdff0;padding-top:8px}
 .status b{font-weight:700}
-.actions{display:grid;grid-template-columns:1fr;gap:6px}
-.actions .px-btn{width:calc(100% - var(--b) * 2);min-height:56px;justify-content:flex-start;font-size:18px;padding:8px 16px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.actions .px-btn{width:calc(100% - var(--b) * 2);min-height:58px;justify-content:flex-start;font-size:16px;padding:8px 10px;gap:8px}
 .actions .px-btn svg{width:26px;height:26px}
 .a-pet{--bg:var(--pink-soft)}
 .a-snack{--bg:var(--butter)}
 .a-nap{--bg:var(--lilac)}
+.a-inbox{--bg:var(--blue-soft)}
+.px-btn .badge{position:absolute;top:-8px;right:-8px;min-width:22px;height:22px;padding:0 5px;display:flex;align-items:center;justify-content:center;background:#ff5c93;color:#fff;font-family:var(--font-display);font-size:11px;box-shadow:0 0 0 2px var(--ink)}
+.px-btn .badge[hidden]{display:none}
 .px-btn.need{animation:needpulse 1.2s steps(2) infinite}
 .px-btn.urgent{animation:urgentpulse .45s steps(2) infinite}
 @keyframes needpulse{50%{filter:brightness(1.1) saturate(1.35)}}
@@ -102,7 +107,7 @@ button{font:inherit;color:inherit}
 @media (min-width:901px) and (max-height:760px){
   .side{gap:8px}
   .mood{gap:6px;padding:10px 12px}
-  .actions{grid-template-columns:repeat(3,minmax(0,1fr));gap:2px}
+  .actions{grid-template-columns:repeat(4,minmax(0,1fr));gap:2px}
   .actions .px-btn{flex-direction:column;justify-content:center;gap:4px;min-height:66px;font-size:14px;padding:8px 4px;text-align:center}
   .actions .px-btn svg{width:24px;height:24px}
   .tip{display:none}
@@ -110,7 +115,7 @@ button{font:inherit;color:inherit}
 @media (max-width:900px){
   .stage{grid-template-columns:minmax(0,1fr);gap:12px}
   .side{display:contents}
-  .screen{order:1}.actions{order:2;grid-template-columns:repeat(3,minmax(0,1fr))}.mood{order:3}.tip{order:4}
+  .screen{order:1}.actions{order:2;grid-template-columns:repeat(4,minmax(0,1fr))}.mood{order:3}.tip{order:4}
   .actions .px-btn{justify-content:center;font-size:16px;min-height:56px}
 }
 @media (max-width:480px){.actions .px-btn{flex-direction:column;gap:4px;font-size:14px;padding:8px 4px;min-height:64px}.actions .px-btn svg{width:22px;height:22px}}
@@ -131,11 +136,7 @@ button{font:inherit;color:inherit}
   background-size:calc(var(--px) * 8) calc(var(--px) * 8);image-rendering:pixelated}
 .wainscot{position:absolute;left:0;right:0;bottom:0;height:36%;background:var(--wains);border-top:calc(var(--px) * 2) solid var(--trim);box-shadow:0 calc(var(--px) * -1) 0 #d9d6e4;
   background-image:repeating-linear-gradient(90deg,transparent 0 calc(var(--px) * 21),var(--wains-line) calc(var(--px) * 21) calc(var(--px) * 22))}
-.lights{position:absolute;left:0;right:0;top:0;height:calc(var(--px) * 14);z-index:3}
-.lights svg{position:absolute;inset:0;width:100%;height:100%}
-.bulb{position:absolute;width:calc(var(--px) * 2);height:calc(var(--px) * 3);background:var(--bc);box-shadow:0 0 0 1px rgba(61,43,79,.35);animation:twinkle 2.4s steps(2) infinite;animation-delay:var(--d)}
-.room.night .bulb{box-shadow:0 0 calc(var(--px) * 3) var(--bc),0 0 0 1px rgba(61,43,79,.35)}
-@keyframes twinkle{50%{opacity:.45}}
+.ac{position:absolute;left:calc(50% - var(--px) * 18);top:calc(var(--px) * .5);width:calc(var(--px) * 36);height:calc(var(--px) * 9.5);z-index:4}
 .win{position:absolute;left:50%;top:calc(var(--px) * 14);width:calc(var(--px) * 60);height:calc(var(--px) * 46);transform:translateX(-50%);z-index:2}
 .win > svg{position:absolute;inset:0;width:100%;height:100%}
 .glass{position:absolute;left:6.667%;top:6.52%;width:86.67%;height:80.4%;overflow:hidden}
@@ -207,6 +208,40 @@ button{font:inherit;color:inherit}
 .closet-door.l i{right:calc(var(--px) * 3)}
 .closet-door.r i{left:calc(var(--px) * 3)}
 .closet.open .closet-door{transform:scaleX(.18)}
+.inbox-panel{position:absolute;right:10px;top:calc(var(--px) * 13);z-index:44;width:min(350px,calc(100% - 20px));max-height:calc(100% - var(--px) * 28);display:flex;flex-direction:column;
+  background:var(--paper);opacity:0;transform:translateY(-12px);transition:transform .2s steps(3),opacity .2s steps(3);
+  box-shadow:0 -3px 0 0 var(--ink),0 3px 0 0 var(--ink),-3px 0 0 0 var(--ink),3px 0 0 0 var(--ink),0 9px 0 0 rgba(61,43,79,.22)}
+.inbox-panel.show{opacity:1;transform:none}
+.inbox-panel[hidden]{display:none}
+.ib-head{display:flex;align-items:center;gap:6px;padding:8px 8px 7px;border-bottom:2px dashed #ecdff0;flex:none}
+.ib-title{font-family:var(--font-display);font-size:12px;margin-right:auto;display:flex;align-items:center;gap:6px}
+.ib-title svg{width:16px;height:16px}
+.ib-tabs{display:flex;gap:6px;padding:8px 8px 0;flex:none}
+.ib-tab,.ib-btn{border:0;cursor:pointer;font-family:var(--font-body);font-weight:700;font-size:13px;padding:6px 9px;background:#f4effb;color:var(--ink);box-shadow:0 0 0 2px var(--ink)}
+.ib-tab[aria-selected="true"]{background:var(--pink-soft)}
+.ib-btn.primary{background:var(--pink-soft)}
+.ib-btn[aria-pressed="true"]{background:#ffd6e4;box-shadow:0 0 0 2px var(--ink),inset 0 0 0 2px var(--pink)}
+.ib-btn:disabled{opacity:.55;cursor:default}
+.ib-body{overflow:auto;padding:8px;display:grid;gap:7px;align-content:start;min-height:120px}
+.msg-row{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:8px;align-items:center;width:100%;border:0;text-align:left;cursor:pointer;background:#fff;color:var(--ink);padding:8px 9px;font-family:var(--font-body);font-size:14px;box-shadow:0 0 0 2px var(--ink)}
+.msg-row:hover{background:#fff6fa}
+.msg-row .dot{width:8px;height:8px}
+.msg-row.unread .dot{background:var(--pink)}
+.msg-row .pv{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msg-row.unread .pv{font-weight:700}
+.msg-row .meta{font-size:11px;color:var(--ink-soft);white-space:nowrap}
+.ib-empty{margin:6px 2px;font-size:14px;color:var(--ink-soft);line-height:1.4}
+.ib-foot{display:flex;gap:6px;justify-content:space-between;padding:0 8px 9px;flex:none}
+.ib-foot:empty{display:none}
+.chat{display:grid;gap:9px}
+.cb{max-width:88%;padding:8px 10px 9px;font-size:15px;line-height:1.35;box-shadow:0 0 0 2px var(--ink);overflow-wrap:anywhere}
+.cb small{display:block;font-family:var(--font-display);font-size:9px;letter-spacing:1px;color:var(--ink-soft);margin-bottom:3px}
+.cb.from{justify-self:start;background:#ffe3ee}
+.cb.reply{justify-self:end;background:#e6ddff}
+.chip{justify-self:start;font-family:var(--font-display);font-size:9px;letter-spacing:1px;background:var(--butter);padding:3px 7px;box-shadow:0 0 0 2px var(--ink)}
+.ib-tab:focus-visible,.ib-btn:focus-visible,.msg-row:focus-visible{outline:3px dashed var(--pink);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){.inbox-panel{transition:none}}
+@media (max-width:480px){.cb{font-size:14px}.msg-row{font-size:13px}.ib-tab,.ib-btn{font-size:12px;padding:5px 7px}}
 .closet-panel{position:absolute;left:50%;top:calc(var(--px) * 15);z-index:44;width:min(330px,calc(100% - 20px));transform:translate(-50%,-12px);opacity:0;transition:transform .2s steps(3),opacity .2s steps(3);
   background:var(--paper);padding:10px 10px 12px;display:grid;gap:8px;
   box-shadow:0 -3px 0 0 var(--ink),0 3px 0 0 var(--ink),-3px 0 0 0 var(--ink),3px 0 0 0 var(--ink),0 9px 0 0 rgba(61,43,79,.22)}
@@ -244,7 +279,7 @@ button{font:inherit;color:inherit}
 @keyframes spin{to{transform:rotate(360deg)}}
 .laptop{left:16%;width:calc(var(--px) * 26);height:calc(var(--px) * 16)}
 .mug{right:15%;width:calc(var(--px) * 10);height:calc(var(--px) * 10)}
-.phone{right:24%;width:calc(var(--px) * 7);height:calc(var(--px) * 11)}
+.phone{left:calc(16% + var(--px) * 30);width:calc(var(--px) * 7);height:calc(var(--px) * 11)}
 .phone.buzz svg{animation:buzz .12s steps(2) 8}
 @keyframes buzz{50%{transform:translateX(calc(var(--px) * 1))}}
 .notif{position:absolute;bottom:calc(100% + var(--px) * 2);left:50%;transform:translateX(-50%) scale(0);transform-origin:50% 100%;white-space:nowrap;font-family:var(--font-display);font-size:calc(var(--px) * 2.4);background:#fff;padding:calc(var(--px) * 1) calc(var(--px) * 1.5);box-shadow:0 0 0 calc(var(--px) * .5) var(--ink);display:flex;gap:calc(var(--px) * 1);align-items:center;transition:transform .2s steps(3)}
@@ -319,7 +354,7 @@ button{font:inherit;color:inherit}
 .toast.show{transform:translate(-50%,0)}
 .loader{position:absolute;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:rgba(253,228,238,.92);font-family:var(--font-display);font-size:14px;letter-spacing:1px}
 .loader[hidden]{display:none}
-@media (prefers-reduced-motion:reduce){.rain{animation-duration:2.4s}.rain.r2{animation-duration:3.2s}.bulb,.steam,.clock .colon{animation:none}}
+@media (prefers-reduced-motion:reduce){.rain{animation-duration:2.4s}.rain.r2{animation-duration:3.2s}.steam,.clock .colon{animation:none}}
 </style>
 </head>
 <body>
@@ -332,7 +367,7 @@ button{font:inherit;color:inherit}
         <p>A pocket-sized Thaya · Bogor rain edition</p>
       </div>
     </div>
-    <button class="px-btn small" id="btnSfx" type="button" aria-pressed="true">SFX: ON</button>
+    <div class="top-btns"><button class="px-btn small" id="btnBgm" type="button" aria-pressed="true">BGM: LO-FI + RAIN</button><button class="px-btn small" id="btnSfx" type="button" aria-pressed="true">SFX: ON</button></div>
   </header>
 
   <main class="device px-box">
@@ -342,7 +377,7 @@ button{font:inherit;color:inherit}
         <div class="room" id="room">
           <div class="wall"></div>
           <div class="wainscot"></div>
-          <div class="lights" id="lights" data-obj="lights" role="button" tabindex="0" aria-label="Fairy lights. Ask Thaya about them."></div>
+          <div class="ac" data-obj="ac" role="button" tabindex="0" aria-label="Air conditioner above the window. Ask Thaya about it."><svg id="acSvg" viewBox="0 0 36 10" width="100%" height="100%" aria-hidden="true"></svg></div>
           <div class="win">
             <div class="valance"></div>
             <div class="curtain l" data-obj="curtain" role="button" tabindex="0" aria-label="Pink curtains. Ask Thaya about them."></div><div class="curtain r" data-obj="curtain"></div>
@@ -390,6 +425,12 @@ button{font:inherit;color:inherit}
           <div class="brb" id="brb" aria-live="polite"><span>◀ BRB</span><span id="brbText">BATHROOM</span><span class="tm" id="brbTime">0:05</span></div>
           <div class="bubble" id="bubble" role="status"><span class="who">THAYA</span><div class="txt" id="bubbleTxt"></div><span class="tail"></span></div>
           <div class="toast" id="toast" role="status" aria-live="polite"></div>
+          <div class="inbox-panel" id="inboxPanel" role="dialog" aria-labelledby="ibTitle" hidden>
+            <div class="ib-head"><span class="ib-title" id="ibTitle"><svg viewBox="0 0 8 7" data-icon="mail" aria-hidden="true"></svg>THAYA'S PHONE</span><button class="cp-x" id="ibClose" type="button" aria-label="Close inbox">&#x2715;</button></div>
+            <div class="ib-tabs" role="tablist" aria-label="Inbox sections"><button class="ib-tab" id="ibTabInbox" role="tab" type="button" aria-selected="true">Messages</button><button class="ib-tab" id="ibTabMem" role="tab" type="button" aria-selected="false">Memories</button></div>
+            <div class="ib-body" id="ibBody"></div>
+            <div class="ib-foot" id="ibFoot"></div>
+          </div>
           <div class="closet-panel" id="closetPanel" role="dialog" aria-labelledby="closetTitle" hidden>
             <div class="cp-head"><span id="closetTitle">WARDROBE</span><small id="fitName">Original</small><button class="cp-x" id="closetClose" type="button" aria-label="Close wardrobe">&#x2715;</button></div>
             <div class="cp-grid" id="fitGrid" role="group" aria-label="Choose Thaya's outfit"></div>
@@ -409,6 +450,7 @@ button{font:inherit;color:inherit}
         <div class="actions" role="group" aria-label="Actions">
           <button class="px-btn a-pet" id="actPet" type="button"><svg viewBox="0 0 7 7" data-icon="sparkle"></svg><span>Pet</span></button>
           <button class="px-btn a-snack" id="actSnack" type="button"><svg viewBox="0 0 8 8" data-icon="cookie"></svg><span>Give Snack</span></button>
+          <button class="px-btn a-inbox" id="actInbox" type="button" aria-label="Inbox"><svg viewBox="0 0 8 7" data-icon="mail"></svg><span>Inbox</span><b class="badge" id="inboxBadge" hidden>0</b></button>
           <button class="px-btn a-nap" id="actNap" type="button"><svg viewBox="0 0 8 8" data-icon="moon"></svg><span id="napLabel">Take a Nap</span></button>
         </div>
         <p class="tip">Tap Thaya to chat, or tap anything in her room to hear its story. Press Pet to cheer her up. The wardrobe changes her outfit.</p>
@@ -454,6 +496,7 @@ const ICONS = {
   anger: { rows: ['XX.XX', 'X...X', '.....', 'X...X', 'XX.XX'], pal: { X: '#e2334f' } },
   drop: { rows: ['..X..', '.XXX.', 'XXXXX', 'XXoXX', '.XXX.'], pal: { X: '#5f9be8', o: '#d8ecff' } },
   phone: { rows: ['XXXXX', 'XoooX', 'XoooX', 'XoooX', 'XoooX', 'XXoXX', 'XXXXX'], pal: { X: '#3d2b4f', o: '#ffc0d3' } },
+  mail: { rows: ['XXXXXXXX', 'XooooooX', 'XXooooXX', 'XoXooXoX', 'XooXXooX', 'XooooooX', 'XXXXXXXX'], pal: { X: '#3d6fbf', o: '#ffffff' } },
   logo: { rows: ['...XXXXX...', '..XoooooX..', '.XoXoooXoX.', 'XooooooooX.', 'XoppooopoX.', 'XooohhooooX', '.XoooooooX.', '..XXoooXX..', '....XXX....', '...........', '...........'], pal: { X: '#3d2b4f', o: '#ecd4b6', p: '#ff9cbc', h: '#c2477a' } },
 };
 const iconSVG = (n) => pixelSVG(ICONS[n].rows, ICONS[n].pal);
@@ -1196,6 +1239,12 @@ const L = {
   ],
   objRage: ["It's a thing. In my room. Leave it.", "Don't touch my stuff.", "Not in the mood for a museum tour.", "Hands off.", "Why are you touching my things right now."],
   objCall: ["Hold on, I'm on the phone! Ask me later.", "One sec, Kidi's talking!", "Shh, phone call! Museum tour later."],
+  inboxNew: ["Kidi texted me! Hold on, I'll check my inbox.", "My phone just buzzed. It's Kidi! Tap Inbox, quick.", "A new message from Kidi? Okay, act normal.", "Is that Kidi? It's Kidi. Inbox, now, please.", "Kidi sent something. I'm not smiling. You're smiling."],
+  inboxOpen: ["Okay, let me check my phone.", "Let's see what Kidi said.", "Phone time! Don't read over my shoulder. ...Okay, you can."],
+  inboxEmpty: ["No new messages. Kidi, where are you?", "Nothing new yet. I'll just stare at my phone. Normal behavior."],
+  rageInbox: ["I don't want to read anything right now.", "Not now. Not even Kidi.", "Phone's off. Mood's off."],
+  memSave: ["Saved. This one's going in the museum.", "Saved to my memories. Forever and ever.", "This one's a keeper. Like him. Don't tell him I said that."],
+  memUnsave: ["Okay, I took it out of my memories. It's still in my heart though.", "Removed. ...Fine, I still remember it."],
   mamaCall: ["Dedeee!", "Dede! Come here for a sec!", "Dedeee, help Mama for a minute!", "Dede! Where are you?", "Dedeee! Mama needs you!", "Dede, come here, quick!"],
   mamaAnswer: ["Yes, Ma! Coming!", "Coming, Mama! One sec!", "Yes, Ma? On my way!", "Coming! ...What did I do this time?", "Mama's calling. Be right back!", "Yes, Maaa! Coming!"],
   mamaTap: ["Wait, Mama's calling me!", "Hold on, I'll be right back!", "Not now, Mama needs me!"],
@@ -1593,15 +1642,16 @@ function line(pool, vars) {
 }
 
 /* ---------- state ---------- */
-const S = { mood: 70, tummy: 78, energy: 82, sfx: true, outfit: 'original' };
+const S = { mood: 70, tummy: 78, energy: 82, sfx: true, bgm: 'all', outfit: 'original' };
 let lastInteraction = now();
 const STORE = 'thayagotchi.v1';
-function save() { try { localStorage.setItem(STORE, JSON.stringify({ mood: S.mood, tummy: S.tummy, energy: S.energy, sfx: S.sfx, outfit: S.outfit, lastSeen: Date.now() })); } catch (e) { /* storage unavailable */ } }
+function save() { try { localStorage.setItem(STORE, JSON.stringify({ mood: S.mood, tummy: S.tummy, energy: S.energy, sfx: S.sfx, bgm: S.bgm, outfit: S.outfit, lastSeen: Date.now() })); } catch (e) { /* storage unavailable */ } }
 function restore() {
   try {
     const d = JSON.parse(localStorage.getItem(STORE) || 'null'); if (!d) return null;
     ['mood', 'tummy', 'energy'].forEach((k) => { if (typeof d[k] === 'number' && isFinite(d[k])) S[k] = d[k]; });
     if (typeof d.sfx === 'boolean') S.sfx = d.sfx;
+    if (['all', 'rain', 'off'].includes(d.bgm)) S.bgm = d.bgm;
     if (typeof d.outfit === 'string' && ['original', 'brown', 'casual'].includes(d.outfit)) S.outfit = d.outfit;
     return d.lastSeen || null;
   } catch (e) { return null; }
@@ -2008,6 +2058,12 @@ function buildDecor() {
   [[1, 3], [7, 0], [15, 2], [16, 7], [2, 1], [11, 1], [9, 5]].forEach(([x, y]) => { bq += R(x, y, 1, 1, '#ffffff'); });
   bq += R(5, 16, 8, 2, '#5b8fe0') + R(3, 15, 3, 2, '#5b8fe0') + R(12, 15, 3, 2, '#5b8fe0') + R(8, 16, 2, 2, '#3d6fc4') + R(7, 18, 1, 3, '#5b8fe0') + R(10, 18, 1, 3, '#5b8fe0');
   $('#bouquetSvg').innerHTML = bq;
+  // the air conditioner above the window (just decoration for now)
+  let ac = R(0, 0, 36, 9, ink) + R(1, 1, 34, 7, '#f7f8fc') + R(1, 1, 34, 1, '#ffffff') + R(1, 6, 34, 2, '#e3e6ef');
+  for (let x = 3; x < 33; x += 2) ac += R(x, 7, 1, 1, '#c3c8d6');
+  ac += R(2, 8, 32, 1, '#9aa1b3') + R(4, 9, 28, 1, ink);
+  ac += R(26, 2, 6, 3, '#2b2236') + R(27, 3, 1, 1, '#9ff0c9') + R(29, 3, 2, 1, '#9ff0c9') + R(3, 3, 1, 1, '#7fd6a8') + R(5, 2, 12, 1, '#eceef5') + R(5, 4, 9, 1, '#eceef5');
+  $('#acSvg').innerHTML = ac;
   // little tulips on the windowsill
   $('#sillVaseSvg').innerHTML = R(3, 4, 1, 4, '#4f9d6f') + R(6, 3, 1, 5, '#4f9d6f') + R(2, 2, 3, 3, '#ff7fab') + R(2, 1, 1, 1, '#ff7fab') + R(4, 1, 1, 1, '#ff7fab') + R(5, 1, 3, 3, '#8db6ef') + R(5, 0, 1, 1, '#8db6ef') + R(7, 0, 1, 1, '#8db6ef') + R(1, 7, 7, 5, '#8db6ef') + R(1, 7, 7, 1, '#5b8fe0') + R(2, 9, 5, 1, '#ffffff');
   // framed blue whale (her favourite animal)
@@ -2025,14 +2081,6 @@ function buildDecor() {
   $('#laptopSvg').innerHTML = lp;
   $('#mugSvg').innerHTML = R(1, 2, 7, 8, ink) + R(2, 3, 5, 6, '#ffd6e4') + R(2, 3, 5, 1, '#8cc06b') + R(7, 4, 3, 1, ink) + R(9, 4, 1, 4, ink) + R(7, 7, 3, 1, ink) + R(3, 5, 3, 2, '#8db6ef');
   $('#phoneSvg').innerHTML = R(0, 0, 7, 11, ink) + R(1, 1, 5, 9, '#ffc0d3') + R(1, 1, 2, 2, '#3d2b4f') + R(4, 6, 1, 1, '#fff');
-}
-function buildLights(w, px) {
-  const span = w / 3, pts = [];
-  for (let x = 0; x <= w; x += px * 2) { const t = (x % span) / span; pts.push([x, px * 3 + Math.sin(Math.PI * t) * px * 7]); }
-  let svg = `<svg viewBox="0 0 ${w} ${px * 14}" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="#6d5a80" stroke-width="${Math.max(1, px / 2)}" points="${pts.map((p) => p.join(',')).join(' ')}"/></svg>`;
-  const colors = ['#ff7fab', '#8db6ef', '#ffb3cd', '#5b8fe0', '#ffd36e'], n = Math.floor(w / (px * 11));
-  for (let i = 1; i < n; i++) { const x = (i / n) * w, t = (x % span) / span, y = px * 3 + Math.sin(Math.PI * t) * px * 7; svg += `<i class="bulb" style="left:${x - px}px;top:${y}px;--bc:${colors[i % colors.length]};--d:${(i % 4) * 0.6}s"></i>`; }
-  $('#lights').innerHTML = svg;
 }
 let hourNow = new Date().getHours();
 function updateClock() {
@@ -2125,7 +2173,6 @@ function layout() {
   if (refKey) { M.target = Math.min(Sheets.emo ? Sheets.emo.medH : Sheets[refKey].medH, h * 0.46); M.charH = M.target; M.charW = Sheets[refKey].medW * scaleOf(refKey); }
   M.floorY = h - M.deskH + M.charH * (curGroup() === 'casual' ? CASUAL_SINK : 0.1);
   if (!bath) { pos.x = clamp(pos.x, minX(), maxX()); walk.tx = clamp(walk.tx, minX(), maxX()); }
-  buildLights(w, px);
   if (curFrame) showFrame(curFrame);
   if (typeof vPlace === 'function') { try { vPlace(); } catch (e) { /* visitor code not ready yet */ } }
 }
@@ -2274,7 +2321,7 @@ function updateHud() {
 let act = { type: 'idle' };
 let poseUntil = 0, nextBehaviorAt = now() + 3000, nextChatAt = now() + 9000, lastHobbyAt = now() - 15000, lastTagSayAt = 0;
 let snackTimes = [], insecureUntil = 0, nextCallAt = now() + rand(45000, 90000), callStartedAt = 0;
-let nextSwingAt = now() + rand(18000, 32000), nextThunderAt = now() + rand(40000, 90000), nextKidiTextAt = now() + rand(70000, 140000);
+let nextSwingAt = now() + rand(18000, 32000), nextThunderAt = now() + rand(40000, 90000), nextKidiTextAt = now() + rand(150000, 240000);
 let lastEffectAt = 0, sleepTalked = false, currentSnack = null;
 const HOBBY = {
   music: { status: 'Listening to music', fx: 'note', fd: [1300, 1900] },
@@ -2298,6 +2345,7 @@ function statusText() {
     case 'rant': return 'Ranting about systems';
     case 'hobby': return act.hobby === 'music' && nowPlaying ? `Listening to ${nowPlaying.title ? '"' + nowPlaying.title + '"' : nowPlaying.artist}` : HOBBY[act.hobby].status;
     case 'sing': return 'Singing along';
+    case 'inbox': return 'Reading messages from Kidi';
     case 'bathroom': return bath && bath.kind === 'mama' ? (bath.phase === 'back' ? 'Back from helping Mama' : 'Mama called her ("Dedeee!")') : !bath ? 'Back from the bathroom' : bath.phase === 'back' ? 'Back from the bathroom' : bath.kind === 'poop' ? 'In the bathroom (poop break)' : 'In the bathroom (pee break)';
     case 'startle': return 'Startled';
     case 'dizzy': return 'Dizzy from all the poking';
@@ -2591,7 +2639,7 @@ const MAMA_ERRANDS = [
   { t: "Mama just wanted a hug. Okay, that was actually nice.", m: 5 },
 ];
 let lastErrand = -1;
-const mamaOK = () => !rage.active && !bath && !sleepingNow() && ['idle', 'react', 'hobby'].includes(act.type);
+const mamaOK = () => !rage.active && !bath && !IB.open && !IB.pending && !sleepingNow() && ['idle', 'react', 'hobby'].includes(act.type);
 function mamaCall() {
   if (!mamaOK()) return false;
   if (act.type === 'hobby') act = { type: 'idle' };
@@ -2607,7 +2655,7 @@ function mamaCall() {
   }, 900);
   return true;
 }
-function canGoBathroom() { return !rage.active && !bath && ['idle', 'react', 'event', 'refuse'].includes(act.type); }
+function canGoBathroom() { return !rage.active && !bath && !IB.open && !IB.pending && ['idle', 'react', 'event', 'refuse'].includes(act.type); }
 function startBathroom(kind) {
   if (act.type === 'hobby') act = { type: 'idle' };
   bath = { kind, phase: 'out', dur: kind === 'poop' ? 10000 : kind === 'mama' ? rand(5000, 10000) : 5000 };
@@ -2680,7 +2728,7 @@ function yawn() { startAct('react', 1500, F.yawn, 1500); }
 function thunder() {
   const flash = (el, peak) => el.animate([{ opacity: 0 }, { opacity: peak, offset: 0.1 }, { opacity: 0, offset: 0.3 }, { opacity: peak * 0.7, offset: 0.4 }, { opacity: 0 }], { duration: 900, easing: 'steps(9)' });
   flash($('#winFlash'), 0.9); if (!reduceMotion) flash($('#roomFlash'), 0.25);
-  setTimeout(() => SFX.play('thunder'), 350);
+  setTimeout(() => { SFX.play('thunder'); BGM.thunderSwell(); }, 350);
   if (act.type === 'sleep') { if (!Bubble.visible) say('...zzz... huh? ...zzz...'); return; }
   if (act.type === 'hobby') { if (!Bubble.reading()) setTimeout(() => say(line('thunder')), 400); return; }
   if (act.type !== 'idle' && act.type !== 'react') return;
@@ -2761,7 +2809,7 @@ function eventPose(name) {
 const EVENT_STATUS = { cringe: 'Cringing at a memory', panic: 'Panicking', furious: 'Angry at the news', sad: 'Feeling down', sulky: 'Grumpy', gesture: 'Excited', lovely: 'Touched', happy: 'Happy news' };
 let lastEventId = '';
 function randomEvent() {
-  const busy = rage.active || !!bath || ['sleep', 'sleepin', 'eat', 'call', 'rant', 'dizzy', 'startle', 'refuse', 'event', 'kidi', 'rage', 'sing', 'bathroom'].includes(act.type);
+  const busy = rage.active || !!bath || IB.open || IB.pending || ['sleep', 'sleepin', 'eat', 'call', 'rant', 'dizzy', 'startle', 'refuse', 'event', 'kidi', 'rage', 'sing', 'bathroom', 'inbox'].includes(act.type);
   if (busy || Bubble.reading()) { nextSwingAt = now() + rand(6000, 10000); return; }
   if (Math.random() < 0.05 && mamaCall()) return;
   if (Math.random() < 0.10) { enterRage('sudden'); return; }
@@ -2809,7 +2857,7 @@ function singEvent() {
   say(text);
 }
 function kidiCall() {
-  if (rage.active || bath || ['call', 'eat', 'rant', 'dizzy', 'startle', 'refuse', 'rage', 'bathroom'].includes(act.type) || Bubble.reading()) { nextCallAt = now() + rand(8000, 14000); return; }
+  if (rage.active || bath || IB.open || IB.pending || closetOpen || ['call', 'eat', 'rant', 'dizzy', 'startle', 'refuse', 'rage', 'bathroom', 'inbox'].includes(act.type) || Bubble.reading()) { nextCallAt = now() + rand(8000, 14000); return; }
   const ph = $('#phone'); ph.classList.add('ring'); SFX.play('ring');
   const wasAsleep = sleepingNow();
   if (wasAsleep) setNap(false);
@@ -2877,7 +2925,7 @@ function animTick() {
     }
     if (act.type === 'sleep' && !sleepTalked && t > act.until - 6000 && Math.random() < 0.02) { sleepTalked = true; say(line('sleepTalk')); }
   } else if (t >= poseUntil) { showFrame(idlePose()); poseUntil = t + rand(1800, 4200); }
-  if (isStarving() && !sleepingNow() && !rage.active && !bath && !['call', 'eat', 'bathroom'].includes(act.type) && t >= nextStarveAt) {
+  if (isStarving() && !sleepingNow() && !rage.active && !bath && !IB.open && !['call', 'eat', 'bathroom', 'inbox'].includes(act.type) && t >= nextStarveAt) {
     nextStarveAt = t + rand(6000, 9000);
     if (act.type === 'hobby') act = { type: 'idle' };
     walk.active = false; hop(14); SFX.play('growl'); SFX.play('angry');
@@ -2887,7 +2935,7 @@ function animTick() {
   } else if (isHungry() && !isStarving() && !sleepingNow() && t - lastGrowlAt > 20000 && Math.random() < 0.02) { lastGrowlAt = t; SFX.play('growl'); }
   if (act.type === 'idle' && !walk.active && t >= nextBehaviorAt) doBehavior();
   if (Bubble.visible && t >= Bubble.hideAt) Bubble.hide();
-  if (!Bubble.visible && t >= nextChatAt && !sleepingNow() && act.type !== 'hobby' && !bath) { nextChatAt = t + rand(9000, 16000); say(poolLine(chatterPool())); }
+  if (!Bubble.visible && t >= nextChatAt && !sleepingNow() && act.type !== 'hobby' && act.type !== 'inbox' && !IB.open && !bath) { nextChatAt = t + rand(9000, 16000); say(poolLine(chatterPool())); }
 }
 function logicTick() {
   if (!F.happy) return;
@@ -2906,16 +2954,16 @@ function logicTick() {
     const k = tierOf(S.mood).key;
     if (k === 'sad' || k === 'crying') {
       if (!sadSince) sadSince = t;
-      else if (t - sadSince > 45000 && !['sleep', 'sleepin', 'call', 'eat', 'bathroom'].includes(act.type)) enterRage('sad');
+      else if (t - sadSince > 45000 && !['sleep', 'sleepin', 'call', 'eat', 'bathroom', 'inbox'].includes(act.type)) enterRage('sad');
     } else sadSince = 0;
   }
-  if (S.energy < 5 && t >= collapseBlockUntil && !sleepingNow() && !rage.active && !bath && !['call', 'eat', 'bathroom'].includes(act.type)) startNap(true);
+  if (S.energy < 5 && t >= collapseBlockUntil && !sleepingNow() && !rage.active && !bath && !IB.open && !['call', 'eat', 'bathroom', 'inbox'].includes(act.type)) startNap(true);
   if (t >= nextSwingAt) { nextSwingAt = t + rand(18000, 32000); randomEvent(); }
   if (t >= nextMeowAt) { nextMeowAt = t + rand(18000, 45000); greyMeow(false); }
   if (t >= nextVisitAt) { nextVisitAt = t + rand(70000, 150000); catVisit(); }
   if (t >= nextCallAt) { nextCallAt = t + rand(55000, 110000); kidiCall(); }
   if (t >= nextThunderAt) { nextThunderAt = t + rand(45000, 110000); thunder(); }
-  if (t >= nextKidiTextAt) { nextKidiTextAt = t + rand(70000, 150000); kidiTexts(); }
+  if (t >= nextKidiTextAt) { nextKidiTextAt = t + rand(200000, 320000); if (!kidiSends() && !IB.open) kidiTexts(); }
 }
 
 /* ---------- wardrobe (the closet under the shelf) ---------- */
@@ -3015,6 +3063,165 @@ syncFits();
 /* ---------- input ---------- */
 function syncSfx() { const b = $('#btnSfx'); b.textContent = 'SFX: ' + (S.sfx ? 'ON' : 'OFF'); b.setAttribute('aria-pressed', String(S.sfx)); }
 $('#btnSfx').addEventListener('click', () => { S.sfx = !S.sfx; SFX.init(); syncSfx(); if (S.sfx) SFX.play('tap'); save(); });
+/* =========================================================
+   BGM: Bogor rain + a simple lo-fi loop, all synthesised (no audio files)
+   ========================================================= */
+const BGM = {
+  ctx: null, out: null, rainBus: null, lofiBus: null, started: false, timer: null, dripTimer: null,
+  step: 0, nextT: 0, bar: 0, bpm: 72, rainLevel: 0.2, lofiLevel: 0.75,
+  // ii-V-I-vi in C, jazzy voicings (midi): Dm9, G13, Cmaj9, Am9
+  chords: [[50, 53, 57, 60, 64], [43, 53, 57, 59, 64], [48, 52, 55, 59, 62], [45, 52, 55, 59, 60]],
+  bass: [38, 43, 36, 45],
+  scale: [60, 62, 64, 67, 69, 72, 74, 76],
+  hz: (m) => 440 * Math.pow(2, (m - 69) / 12),
+  ensure() {
+    SFX.init(); if (!SFX.ctx) return false;
+    if (this.ctx) return true;
+    const c = this.ctx = SFX.ctx;
+    this.out = c.createGain(); this.out.gain.value = 0; this.out.connect(c.destination);
+    this.rainBus = c.createGain(); this.rainBus.gain.value = 0; this.rainBus.connect(this.out);
+    this.lofiBus = c.createGain(); this.lofiBus.gain.value = 0;
+    // lo-fi colour: warm lowpass + a gentle wobble on the cutoff
+    const tone = c.createBiquadFilter(); tone.type = 'lowpass'; tone.frequency.value = 2300; tone.Q.value = 0.4;
+    const wob = c.createOscillator(), wobG = c.createGain(); wob.frequency.value = 0.18; wobG.gain.value = 260; wob.connect(wobG); wobG.connect(tone.frequency); wob.start();
+    this.lofiBus.connect(tone); tone.connect(this.out);
+    this.noiseBuf = this.makeNoise(4, 'pink'); this.brownBuf = this.makeNoise(4, 'brown'); this.crackBuf = this.makeCrackle(3);
+    this.buildRain(); this.buildCrackle();
+    return true;
+  },
+  makeNoise(sec, kind) {
+    const c = this.ctx, n = Math.floor(c.sampleRate * sec), b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0);
+    let b0 = 0, b1 = 0, b2 = 0, last = 0;
+    for (let i = 0; i < n; i++) {
+      const w = Math.random() * 2 - 1;
+      if (kind === 'brown') { last = (last + 0.02 * w) / 1.02; d[i] = last * 3.2; }
+      else { b0 = 0.99765 * b0 + w * 0.099046; b1 = 0.963 * b1 + w * 0.2965164; b2 = 0.57 * b2 + w * 1.0526913; d[i] = (b0 + b1 + b2 + w * 0.1848) * 0.16; }
+    }
+    // crossfade the loop seam
+    const f = Math.floor(c.sampleRate * 0.05); for (let i = 0; i < f; i++) { const k = i / f; d[i] = d[i] * k + d[n - f + i] * (1 - k); }
+    return b;
+  },
+  makeCrackle(sec) {
+    const c = this.ctx, n = Math.floor(c.sampleRate * sec), b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < n; i++) { const r = Math.random(); d[i] = r < 0.0006 ? (Math.random() * 2 - 1) * 0.9 : r < 0.004 ? (Math.random() * 2 - 1) * 0.12 : (Math.random() * 2 - 1) * 0.006; }
+    return b;
+  },
+  loop(buf, dest, rate) { const s = this.ctx.createBufferSource(); s.buffer = buf; s.loop = true; s.playbackRate.value = rate || 1; s.connect(dest); s.start(); return s; },
+  buildRain() {
+    const c = this.ctx;
+    // steady rain on the roof: pink noise, band-limited
+    const hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 380;
+    const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 4200;
+    const g1 = c.createGain(); g1.gain.value = 0.9; hp.connect(lp); lp.connect(g1); g1.connect(this.rainBus);
+    this.loop(this.noiseBuf, hp);
+    // gusts: slow swell on the rain level
+    const gust = c.createOscillator(), gg = c.createGain(); gust.frequency.value = 0.07; gg.gain.value = 0.22; gust.connect(gg); gg.connect(g1.gain); gust.start();
+    // low rumble of heavy rain far away
+    const lp2 = c.createBiquadFilter(); lp2.type = 'lowpass'; lp2.frequency.value = 420;
+    const g2 = c.createGain(); g2.gain.value = 0.55; lp2.connect(g2); g2.connect(this.rainBus);
+    this.loop(this.brownBuf, lp2, 0.9);
+    this.rainMain = g1;
+    // drips on the window and gutter
+    this.dripTimer = setInterval(() => { if (this.ctx.state === 'running' && S.bgm !== 'off') for (let i = 0; i < 1 + Math.floor(Math.random() * 3); i++) this.drip(Math.random() * 0.4); }, 420);
+  },
+  drip(delay) {
+    const c = this.ctx, t = c.currentTime + delay, o = c.createOscillator(), g = c.createGain();
+    const f = 1400 + Math.random() * 2600;
+    o.type = 'sine'; o.frequency.setValueAtTime(f, t); o.frequency.exponentialRampToValueAtTime(f * 0.45, t + 0.05);
+    g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.018 + Math.random() * 0.02, t + 0.004); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.07);
+    o.connect(g); g.connect(this.rainBus); o.start(t); o.stop(t + 0.09);
+  },
+  buildCrackle() {
+    const hp = this.ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 900;
+    const g = this.ctx.createGain(); g.gain.value = 0.32; hp.connect(g); g.connect(this.lofiBus);
+    this.loop(this.crackBuf, hp);
+  },
+  // electric-piano-ish note
+  keys(m, t, dur, vol) {
+    const c = this.ctx, g = c.createGain(), f = this.hz(m);
+    g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(vol, t + 0.025); g.gain.exponentialRampToValueAtTime(vol * 0.35, t + 0.5); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    g.connect(this.lofiBus);
+    [['sine', 0, 1], ['triangle', 4, 0.35], ['sine', -6, 0.5]].forEach(([type, det, lv], k) => {
+      const o = c.createOscillator(), og = c.createGain(); o.type = type; o.frequency.value = k === 2 ? f * 2 : f; o.detune.value = det; og.gain.value = lv;
+      o.connect(og); og.connect(g); o.start(t); o.stop(t + dur + 0.05);
+    });
+  },
+  kick(t) {
+    const c = this.ctx, o = c.createOscillator(), g = c.createGain();
+    o.frequency.setValueAtTime(120, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.16);
+    g.gain.setValueAtTime(0.5, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.28);
+    o.connect(g); g.connect(this.lofiBus); o.start(t); o.stop(t + 0.3);
+  },
+  hit(t, freq, q, vol, dur, type) {
+    const c = this.ctx, s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+    s.buffer = this.noiseBuf; f.type = type; f.frequency.value = freq; f.Q.value = q;
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    s.connect(f); f.connect(g); g.connect(this.lofiBus); s.start(t, Math.random() * 3); s.stop(t + dur + 0.02);
+  },
+  bassNote(m, t, dur) {
+    const c = this.ctx, o = c.createOscillator(), g = c.createGain(); o.type = 'sine'; o.frequency.value = this.hz(m);
+    g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.26, t + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(this.lofiBus); o.start(t); o.stop(t + dur + 0.05);
+  },
+  schedule() {
+    const c = this.ctx; if (!c || c.state !== 'running') return;
+    const s16 = 60 / this.bpm / 4;
+    if (this.nextT < c.currentTime - 0.5) this.nextT = c.currentTime + 0.05;
+    while (this.nextT < c.currentTime + 0.35) {
+      const st = this.step % 16, ci = this.bar % 4, swing = st % 2 ? s16 * 0.18 : 0, t = this.nextT + swing;
+      if (this.lofiOn) {
+        if (st === 0) { const ch = this.chords[ci]; ch.forEach((m, k) => this.keys(m, t + k * 0.012, s16 * 15, 0.05)); this.bassNote(this.bass[ci], t, s16 * 6); }
+        if (st === 10) { this.bassNote(this.bass[ci] + (ci === 1 ? 2 : 7), t, s16 * 4); }
+        if (st === 8 && this.bar % 2 === 1) this.chords[ci].slice(2).forEach((m) => this.keys(m, t, s16 * 7, 0.03));
+        if (st === 0 || st === 7 || (st === 10 && this.bar % 2)) this.kick(t);
+        if (st === 4 || st === 12) this.hit(t, 1800, 0.7, 0.12, 0.17, 'bandpass');
+        if (st % 2 === 0) this.hit(t, 7500, 0.8, st % 4 === 2 ? 0.035 : 0.022, 0.05, 'highpass');
+        // a few lazy melody notes
+        if ((st === 2 || st === 6 || st === 11 || st === 14) && Math.random() < 0.32) this.keys(pick(this.scale) + (Math.random() < 0.3 ? 12 : 0), t, s16 * 5, 0.028);
+      }
+      this.nextT += s16; this.step++; if (this.step % 16 === 0) this.bar++;
+    }
+  },
+  start() {
+    if (S.bgm === 'off' || !this.ensure()) return;
+    if (!this.started) { this.started = true; this.nextT = this.ctx.currentTime + 0.1; this.timer = setInterval(() => this.schedule(), 90); }
+    if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
+    this.update(true);
+  },
+  // levels follow what is happening in the room
+  update(snap) {
+    if (!this.ctx) return;
+    const on = S.bgm !== 'off' && !document.hidden;
+    this.lofiOn = S.bgm === 'all';
+    let rain = this.lofiOn ? this.rainLevel : this.rainLevel * 1.6, lofi = this.lofiOn ? this.lofiLevel : 0;
+    const other = act.type === 'call' || act.type === 'sing' || (typeof nowPlaying !== 'undefined' && nowPlaying);
+    if (other) { lofi *= 0.12; rain *= 0.7; }
+    if (sleepingNow()) { lofi *= 0.45; rain *= 1.15; }
+    if (rage.active) lofi *= 0.5;
+    const t = this.ctx.currentTime, tc = snap ? 0.4 : 1.2;
+    this.out.gain.setTargetAtTime(on ? 1.5 : 0, t, snap ? 0.3 : 0.5);
+    this.rainBus.gain.setTargetAtTime(on ? rain : 0, t, tc);
+    this.lofiBus.gain.setTargetAtTime(on ? lofi : 0, t, tc);
+  },
+  thunderSwell() {
+    if (!this.ctx || S.bgm === 'off') return;
+    const t = this.ctx.currentTime, g = this.rainMain.gain;
+    g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); g.linearRampToValueAtTime(1.35, t + 0.6); g.linearRampToValueAtTime(0.9, t + 6);
+  },
+};
+const BGM_LABEL = { all: 'BGM: LO-FI + RAIN', rain: 'BGM: RAIN', off: 'BGM: OFF' };
+function syncBgm() { const b = $('#btnBgm'); b.textContent = BGM_LABEL[S.bgm] || BGM_LABEL.all; b.setAttribute('aria-pressed', String(S.bgm !== 'off')); }
+$('#btnBgm').addEventListener('click', () => {
+  S.bgm = S.bgm === 'all' ? 'rain' : S.bgm === 'rain' ? 'off' : 'all';
+  syncBgm(); save();
+  if (S.bgm === 'off') BGM.update(true); else BGM.start();
+  if (S.bgm !== 'off' && !Bubble.reading()) say(S.bgm === 'all' ? "Lo-fi and rain. Perfect studying music. Or napping music. Mostly napping." : "Just the rain. Bogor's best playlist.");
+});
+// browsers only allow sound after the first tap or key press
+const bgmKick = () => { BGM.start(); if (BGM.started) { window.removeEventListener('pointerdown', bgmKick, true); window.removeEventListener('keydown', bgmKick, true); } };
+window.addEventListener('pointerdown', bgmKick, true); window.addEventListener('keydown', bgmKick, true);
+document.addEventListener('visibilitychange', () => { if (BGM.ctx) BGM.update(true); });
+setInterval(() => BGM.update(false), 700);
 sprite.addEventListener('pointerdown', (e) => { e.preventDefault(); tap(e); });
 thaya.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tap(null); } });
 $('#actPet').addEventListener('click', pet);
@@ -3209,16 +3416,17 @@ const OBJECTS = {
     "Curtains closed means I'm sleeping. Curtains open means I'm pretending to be productive.",
     "Grey thinks these curtains are his personal climbing wall. They're not, Grey.",
   ],
+  ac: [
+    "My AC. The most important appliance in this house. I do not like heat. At all.",
+    "In Bogor it's mostly decoration, honestly. But in Jogja? An AC was my best friend.",
+    "Mama says the electricity bill is my fault. ...She's not wrong.",
+    "When it's hot I become a different person. A worse person. This AC protects everyone.",
+    "One day I'll set it to sixteen degrees and live like a penguin.",
+  ],
   sillvase: [
     "Tiny tulips on the windowsill. They're fake, so they'll never die. Unlike every real plant I've ever owned.",
     "Grey keeps trying to eat them. They're plastic, Grey. Please.",
     "Pink and blue tulips, because of course they are.",
-  ],
-  lights: [
-    "Fairy lights make everything ten times more aesthetic. Even my deadlines.",
-    "I put these up at two in the morning instead of sleeping. No regrets.",
-    "They're like little stars, except I don't have to go hiking at night to see them.",
-    "When the room is dark and these are on, everything feels a bit softer.",
   ],
   laptop: [
     "My laptop has seen everything: my thesis drafts, my Digital Community posts, and way too much anime.",
@@ -3246,7 +3454,7 @@ const OBJECTS = {
     "I have a playlist for every feeling. Don't ask about the 'crying on the KRL' one.",
   ],
 };
-const BIG_OBJ = ['win', 'lights', 'curtain', 'shelf', 'radio'];
+const BIG_OBJ = ['win', 'curtain', 'shelf', 'radio', 'ac'];
 const objSeen = {};
 let museumIntroDone = false;
 objTap.token = 0;
@@ -3283,6 +3491,336 @@ room.addEventListener('keydown', (e) => {
   const el = e.target.closest && e.target.closest('[data-obj]'); if (!el || e.target !== el) return;
   e.preventDefault(); objTap(el.dataset.obj, el);
 });
+
+/* ---------- Kidi's inbox: messages written in Kidi's own texting voice ---------- */
+// when: 'morning' (5-11), 'night' (20-3); sp: a special one worth keeping
+const KIDI_MSGS = [
+  { id: 'k00', t: 'Hai thayy! Ini inbox kita yaa. Aku bakal sering-sering nitip pesan di sini, dibaca pelan-pelan aja hehe', r: "An inbox just for us? Okay, this is cute. I'll read every single one." },
+  { id: 'k01', t: 'Somehow, you make even my ordinary days feel a little brighter.', sp: true },
+  { id: 'k02', t: 'Selamat Pagiii thayyy ☀️ i hope you have a great day', when: 'morning' },
+  { id: 'k03', t: 'Semangat magangnyaaa! Kamu keren banget di BMM' },
+  { id: 'k04', t: 'kenapa yaa kamu secantik ini' },
+  { id: 'k05', t: 'met boboo ya thayyy, mimpiin aku yaa hehe', when: 'night' },
+  { id: 'k06', t: 'Makasihh thayyy, udah dateng ke hidup aku.', sp: true },
+  { id: 'k07', t: 'udah makan belum thayy? jangan sampe telat makan yaa' },
+  { id: 'k08', t: 'kalo kamu jelek berarti semua cewek jelek. soalnya kamu most beautiful person' },
+  { id: 'k09', t: 'baby, i miss you so much' },
+  { id: 'k10', t: 'Pagi thayy, udah bangun belum? jangan lupa sarapan', when: 'morning' },
+  { id: 'k11', t: 'aku seneng direpotin kamuu', r: 'You like it when I bother you? Good. Prepare to be bothered forever.' },
+  { id: 'k12', t: 'I promise I won’t leave you. Janjiku ini bukan cuma buat kamu, tapi buat diriku sendiri juga.', sp: true },
+  { id: 'k13', t: 'semoga presentasi kamu lancar yaa, aku yakin kamu bisa' },
+  { id: 'k14', t: 'kamu kalo dah ngantuk bobo aja, aku ga kemana-mana kok', when: 'night' },
+  { id: 'k15', t: 'Ati-atiii yaa thayyy, kabarin kalo dah sampe' },
+  { id: 'k16', t: 'POLL: Apakah athaya cantik? A. Iyaa cantik  B. CANTIK BANGET. jawabannya B ya, ga nerima jawaban lain', r: 'B. Obviously B. Wait, am I voting for myself? ...Still B.', c: 'funny' },
+  { id: 'k17', t: 'MAKASIHHH YAA THAYYY BUAT HARI INII. AKU SENENG BANGET BISA KE BOGORR', r: 'Come to Bogor again soon! The rain misses you. Okay, I miss you.', c: 'thanks', sp: true },
+  { id: 'k18', t: 'i hope your tummy feels better yaa', r: "It's better now. Thanks for checking on me, Kidi.", c: 'eaten' },
+  { id: 'k19', t: 'besok kalo ke jakarta kubawain rockburger ya' },
+  { id: 'k20', t: 'i will wait for you, even if i have to wait 1000 years', sp: true },
+  { id: 'k21', t: 'kamu kangen aku yaaa? ngaku aja' },
+  { id: 'k22', t: 'Good morning baby, semangat magangnyaa hari ini', when: 'morning' },
+  { id: 'k23', t: 'aku bangga banget sama kamu thayy, beneran' },
+  { id: 'k24', t: 'minum air putih juga thayy, jangan matcha mulu hehe' },
+  { id: 'k25', t: 'jujur sih bogor buat jalan kaki enak, apalagi lewat kebun rayanya', r: 'Kebun Raya walks are the best. Next time we walk the whole thing. Slowly. With snacks.', c: 'rain' },
+  { id: 'k26', t: 'salam buat onyon, grey, unyil, sama usro yaa' },
+  { id: 'k27', t: 'Yeayyy, aku seneng deh kalo kamu seneng. Makasih udah mau jalan sama aku, i feel so appreciated', sp: true },
+  { id: 'k28', t: 'jangan begadang terus thayy, nanti pusing', when: 'night' },
+  { id: 'k29', t: 'baby, im sorry if i annoyed you' },
+  { id: 'k30', t: 'aku lagi dengerin olivia rodrigo, jadi inget kamu' },
+  { id: 'k31', t: 'bentar lagi keterima kerja di tempat yang bagus kok, aku percaya' },
+  { id: 'k32', t: 'omagat aku tidur muluu wkwkwk' },
+  { id: 'k33', t: 'MAACIII YAAA BUNGANYAAA LOVE YOU TOOO', r: 'You liked the flowers? Hehe. Love you too, Kidi.', sp: true },
+  { id: 'k34', t: 'nantii telpon yaaaaa' },
+  { id: 'k35', t: 'kamu istirahat ajaa, kan udah capek dari tadi' },
+  { id: 'k36', t: 'aku lagi makan pedes nih, jadi inget kamu yang suka pedes' },
+  { id: 'k37', t: 'fotoin onyon dong thayy, kangen liat dia', r: 'Onyon says he misses you too. Photo incoming. Several photos.', c: 'cats' },
+  { id: 'k38', t: 'pagi thayy, di bogor ujan ga? jangan lupa bawa payung', when: 'morning' },
+  { id: 'k39', t: 'are you tired and sleepy? cause i want to talk to you before going to sleep', when: 'night' },
+  { id: 'k40', t: 'makasih ya thayy udah bantuin aku ngerjain skripsi, saran kamu kepake semua', r: "Of course I helped. We're a team. Your thesis looked so neat in the end!", c: 'thesis', sp: true },
+  { id: 'k41', t: 'nanti kita makan sushi yuk thayy, aku yang traktir' },
+  { id: 'k42', t: 'kamu tuh pinter banget tau, jangan suka ngeremehin diri sendiri' },
+  { id: 'k43', t: 'love you thayy, more than you love matcha' },
+  { id: 'k44', t: 'baterai kamu berapa? jangan sampe hpnya mati ya' },
+  { id: 'k45', t: 'kayaknya aku tidur 10 jam deh, kalah kamu' },
+  { id: 'k46', t: 'usro tuh kucing paling keren, satu mata tapi tetep ganteng' },
+  { id: 'k47', t: 'nanti kita nonton film bareng yuk, kamu yang pilih' },
+  { id: 'k48', t: 'aku tiba-tiba dikasih kopi, padahal aku tau kamu ga suka kopi wkwk' },
+  { id: 'k49', t: 'akhirnya aku lulus thayy! makasih udah nemenin dari awal', r: "KIDI GRADUATED! I'm so proud of you. Thank you for letting me be there.", c: 'thesis', sp: true },
+  { id: 'k50', t: 'kangen kamu thayy, kapan kita ketemu lagi?' },
+  { id: 'k51', t: 'bentar lagi tak laporin kemnaker kalo kamu disuruh lembur terus' },
+  { id: 'k52', t: 'Pagiii, hari ini aku ngerasa beruntung soalnya ada kamu', when: 'morning' },
+  { id: 'k53', t: 'rekomendasiin anime dong thayy, kamu kan expert' },
+  { id: 'k54', t: 'kamu tau ga? senyum kamu tuh my favorite thing' },
+  { id: 'k55', t: 'maaffin akuu ganggu kamu yaa' },
+  { id: 'k56', t: 'kapan-kapan kita hiking bareng yuk, tapi jangan ninggalin aku di belakang ya' },
+  { id: 'k57', t: 'aku liat ada rendang enak, nanti kita cobain bareng ya' },
+  { id: 'k58', t: 'kalo udah selesai, telpon aku lagi dong' },
+  { id: 'k59', t: 'Good night thayy, makasih buat hari ini', r: 'Good night, Kidi. Thank you for today too. Sleep well.', c: 'night', when: 'night' },
+  { id: 'k60', t: 'di jogja panas banget thayy, untung kamu di bogor yang adem' },
+  { id: 'k61', t: 'unyil masih suka tidur di kasur kamu?' },
+  { id: 'k62', t: 'aku ga ngapa-ngapain, cuma lagi mikirin kamu aja hehe', r: 'Thinking about me? Hehe. Same, honestly.' },
+  { id: 'k63', t: 'jangan lupa istirahat di sela-sela magang ya thayy, kamu bukan robot' },
+  { id: 'k64', t: 'kamu hari ini cantik. kemaren juga. besok juga pasti' },
+  { id: 'k65', t: 'matcha atau milk tea hari ini thayy?', r: 'Matcha. No, milk tea. No, both. Why choose?', c: 'treat' },
+  { id: 'k66', t: 'ceritain dong kamu lagi baca buku apa' },
+  { id: 'k67', t: 'tadi baterai aku tinggal 2% tapi tetep chat kamu dulu', r: 'You used your last 2% on me? Most romantic thing ever. Now charge your phone, Kidi.' },
+  { id: 'k68', t: 'jangan sedih sendirian ya thayy, cerita ke aku aja', r: "Okay. I'll tell you everything. Even the dramatic parts.", c: 'rest', sp: true },
+  { id: 'k69', t: 'aku percaya sama kamu, apapun yang kamu pilih' },
+  { id: 'k70', t: 'kalo ujan di bogor, jangan lupa pake jaket ya' },
+  { id: 'k71', t: 'kalo kamu capek, istirahat aja. dunia bisa nunggu' },
+  { id: 'k72', t: 'thayy, kamu udah ngelakuin yang terbaik hari ini', sp: true },
+  { id: 'k73', t: 'aku seneng banget ada kamu, beneran', r: "I'm happy you're here too, Kidi. Really." },
+];
+// Thaya's written replies, picked by keywords in Kidi's message (Indonesian and English both count)
+const INBOX_CATS = [
+  { k: 'promise', w: 3, tone: 'deep', mood: 8, kw: ['promise', 'janji', 'won’t leave', "won't leave", 'ninggalin kamu', 'wait for you', '1000 years', 'dateng ke hidup', 'hidup aku'],
+    r: ["Okay, I'm saving this forever. Thank you for staying, Kidi.", "You said it, so now it's a promise. I'm holding you to it. Gently.", "I don't say this enough, but... thank you. Really.", "This one goes straight into the museum. Main hall."] },
+  { k: 'love', w: 2, tone: 'sweet', mood: 6, kw: ['love', 'sayang', 'cinta', 'ily', 'luv', '❤', '💕', '<3', 'beruntung', 'brighter', 'favorite thing', 'mikirin'],
+    r: ["Love you too, Kidi. Don't let it go to your head. ...Okay, a little.", "Hehe. Stop being sweet, I'm trying to be productive.", "You're lucky I like you a lot.", "Okay, this made my whole day. Maybe my whole week.", "Ugh, you're so cheesy. Never stop."] },
+  { k: 'miss', w: 2, tone: 'sweet', mood: 5, kw: ['miss', 'kangen', 'rindu', 'ketemu'],
+    r: ["I miss you too. Like, a lot. Don't tell anyone.", "Soon, okay? Let's meet soon.", "Then call me later. That's an order.", "Missing you is my new hobby, apparently."] },
+  { k: 'sorry', w: 2, tone: 'care', mood: 3, kw: ['sorry', 'maaf', 'sori', 'annoyed', 'ganggu'],
+    r: ["It's okay, Kidi. You're not annoying. ...Okay, a little. But I like it.", "No need to say sorry. I'm here.", "Apology accepted. Now send me a cat video."] },
+  { k: 'thesis', w: 2, tone: 'support', mood: 5, kw: ['skripsi', 'lulus', 'sidang', 'yudisium', 'wisuda', 'thesis'],
+    r: ["Thesis talk again? We survived it. Both of us. Somehow.", "Thesis season is over. We celebrate now. With food.", "Okay, academic Kidi, I see you. Proud of us."] },
+  { k: 'beautiful', w: 1, tone: 'sweet', mood: 5, kw: ['cantik', 'beautiful', 'pretty', 'cute', 'lucu', 'gemes', 'senyum', 'smile', 'jelek', 'ganteng'],
+    r: ["You have to say that. ...But thank you. Hehe.", "Stop it, I'm blushing in front of my cats.", "Liar. A very sweet liar. I'll allow it.", "Okay, now I'm smiling at my phone like an idiot."] },
+  { k: 'thanks', w: 1, tone: 'sweet', mood: 4, kw: ['makasi', 'thank', 'thx', 'maaci', 'appreciated', 'terima kasih', 'seneng'],
+    r: ["You're welcome, Kidi! Thank YOU too.", "Aww. Anytime. Seriously, anytime.", "Hehe, I'm happy you're happy."] },
+  { k: 'proud', w: 1, tone: 'support', mood: 5, kw: ['bangga', 'proud', 'keren', 'pinter', 'hebat', 'yakin', 'percaya', 'terbaik', 'bisa', 'semangat', 'good luck', 'lancar', 'sukses'],
+    r: ["You think so? ...Okay, I'll believe you today.", "Thank you for always believing in me. It helps more than you know.", "Hehe. I'll try my best. For me. And a little for you."] },
+  { k: 'work', w: 1, tone: 'support', mood: 3, kw: ['magang', 'intern', 'bmm', 'kerja', 'presentasi', 'kantor', 'meeting', 'lembur', 'kemnaker'],
+    r: ["Thank youuu. Digital Community era, let's go.", "I'll survive today. Probably. With matcha.", "If they make me do overtime again, I'm telling you. And you're telling Kemnaker.", "My internship is tiring, but your messages help. A lot."] },
+  { k: 'rest', w: 1, tone: 'care', mood: 3, kw: ['istirahat', 'capek', 'cape', 'lelah', 'tired', 'rest', 'robot', 'sedih', 'pusing', 'nunggu'],
+    r: ["Okay, I'll rest. Only because you asked.", "I'm not a robot, you're right. I'm a sleepy human.", "Thank you for reminding me to breathe."] },
+  { k: 'night', w: 1, tone: 'care', mood: 2, kw: ['bobo', 'tidur', 'sleep', 'night', 'malam', 'ngantuk', 'begadang', 'mimpi'],
+    r: ["Good night, Kidi. See you in my dreams. Maybe. If you're lucky.", "I'm sleepy, but I'll stay up for one more message.", "Okay, going to sleep now. For real this time. ...Probably.", "Sleep well too, Kidi. Don't stay up too late."] },
+  { k: 'morning', w: 1, tone: 'care', mood: 3, kw: ['pagi', 'morning', 'bangun', 'sarapan'],
+    r: ["Good morning! I'm awake. Technically.", "Morning, Kidi! You're my first notification today. Good start.", "Pagi! I mean, good morning. Hehe. Have a good day too."] },
+  { k: 'safe', w: 1, tone: 'care', mood: 2, kw: ['ati', 'hati-hati', 'kabar', 'sampe', 'sampai', 'pulang', 'baterai', 'battery', '2%'],
+    r: ["I'm home already, don't worry.", "I'll text you when I arrive. Promise.", "My battery is low, but my heart is full. Okay, that was cheesy."] },
+  { k: 'coffee', w: 2, tone: 'fun', mood: 1, kw: ['kopi', 'coffee'],
+    r: ["Coffee? Ew. Give it to someone else. Bring me matcha.", "You know me so well. Coffee is a no."] },
+  { k: 'eaten', w: 2, tone: 'care', mood: 3, kw: ['udah makan', 'makan belum', 'telat makan', 'lupa makan', 'makan dulu', 'makan ya', 'sarapan', 'tummy', 'air putih', 'minum'],
+    r: ["I ate! ...A snack counts, right?", "Yes, Kidi, I'll eat properly. Probably rendang.", "Not yet. Okay, okay, I'm going to eat now.", "Water? Matcha is mostly water. That counts."] },
+  { k: 'treat', w: 1, tone: 'fun', mood: 4, kw: ['sushi', 'rendang', 'burger', 'pedes', 'pedas', 'matcha', 'milk tea', 'traktir'],
+    r: ["Food? Yes. Always yes. When?", "Sushi and rendang, my two love languages.", "You're bringing food? Okay, now I love you more. Kidding. Same amount.", "Spicy food reminds you of me? Correct. I'm spicy."] },
+  { k: 'cats', w: 2, tone: 'fun', mood: 3, kw: ['onyon', 'grey', 'unyil', 'usro', 'kucing', 'cat'],
+    r: ["Onyon, Grey, Unyil, and Usro say hi. Grey said 'meow'. I think it means 'hi Kidi'.", "My cats love you. Okay, they tolerate you. Same thing.", "Usro says thank you for calling him handsome. He's very shy about it.", "I'll send you cat photos later. Way too many cat photos."] },
+  { k: 'music', w: 2, tone: 'fun', mood: 3, kw: ['olivia', 'lagu', 'song', 'music', 'dengerin', 'spotify'],
+    r: ["Olivia Rodrigo reminds you of me? Good. That's correct.", "Send me what you're listening to! Let's swap playlists."] },
+  { k: 'movie', w: 2, tone: 'fun', mood: 3, kw: ['film', 'movie', 'nonton', 'anime', 'buku', 'baca', 'book'],
+    r: ["Okay, movie night! I'm picking. Don't complain.", "I'll recommend you anime. Prepare to cry.", "I'm reading something good. I'll tell you everything. Get comfortable."] },
+  { k: 'hiking', w: 2, tone: 'fun', mood: 3, kw: ['hiking', 'hike', 'gunung', 'naik'],
+    r: ["Hiking together? Okay, but if you get tired, I'm not carrying you.", "Yes! Let's go. I'll bring snacks, you bring the energy."] },
+  { k: 'call', w: 2, tone: 'sweet', mood: 3, kw: ['telpon', 'telepon', 'call', 'vc'],
+    r: ["Okay, call me later! I'll pick up. Probably on the first ring. Don't tell anyone.", "Call me. Now. Okay, after I finish this. Then call me."] },
+  { k: 'rain', w: 1, tone: 'care', mood: 2, kw: ['ujan', 'hujan', 'rain', 'payung', 'jaket', 'dingin', 'adem', 'panas', 'jogja', 'bogor', 'kebun raya'],
+    r: ["It's raining here, as always. Bogor things.", "Jogja is too hot. Come to Bogor, it's cold and cozy.", "I'll bring an umbrella. Thanks for the reminder."] },
+  { k: 'whatsup', w: 2, tone: 'fun', mood: 2, kw: ['lagi apa', 'lagi ngapain', 'ngapain', 'what are you doing', 'wyd', 'sibuk'],
+    r: ["Lying down. Thinking about snacks. And you, a little.", "Reading, scrolling, pretending to be productive. The usual.", "Right now? Replying to you. Obviously."] },
+  { k: 'funny', w: 1, tone: 'fun', mood: 3, kw: ['wkwk', 'haha', 'lol', 'tidur mulu', 'tidur muluu', '10 jam', 'ngaku', 'poll', 'omagat'],
+    r: ["Hahaha you're so silly. That's why I like you.", "Wkwkwk. What is wrong with you. Cute though.", "You sleep more than me? Impossible. That's my title."] },
+];
+const INBOX_FALLBACK = { k: 'other', tone: 'sweet', mood: 2, r: ["Hehe. Thanks for texting me, Kidi.", "Okay, noted! ...I'm smiling, by the way.", "You always know when to text me.", "I read it three times. Don't ask why."] };
+const INBOX_EXCL = {
+  deep: ["...Okay, I'm not crying. You're crying.", "Kidi. Stop. My heart.", "I'm saving this one. Obviously."],
+  sweet: ["Aaaa KIDI.", "Stoppp, I'm blushing.", "Hehe. Okay. I'm happy.", "My heart can't take this."],
+  support: ["He believes in me. Okay. Okay!", "Hehe. Thank you, Kidi.", "Energy restored."],
+  care: ["Yes, Kidi. I will. Hehe.", "He's so caring. Ugh. Cute.", "Okay okay, noted!"],
+  fun: ["Hahaha. What is he even saying.", "This guy. Wkwk.", "Kidi, you're so silly."],
+};
+
+/* ---------- inbox engine ---------- */
+const KIDI_BY_ID = Object.fromEntries(KIDI_MSGS.map((m) => [m.id, m]));
+const INBOX_KEY = 'thayagotchi.inbox.v1';
+function loadInboxState() {
+  try {
+    const d = JSON.parse(localStorage.getItem(INBOX_KEY) || 'null');
+    if (d && Array.isArray(d.list)) { d.list = d.list.filter((e) => e && KIDI_BY_ID[e.id]); delete d.custom; return d; }
+  } catch (e) { /* ignore */ }
+  return { list: [], seeded: false };
+}
+const IBS = loadInboxState();
+function saveInbox() { try { localStorage.setItem(INBOX_KEY, JSON.stringify(IBS)); } catch (e) { /* storage unavailable */ } }
+const ibMsg = (id) => KIDI_BY_ID[id];
+const ibUnread = () => IBS.list.filter((m) => !m.read).length;
+function inboxCategory(text) {
+  const t = ' ' + String(text).toLowerCase().replace(/[’‘]/g, "'") + ' ';
+  let best = null, bs = 0;
+  for (const c of INBOX_CATS) {
+    let sc = 0;
+    for (const k of c.kw) if (t.includes(k.replace(/[’‘]/g, "'"))) sc += c.w * (1 + 0.15 * k.length);
+    if (sc > bs) { bs = sc; best = c; }
+  }
+  return best || INBOX_FALLBACK;
+}
+const fitsHour = (when, h) => !when || (when === 'morning' ? h >= 5 && h < 11 : when === 'night' ? h >= 20 || h < 3 : true);
+function nextKidiMsg() {
+  const have = new Set(IBS.list.map((m) => m.id));
+  const pend = KIDI_MSGS.filter((m) => !have.has(m.id));
+  return pend.slice(0, 8).find((m) => fitsHour(m.when, new Date().getHours())) || pend.find((m) => !m.when) || null;
+}
+function deliver(id, at) {
+  IBS.list.push({ id, at: at || Date.now(), read: false, saved: false }); saveInbox(); syncInboxBadge();
+  if (IB.open) ibRender();
+}
+function syncInboxBadge() {
+  const n = ibUnread(), b = $('#inboxBadge');
+  b.hidden = !n; b.textContent = n > 9 ? '9+' : String(n);
+  $('#actInbox').setAttribute('aria-label', n ? `Inbox, ${n} unread message${n === 1 ? '' : 's'} from Kidi` : 'Inbox');
+  $('#actInbox').classList.toggle('need', n > 0 && !IB.open);
+}
+function buzzPhone() { const ph = $('#phone'); ph.classList.remove('buzz'); void ph.offsetWidth; ph.classList.add('buzz'); SFX.play('buzz'); setTimeout(() => ph.classList.remove('buzz'), 2600); }
+// a new message from Kidi arrives; returns false when he has nothing new to send right now
+function kidiSends() {
+  const m = nextKidiMsg(); if (!m) return false;
+  deliver(m.id); buzzPhone();
+  if (rage.active) { if (!Bubble.reading()) say(line('rageText')); return true; }
+  if (sleepingNow()) { if (!Bubble.visible) say('...Kidiii...? ...hehe... zzz...'); return true; }
+  if (!bath && act.type !== 'call' && act.type !== 'inbox' && !Bubble.reading()) { hop(10); say(line('inboxNew')); }
+  return true;
+}
+// first visit and coming back after a while: messages that arrived "while you were away"
+function inboxBoot(lastSeen) {
+  if (!IBS.seeded) {
+    IBS.seeded = true;
+    const t = Date.now(); deliver('k00', t - 20000); const m = nextKidiMsg(); if (m) deliver(m.id, t - 60000);
+    return;
+  }
+  if (!lastSeen) return;
+  const away = Date.now() - lastSeen; if (away < 45 * 60000) return;
+  const n = Math.min(3, 1 + Math.floor(away / (6 * 3600000)));
+  for (let i = 0; i < n; i++) { const m = nextKidiMsg(); if (!m) break; deliver(m.id, lastSeen + Math.round(away * (i + 1) / (n + 1))); }
+}
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function fmtWhen(at) {
+  const d = new Date(at), n = new Date(), hm = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  const day = (x) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
+  const diff = Math.round((day(n) - day(d)) / 86400000);
+  return diff === 0 ? `Today ${hm}` : diff === 1 ? `Yesterday ${hm}` : `${d.getDate()} ${MONTHS[d.getMonth()]} ${hm}`;
+}
+const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
+/* ---------- inbox panel ---------- */
+const IB = { open: false, view: 'list', tab: 'inbox', cur: null };
+const ibPanel = $('#inboxPanel'), ibBody = $('#ibBody'), ibFoot = $('#ibFoot');
+function ibRow(e) {
+  const m = ibMsg(e.id); if (!m) return '';
+  return `<button class="msg-row${e.read ? '' : ' unread'}" type="button" data-msg="${esc(e.id)}" aria-label="${e.read ? '' : 'Unread. '}Message from Kidi, ${esc(fmtWhen(e.at))}: ${esc(m.t)}"><i class="dot" aria-hidden="true"></i><span class="pv">${e.saved ? '♥ ' : ''}${esc(m.t)}</span><span class="meta">${esc(fmtWhen(e.at))}</span></button>`;
+}
+function ibRender() {
+  $('#ibTabInbox').textContent = `Messages${ibUnread() ? ` (${ibUnread()})` : ''}`;
+  const mem = IBS.list.filter((e) => e.saved).length;
+  $('#ibTabMem').textContent = `Memories${mem ? ` (${mem})` : ''}`;
+  $('#ibTabInbox').setAttribute('aria-selected', String(IB.tab === 'inbox'));
+  $('#ibTabMem').setAttribute('aria-selected', String(IB.tab === 'mem'));
+  if (IB.view === 'detail' && IB.cur) {
+    const e = IBS.list.find((x) => x.id === IB.cur), m = e && ibMsg(e.id);
+    if (!e || !m) { IB.view = 'list'; return ibRender(); }
+    ibBody.innerHTML = `<div class="chat">${KIDI_BY_ID[e.id] && KIDI_BY_ID[e.id].sp ? '<span class="chip">✦ SPECIAL</span>' : ''}`
+      + `<div class="cb from"><small>KIDI · ${esc(fmtWhen(e.at).toUpperCase())}</small>${esc(m.t)}</div>`
+      + (e.reply ? `<div class="cb reply"><small>THAYA</small>${esc(e.reply)}</div>` : '') + '</div>';
+    requestAnimationFrame(() => { ibBody.scrollTop = ibBody.scrollHeight; });
+    ibFoot.innerHTML = `<button class="ib-btn" type="button" id="ibBack">‹ Back</button><button class="ib-btn${e.saved ? '' : ' primary'}" type="button" id="ibSave" aria-pressed="${e.saved}">${e.saved ? '♥ Saved as memory' : '♡ Save as memory'}</button>`;
+    return;
+  }
+  const rows = IBS.list.filter((e) => IB.tab === 'inbox' || e.saved).slice().sort((a, b) => b.at - a.at);
+  ibBody.innerHTML = rows.length ? rows.map(ibRow).join('')
+    : `<p class="ib-empty">${IB.tab === 'inbox' ? 'No messages yet. Kidi will text soon.' : 'Open a message from Kidi and tap “Save as memory”. Saved messages stay here, like everything else in her museum.'}</p>`;
+  ibFoot.innerHTML = '';
+}
+function ibOpenMsg(id) {
+  const e = IBS.list.find((x) => x.id === id); if (!e) return;
+  IB.view = 'detail'; IB.cur = id;
+  const m = ibMsg(id), first = !e.read;
+  if (!e.reply) {
+    const km = KIDI_BY_ID[id];
+    if (km && km.r) { e.cat = km.c || 'love'; e.reply = km.r; }
+    else { const c = inboxCategory(m.t); e.cat = c.k; e.reply = pick(c.r); }
+  }
+  e.read = true; saveInbox(); syncInboxBadge(); ibRender();
+  thayaReadsMsg(e, first);
+  setTimeout(() => { const b = $('#ibSave'); if (b) b.focus({ preventScroll: true }); }, 30);
+}
+function thayaReadsMsg(e, first) {
+  const c = INBOX_CATS.find((x) => x.k === e.cat) || INBOX_FALLBACK, sp = !!(KIDI_BY_ID[e.id] && KIDI_BY_ID[e.id].sp);
+  const sweet = c.tone === 'sweet' || c.tone === 'deep' || sp;
+  if (act.type === 'inbox') { act.seq = inboxFrames(sweet); act.i = 0; act.nextFrameAt = 0; }
+  const hp = headPoint();
+  if (first) {
+    const d = c.mood + (sp ? 3 : 0); S.mood += d; flashMood(d);
+    spawn(sweet ? 'heart' : 'sparkle', hp.x, hp.y - M.charH * 0.1, sweet ? 6 : 3, { spread: M.charW * 0.4, rise: 90 });
+    SFX.play(sweet ? 'heart' : 'tap');
+  }
+  say(pick(INBOX_EXCL[sp ? 'deep' : c.tone] || INBOX_EXCL.sweet));
+}
+function inboxFrames(sweet) {
+  if (A && sweet && A.kidiphone && A.kidiphone.length) return A.kidiphone;
+  if (A && A.phone && A.phone.length) { const p = A.phone.filter((f) => !['game', 'selfie', 'gossip'].includes(f.tag)); if (p.length) return p; }
+  return F.happy;
+}
+function openInbox() {
+  touch(); SFX.init();
+  if (IB.open) { closeInbox(true); return; }
+  if (!F.happy) return;
+  if (bath) { toast(awayMsg()); return; }
+  if (sleepingNow()) { toast('Thaya is asleep. Kidi’s messages can wait until she wakes up!'); return; }
+  if (rage.active) { SFX.play('angry'); say(line('rageInbox')); return; }
+  if (act.type === 'call') { say(line('callBusy')); return; }
+  if (act.type === 'eat') { say("Let me finish eating first! Then I'll check my phone."); return; }
+  if (closetOpen) closeCloset(false);
+  if (act.type !== 'idle') act = { type: 'idle' };
+  // walk over to the phone on the desk, pick it up, then open the inbox
+  const ph = $('#phone'), r = ph.getBoundingClientRect(), rr = room.getBoundingClientRect();
+  const x = r.left - rr.left + r.width / 2;
+  nextBehaviorAt = now() + 15000; IB.pending = true;
+  walkTo(x, 160);
+  if (!walk.active) say(line(ibUnread() ? 'inboxOpen' : 'inboxEmpty'));
+  const t0 = now(), iv = setInterval(() => {
+    if (!IB.pending) { clearInterval(iv); return; }
+    if (walk.active && now() - t0 < 6000) return;
+    clearInterval(iv); IB.pending = false;
+    if (bath || sleepingNow() || rage.active || act.type === 'call') return;
+    walk.active = false;
+    startAct('inbox', 15 * 60000, inboxFrames(false), 1800, () => { ph.style.visibility = ''; });
+    ph.style.visibility = 'hidden'; hop(8);
+    if (!Bubble.reading()) say(line(ibUnread() ? 'inboxOpen' : 'inboxEmpty'));
+    IB.open = true; IB.view = 'list'; IB.tab = 'inbox'; ibRender(); syncInboxBadge();
+    ibPanel.hidden = false; requestAnimationFrame(() => ibPanel.classList.add('show'));
+    setTimeout(() => { const f = ibBody.querySelector('.msg-row') || $('#ibClose'); f.focus({ preventScroll: true }); }, 40);
+  }, 100);
+}
+function closeInbox(returnFocus) {
+  IB.pending = false;
+  if (!IB.open) return;
+  IB.open = false; ibPanel.classList.remove('show'); ibPanel.hidden = true;
+  $('#phone').style.visibility = '';
+  if (act.type === 'inbox') endAct();
+  syncInboxBadge();
+  if (returnFocus) $('#actInbox').focus({ preventScroll: true });
+}
+$('#actInbox').addEventListener('click', openInbox);
+$('#ibClose').addEventListener('click', () => closeInbox(true));
+$('#ibTabInbox').addEventListener('click', () => { IB.tab = 'inbox'; IB.view = 'list'; ibRender(); });
+$('#ibTabMem').addEventListener('click', () => { IB.tab = 'mem'; IB.view = 'list'; ibRender(); });
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape' || !IB.open) return;
+  e.preventDefault();
+  if (IB.view !== 'list') { IB.view = 'list'; ibRender(); const f = ibBody.querySelector('.msg-row') || $('#ibClose'); f.focus({ preventScroll: true }); } else closeInbox(true);
+});
+ibPanel.addEventListener('click', (e) => {
+  const row = e.target.closest('[data-msg]'); if (row) { ibOpenMsg(row.dataset.msg); return; }
+  const id = e.target.closest('button') && e.target.closest('button').id;
+  if (id === 'ibBack') { IB.view = 'list'; ibRender(); const f = ibBody.querySelector('.msg-row'); if (f) f.focus({ preventScroll: true }); }
+  else if (id === 'ibSave') {
+    const e2 = IBS.list.find((x) => x.id === IB.cur); if (!e2) return;
+    e2.saved = !e2.saved; saveInbox(); ibRender();
+    if (e2.saved) { SFX.play('heart'); const hp = headPoint(); spawn('heart', hp.x, hp.y - M.charH * 0.1, 4, { spread: M.charW * 0.3, rise: 80 }); if (!e2.memBonus) { e2.memBonus = true; S.mood += 2; saveInbox(); } }
+    say(line(e2.saved ? 'memSave' : 'memUnsave'));
+    const b = $('#ibSave'); if (b) b.focus({ preventScroll: true });
+  }
+});
+syncInboxBadge();
 vEl.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') petVisitor(e); });
 window.addEventListener('resize', () => { layout(); Bubble.fit(); });
 document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
@@ -3292,7 +3830,7 @@ window.addEventListener('pagehide', save);
 function fmtAway(ms) { const m = Math.round(ms / 60000); if (m < 60) return `${m} minute${m === 1 ? '' : 's'}`; const h = Math.round(m / 60); if (h < 48) return `${h} hour${h === 1 ? '' : 's'}`; return `${Math.round(h / 24)} days`; }
 (async function boot() {
   buildDecor(); updateClock(); setInterval(updateClock, 15000);
-  const lastSeen = restore(); syncSfx(); syncFits();
+  const lastSeen = restore(); syncSfx(); syncBgm(); syncFits(); inboxBoot(lastSeen); syncInboxBadge();
   let greeting = line('greet');
   if (lastSeen) {
     const away = Date.now() - lastSeen;
@@ -3315,7 +3853,7 @@ function fmtAway(ms) { const m = Math.round(ms / 60000); if (m < 60) return `${m
   setTimeout(() => { hop(14); say(greeting); }, 400);
   setInterval(animTick, 100); setInterval(logicTick, 1000); setInterval(save, 5000);
   setTimeout(async () => { const g0 = curGroup(), ak = GROUP_KEYS[g0][1]; try { await loadSheet(ak, SHEET_SRC[ak]); SETS[g0].A = A = buildActSets(ak); } catch (e) { SETS[g0].A = A = null; } sheetsReady = true; }, 600);
-  window.Thaya = { state: S, sheets: Sheets, startHobby: (k) => startHobby(k), event: () => randomEvent(), call: () => kidiCall(), sing: () => singEvent(), rage: () => enterRage('sudden'), bathroom: (k) => startBathroom(k || 'pee'), act: () => act.type, say: (t) => say(t), meow: () => greyMeow(false), wear: (id) => wearOutfit(id), outfit: () => S.outfit, ready: () => sheetsReady, loadGroup: (g) => ensureGroup(g), sets: SETS, show: (f) => { act = { type: 'idle' }; poseUntil = now() + 4000; showFrame(f); }, visit: (id) => catVisit(id), mama: () => mamaCall(), obj: (id) => { const el = document.querySelector(`[data-obj="${id}"]`); if (el) objTap(id, el); }, visitor: () => visitor && { id: visitor.id, pose: visitor.pose, leaving: !!visitor.leaving } };
+  window.Thaya = { state: S, sheets: Sheets, startHobby: (k) => startHobby(k), event: () => randomEvent(), call: () => kidiCall(), sing: () => singEvent(), rage: () => enterRage('sudden'), bathroom: (k) => startBathroom(k || 'pee'), act: () => act.type, say: (t) => say(t), bgmObj: () => BGM, bgm: () => BGM.ctx && { state: BGM.ctx.state, mode: S.bgm, out: BGM.out.gain.value, rain: BGM.rainBus.gain.value, lofi: BGM.lofiBus.gain.value, step: BGM.step }, meow: () => greyMeow(false), wear: (id) => wearOutfit(id), outfit: () => S.outfit, ready: () => sheetsReady, loadGroup: (g) => ensureGroup(g), sets: SETS, show: (f) => { act = { type: 'idle' }; poseUntil = now() + 4000; showFrame(f); }, visit: (id) => catVisit(id), mama: () => mamaCall(), inbox: () => openInbox(), ibState: () => IBS, kidiSends: () => kidiSends(), obj: (id) => { const el = document.querySelector(`[data-obj="${id}"]`); if (el) objTap(id, el); }, visitor: () => visitor && { id: visitor.id, pose: visitor.pose, leaving: !!visitor.leaving } };
 })();
 })();
 </script>
