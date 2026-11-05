@@ -1260,6 +1260,8 @@ const L = {
   rageInbox: ["I don't want to read anything right now.", "Not now. Not even Kidi.", "Phone's off. Mood's off."],
   memSave: ["Saved. This one's going in the museum.", "Saved to my memories. Forever and ever.", "This one's a keeper. Like him. Don't tell him I said that."],
   memUnsave: ["Okay, I took it out of my memories. It's still in my heart though.", "Removed. ...Fine, I still remember it."],
+  mamaHangUp: ["Kidi, Mama's calling me! I'll call you back, okay? Bye!", "Wait, Mama's calling. Sorry Kidi, gotta go! Bye bye!", "Kidi, hold on, Mama needs me. I'll call you later! Bye!", "Uh oh, Mama's calling. Talk later, Kidi! Bye!"],
+  mamaCallBack: ["I should call Kidi back. ...Later. He'll survive.", "Poor Kidi, I hung up on him. I'll text him sorry.", "Okay, Kidi, I'm back. ...Oh right, I hung up. Oops."],
   mamaCall: ["Dedeee!", "Dede! Come here for a sec!", "Dedeee, help Mama for a minute!", "Dede! Where are you?", "Dedeee! Mama needs you!", "Dede, come here, quick!"],
   mamaAnswer: ["Yes, Ma! Coming!", "Coming, Mama! One sec!", "Yes, Ma? On my way!", "Coming! ...What did I do this time?", "Mama's calling. Be right back!", "Yes, Maaa! Coming!"],
   mamaTap: ["Wait, Mama's calling me!", "Hold on, I'll be right back!", "Not now, Mama needs me!"],
@@ -2656,13 +2658,27 @@ const MAMA_ERRANDS = [
 ];
 let lastErrand = -1;
 const mamaOK = () => !rage.active && !bath && !IB.open && !IB.pending && !sleepingNow() && ['idle', 'react', 'hobby'].includes(act.type);
+// Mama can also call while Thaya is on the phone with Kidi: she hangs up right away and goes
+const mamaDuringCallOK = () => act.type === 'call' && !act.fought && !rage.active && !bath && !IB.open && !IB.pending;
 function mamaCall() {
-  if (!mamaOK()) return false;
+  const onCall = mamaDuringCallOK();
+  if (!onCall && !mamaOK()) return false;
   if (act.type === 'hobby') act = { type: 'idle' };
   walk.active = false;
   $('#mamaText').textContent = line('mamaCall');
   $('#mamaCall').classList.add('show'); SFX.play('mama');
   setTimeout(() => $('#mamaCall').classList.remove('show'), 2600);
+  if (onCall) {
+    act.fight = false; act.nextLineAt = Infinity; act.until = Infinity; act.onEnd = null;
+    setTimeout(() => {
+      if (act.type !== 'call' || rage.active || bath) return;
+      $('#callbar').classList.remove('show'); SFX.play('click');
+      hop(12); startAct('event', 1600, [pick(F.startle)], 1600); act.status = 'Hanging up, Mama is calling';
+      say(line('mamaHangUp'));
+      setTimeout(() => { if (!bath && !rage.active && !sleepingNow() && ['idle', 'react', 'event'].includes(act.type)) { startBathroom('mama'); bath.afterCall = true; } }, 1500);
+    }, 700);
+    return true;
+  }
   setTimeout(() => {
     if (!mamaOK() && act.type !== 'event') return;
     hop(12); startAct('event', 1400, [pick(F.startle)], 1400); act.status = 'Mama is calling';
@@ -2699,15 +2715,17 @@ function bathroomTick(t) {
       showFrame(pick(F.happy));
     }
   } else if (bath.phase === 'back' && !walk.active) {
-    const kind = bath.kind; bath = null; act = { type: 'idle' };
+    const kind = bath.kind, afterCall = !!bath.afterCall; bath = null; act = { type: 'idle' };
     if (kind === 'mama') {
       let i; do { i = Math.floor(Math.random() * MAMA_ERRANDS.length); } while (i === lastErrand && MAMA_ERRANDS.length > 1);
       lastErrand = i; const e = MAMA_ERRANDS[i];
       S.mood += e.m; if (e.tummy) S.tummy += e.tummy; if (e.m) flashMood(e.m);
       hop(12); SFX.play('wake');
       startAct('react', 3000, [pick(e.m < 0 ? F.sulky : e.m >= 4 ? F.lovely : F.happy)], 3000);
-      nextSwingAt = Math.max(nextSwingAt, now() + rand(12000, 18000)); nextChatAt = Math.max(nextChatAt, now() + 9000);
-      say(e.t); return;
+      nextSwingAt = Math.max(nextSwingAt, now() + rand(12000, 18000)); nextChatAt = Math.max(nextChatAt, now() + 12000);
+      say(e.t);
+      if (afterCall) setTimeout(() => { if (!rage.active && !bath && !sleepingNow() && act.type !== 'call' && !Bubble.reading()) say(line('mamaCallBack')); }, 5200);
+      return;
     }
     S.mood += kind === 'poop' ? 5 : 3; S.tummy -= kind === 'poop' ? 15 : 5;
     hop(12); SFX.play('wake');
@@ -2934,7 +2952,7 @@ function animTick() {
     if (act.type === 'call') {
       const sec = Math.floor((t - callStartedAt) / 1000); $('#callTime').textContent = '00:' + String(sec).padStart(2, '0');
       if (act.fight && t >= act.fightAt) {
-        act.fight = false; act.nextLineAt = Infinity; act.until = t + 2000; act.seq = F.furious;
+        act.fight = false; act.fought = true; act.nextLineAt = Infinity; act.until = t + 2000; act.seq = F.furious;
         act.onEnd = () => { $('#callbar').classList.remove('show'); enterRage('call'); };
         showFrame(pick(F.furious)); SFX.play('angry'); say(line('callFight'));
       } else if (t >= act.nextLineAt && act.until - t > 1500) { act.nextLineAt = t + 2800; say(line('callMid')); }
@@ -2957,7 +2975,7 @@ function logicTick() {
   if (!F.happy) return;
   const t = now(), ign = (t - lastInteraction) / 1000;
   if (rage.active) { S.mood = Math.min(S.mood, 12); S.tummy -= 0.1; S.energy -= 0.05; }
-  else if (act.type === 'call') { S.mood += 2; S.energy -= 0.02; }
+  else if (act.type === 'call') { S.mood += 2; S.energy -= 0.02; if (Math.random() < 0.004 && t - callStartedAt > 3000) mamaCall(); }
   else if (act.type === 'sleep') { S.energy += 5; S.mood += 0.25; S.tummy -= 0.05; }
   else if (act.type === 'hobby') {
     S.mood += act.hobby === 'work' ? -0.05 : 0.2; S.energy -= act.hobby === 'work' ? 0.3 : 0.06; S.tummy -= 0.1;
@@ -3876,7 +3894,7 @@ function fmtAway(ms) { const m = Math.round(ms / 60000); if (m < 60) return `${m
   setTimeout(() => { hop(14); say(greeting); }, 400);
   setInterval(animTick, 100); setInterval(logicTick, 1000); setInterval(save, 5000);
   setTimeout(async () => { const g0 = curGroup(), ak = GROUP_KEYS[g0][1]; try { await loadSheet(ak, SHEET_SRC[ak]); SETS[g0].A = A = buildActSets(ak); } catch (e) { SETS[g0].A = A = null; } sheetsReady = true; }, 600);
-  window.Thaya = { state: S, sheets: Sheets, startHobby: (k) => startHobby(k), event: () => randomEvent(), call: () => kidiCall(), sing: () => singEvent(), rage: () => enterRage('sudden'), bathroom: (k) => startBathroom(k || 'pee'), act: () => act.type, say: (t) => say(t), bgmObj: () => BGM, bgm: () => BGM.ctx && { state: BGM.ctx.state, mode: S.bgm, out: BGM.out.gain.value, rain: BGM.rainBus.gain.value, lofi: BGM.lofiBus.gain.value, step: BGM.step }, meow: () => greyMeow(false), wear: (id) => wearOutfit(id), outfit: () => S.outfit, ready: () => sheetsReady, loadGroup: (g) => ensureGroup(g), sets: SETS, show: (f) => { act = { type: 'idle' }; poseUntil = now() + 4000; showFrame(f); }, visit: (id) => catVisit(id), mama: () => mamaCall(), inbox: () => openInbox(), ibState: () => IBS, kidiSends: () => kidiSends(), obj: (id) => { const el = document.querySelector(`[data-obj="${id}"]`); if (el) objTap(id, el); }, visitor: () => visitor && { id: visitor.id, pose: visitor.pose, leaving: !!visitor.leaving } };
+  window.Thaya = { state: S, sheets: Sheets, startHobby: (k) => startHobby(k), event: () => randomEvent(), call: () => kidiCall(), sing: () => singEvent(), rage: () => enterRage('sudden'), bathroom: (k) => startBathroom(k || 'pee'), act: () => act.type, say: (t) => say(t), bgmObj: () => BGM, bgm: () => BGM.ctx && { state: BGM.ctx.state, mode: S.bgm, out: BGM.out.gain.value, rain: BGM.rainBus.gain.value, lofi: BGM.lofiBus.gain.value, step: BGM.step }, meow: () => greyMeow(false), wear: (id) => wearOutfit(id), outfit: () => S.outfit, ready: () => sheetsReady, loadGroup: (g) => ensureGroup(g), sets: SETS, show: (f) => { act = { type: 'idle' }; poseUntil = now() + 4000; showFrame(f); }, visit: (id) => catVisit(id), mama: () => mamaCall(), callNow: () => { nextCallAt = 0; kidiCall(); }, inbox: () => openInbox(), ibState: () => IBS, kidiSends: () => kidiSends(), obj: (id) => { const el = document.querySelector(`[data-obj="${id}"]`); if (el) objTap(id, el); }, visitor: () => visitor && { id: visitor.id, pose: visitor.pose, leaving: !!visitor.leaving } };
 })();
 })();
 </script>
