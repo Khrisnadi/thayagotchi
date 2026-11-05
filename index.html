@@ -313,6 +313,7 @@ button{font:inherit;color:inherit}
 @keyframes cardflip{50%{transform:scaleX(.1)}}
 .rps-btn:focus-visible,.gm-pick:focus-visible,.card:focus-visible{outline:3px dashed var(--pink);outline-offset:3px}
 @media (prefers-reduced-motion:reduce){.vs .side.shake svg,.card.flip{animation:none}}
+@media (max-width:900px){.cards{max-width:200px;gap:6px}.card .face{font-size:18px}.rps-btn svg{width:30px;height:27px}.vs .side svg{width:40px;height:36px}}
 .closet-panel{position:absolute;left:50%;top:calc(var(--px) * 15);z-index:44;width:min(330px,calc(100% - 20px));transform:translate(-50%,-12px);opacity:0;transition:transform .2s steps(3),opacity .2s steps(3);
   background:var(--paper);padding:10px 10px 12px;display:grid;gap:8px;
   box-shadow:0 -3px 0 0 var(--ink),0 3px 0 0 var(--ink),-3px 0 0 0 var(--ink),3px 0 0 0 var(--ink),0 9px 0 0 rgba(61,43,79,.22)}
@@ -4154,8 +4155,8 @@ function gmCards() {
   const ranks = shuffle([...Array(13).keys()]).slice(0, 6);
   GM.deck = ranks.map((v) => ({ v, suit: pick(SUITS) }));
   gmBody.innerHTML = `<p class="gm-hint" id="cardHint">Pick a card. Thaya picks after you. Bigger card wins!</p>
-    <div class="cards">${GM.deck.map((c, i) => `<button class="card" type="button" data-card="${i}" aria-label="Face-down card ${i + 1}"><span class="back"></span><span class="face" style="color:${c.suit[1]}">${RANKS[c.v]}<span>${c.suit[0]}</span><small></small></span></button>`).join('')}</div>
-    <p class="gm-result" id="gmResult"></p>`;
+    <p class="gm-result" id="gmResult"></p>
+    <div class="cards">${GM.deck.map((c, i) => `<button class="card" type="button" data-card="${i}" aria-label="Face-down card ${i + 1}"><span class="back"></span><span class="face" style="color:${c.suit[1]}">${RANKS[c.v]}<span>${c.suit[0]}</span><small></small></span></button>`).join('')}</div>`;
   gmFoot.innerHTML = '<button class="ib-btn" type="button" id="gmBack">‹ Games</button><span></span>';
   gmFocus('.card');
 }
