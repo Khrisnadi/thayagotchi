@@ -2111,6 +2111,7 @@ const SFX = {
     src.connect(flt); flt.connect(g); g.connect(c.destination); src.start(t);
   },
   play(n) {
+    if (n !== 'blip' && n !== 'thunder' && S.sfx) { try { BGM.duck(); } catch (e) { /* BGM not ready */ } }
     switch (n) {
       case 'tap': this.tone(660, 0.07); this.tone(990, 0.08, { delay: 0.06 }); break;
       case 'heart': [784, 988, 1319].forEach((f, i) => this.tone(f, 0.1, { delay: i * 0.07, type: 'triangle', vol: 0.05 })); break;
@@ -3068,7 +3069,7 @@ $('#btnSfx').addEventListener('click', () => { S.sfx = !S.sfx; SFX.init(); syncS
    ========================================================= */
 const BGM = {
   ctx: null, out: null, rainBus: null, lofiBus: null, started: false, timer: null, dripTimer: null,
-  step: 0, nextT: 0, bar: 0, bpm: 72, rainLevel: 0.2, lofiLevel: 0.75,
+  step: 0, nextT: 0, bar: 0, bpm: 72, rainLevel: 0.085, lofiLevel: 0.6,
   // ii-V-I-vi in C, jazzy voicings (midi): Dm9, G13, Cmaj9, Am9
   chords: [[50, 53, 57, 60, 64], [43, 53, 57, 59, 64], [48, 52, 55, 59, 62], [45, 52, 55, 59, 60]],
   bass: [38, 43, 36, 45],
@@ -3078,7 +3079,8 @@ const BGM = {
     SFX.init(); if (!SFX.ctx) return false;
     if (this.ctx) return true;
     const c = this.ctx = SFX.ctx;
-    this.out = c.createGain(); this.out.gain.value = 0; this.out.connect(c.destination);
+    this.duckG = c.createGain(); this.duckG.connect(c.destination);
+    this.out = c.createGain(); this.out.gain.value = 0; this.out.connect(this.duckG);
     this.rainBus = c.createGain(); this.rainBus.gain.value = 0; this.rainBus.connect(this.out);
     this.lofiBus = c.createGain(); this.lofiBus.gain.value = 0;
     // lo-fi colour: warm lowpass + a gentle wobble on the cutoff
@@ -3111,7 +3113,7 @@ const BGM = {
     const c = this.ctx;
     // steady rain on the roof: pink noise, band-limited
     const hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 380;
-    const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 4200;
+    const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2400;
     const g1 = c.createGain(); g1.gain.value = 0.9; hp.connect(lp); lp.connect(g1); g1.connect(this.rainBus);
     this.loop(this.noiseBuf, hp);
     // gusts: slow swell on the rain level
@@ -3128,7 +3130,7 @@ const BGM = {
     const c = this.ctx, t = c.currentTime + delay, o = c.createOscillator(), g = c.createGain();
     const f = 1400 + Math.random() * 2600;
     o.type = 'sine'; o.frequency.setValueAtTime(f, t); o.frequency.exponentialRampToValueAtTime(f * 0.45, t + 0.05);
-    g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.018 + Math.random() * 0.02, t + 0.004); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.07);
+    g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.012 + Math.random() * 0.012, t + 0.004); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.07);
     o.connect(g); g.connect(this.rainBus); o.start(t); o.stop(t + 0.09);
   },
   buildCrackle() {
@@ -3193,20 +3195,26 @@ const BGM = {
     if (!this.ctx) return;
     const on = S.bgm !== 'off' && !document.hidden;
     this.lofiOn = S.bgm === 'all';
-    let rain = this.lofiOn ? this.rainLevel : this.rainLevel * 1.6, lofi = this.lofiOn ? this.lofiLevel : 0;
+    let rain = this.lofiOn ? this.rainLevel : this.rainLevel * 1.5, lofi = this.lofiOn ? this.lofiLevel : 0;
     const other = act.type === 'call' || act.type === 'sing' || (typeof nowPlaying !== 'undefined' && nowPlaying);
     if (other) { lofi *= 0.12; rain *= 0.7; }
     if (sleepingNow()) { lofi *= 0.45; rain *= 1.15; }
     if (rage.active) lofi *= 0.5;
     const t = this.ctx.currentTime, tc = snap ? 0.4 : 1.2;
-    this.out.gain.setTargetAtTime(on ? 1.5 : 0, t, snap ? 0.3 : 0.5);
+    this.out.gain.setTargetAtTime(on ? 0.55 : 0, t, snap ? 0.3 : 0.5);
     this.rainBus.gain.setTargetAtTime(on ? rain : 0, t, tc);
     this.lofiBus.gain.setTargetAtTime(on ? lofi : 0, t, tc);
+  },
+  // dip the music for a moment so sound effects come through clearly
+  duck() {
+    if (!this.ctx || !this.duckG) return;
+    const t = this.ctx.currentTime, g = this.duckG.gain;
+    g.cancelScheduledValues(t); g.setTargetAtTime(0.35, t, 0.02); g.setTargetAtTime(1, t + 0.45, 0.3);
   },
   thunderSwell() {
     if (!this.ctx || S.bgm === 'off') return;
     const t = this.ctx.currentTime, g = this.rainMain.gain;
-    g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); g.linearRampToValueAtTime(1.35, t + 0.6); g.linearRampToValueAtTime(0.9, t + 6);
+    g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); g.linearRampToValueAtTime(1.25, t + 0.6); g.linearRampToValueAtTime(0.9, t + 6);
   },
 };
 const BGM_LABEL = { all: 'BGM: LO-FI + RAIN', rain: 'BGM: RAIN', off: 'BGM: OFF' };
