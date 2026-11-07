@@ -5068,8 +5068,16 @@ function arCloseReview() {
   if (!AR.reviewing) return;
   AR.reviewing = false; $('#arReview').hidden = true; AR.autoAt = now() + 4800;
 }
-function arSave() {
+// inside the claude.ai artifact viewer, saving goes through its downloads capability; on the website a normal download link works
+AR.dl = null;
+try { if (window.claude && typeof window.claude.use === 'function') window.claude.use('downloads').then((d) => { AR.dl = d; }).catch(() => {}); } catch (e) { /* not in the artifact viewer */ }
+async function arSave() {
   if (!AR.shotURL) return;
+  if (AR.dl) {
+    try { await AR.dl.save({ filename: AR.shotName, data: AR.shotBlob }); SFX.play('tune'); arToast('Saved!'); }
+    catch (e) { if (e && e.code !== 'declined') arToast('Saving is not available here. Long-press the photo to save it.', 3600); }
+    return;
+  }
   const a = document.createElement('a'); a.href = AR.shotURL; a.download = AR.shotName; document.body.appendChild(a); a.click(); a.remove();
   SFX.play('tune'); arToast('Saved! Check your downloads.');
 }
