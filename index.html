@@ -465,6 +465,49 @@ button{font:inherit;color:inherit}
 .loader{position:absolute;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:rgba(253,228,238,.92);font-family:var(--font-display);font-size:14px;letter-spacing:1px}
 .loader[hidden]{display:none}
 @media (prefers-reduced-motion:reduce){.rain{animation-duration:2.4s}.rain.r2{animation-duration:3.2s}.steam,.clock .colon{animation:none}}
+/* phones: compact header, squarer room, mood card right under the room, then the buttons */
+@media (max-width:600px){
+  .wrap{padding:8px 10px 18px;gap:8px}
+  .top{gap:6px 8px}
+  .logo{gap:8px}
+  .logo-mark{width:30px;height:30px}
+  .logo h1{font-size:20px}
+  .logo p{display:none}
+  .top-btns{gap:0}
+  .top-btns .px-btn.small{font-size:11px;padding:5px 7px}
+  #btnBgm{min-width:0}
+  .device{padding:6px 7px 10px}
+  .device-label{font-size:9px;padding:0 2px 5px}
+  .screen{padding:4px}
+  .stage{gap:8px}
+  .mood{order:2;padding:7px 10px 8px;gap:5px;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:12px}
+  .mood>*{grid-column:1/-1}
+  .mood>.mini{grid-column:auto;font-size:9px;gap:6px}
+  .mini-bar{flex:1;max-width:120px;grid-template-columns:repeat(10,minmax(0,1fr))}
+  .mini-bar b{height:8px}
+  .mood-ends{display:none}
+  .mood-title{font-size:11px}
+  .tier{font-size:10px;padding:2px 6px}
+  .pct{font-size:12px}
+  .moodbar{height:16px;padding:2px;gap:1px}
+  .status{font-size:13px;padding-top:5px;margin:0}
+  .actions{order:3;gap:4px 2px}
+  .actions .px-btn{min-height:50px;font-size:13px;padding:5px 3px;gap:3px}
+  .actions .px-btn svg{width:20px;height:20px}
+  .tip{order:4;font-size:12px}
+  .inbox-panel{top:8px;max-height:calc(100% - 16px)}
+  .mem-book{overflow:auto;overscroll-behavior:contain}
+  .mem-book .ib-head{position:sticky;top:0;z-index:2;background:var(--paper)}
+  .mem-book .mb-cards{flex:none;overflow:visible}
+  .mb-day{height:22px}
+  .mb-grid{gap:2px}
+  .cards{grid-template-columns:repeat(6,minmax(0,1fr));max-width:100%;gap:5px}
+  .card .face{font-size:16px}
+  .card .back::after{font-size:15px}
+  .gm-hint{font-size:13px}
+  .photo-view{max-width:56%}
+  .room.photo-open .bubble{max-width:calc(44% - 18px)}
+}
 </style>
 </head>
 <body>
@@ -2406,6 +2449,15 @@ function layout() {
   const w = room.clientWidth || 600, px = Math.max(2, Math.round(w / 170));
   let h = Math.round(clamp(w * 0.78, 400, 540));
   if (window.innerWidth > 900) h = Math.min(h, Math.max(380, window.innerHeight - 205));
+  else if (window.innerWidth <= 600) {
+    // phones: a squarer room, sized so the mood card and the buttons still fit on screen.
+    // The viewport height is only re-read when the width changes, so the room does not jump while the browser bar hides.
+    if (M.vhW !== window.innerWidth || !M.vh) { M.vh = window.innerHeight; M.vhW = window.innerWidth; }
+    const acts = document.querySelector('.actions');
+    const below = acts ? Math.max(0, acts.getBoundingClientRect().bottom + window.scrollY - (room.getBoundingClientRect().top + window.scrollY) - room.offsetHeight) : 300;
+    const above = room.getBoundingClientRect().top + window.scrollY;
+    h = Math.round(clamp(M.vh - above - below - 10, 280, Math.min(w * 1.02, 440)));
+  }
   room.style.height = h + 'px'; room.style.setProperty('--px', px + 'px');
   Object.assign(M, { roomW: w, roomH: h, px, deskH: 13 * px });
   const gk = GROUP_KEYS[curGroup()][0], refKey = Sheets[gk] ? gk : (Object.keys(Sheets).find((k) => k.startsWith('emo')) || null);
@@ -2465,7 +2517,9 @@ const Bubble = {
   fit() { this.txt.style.maxHeight = Math.max(70, M.floorY - M.charH * 0.98 - 64) + 'px'; },
   measure() { this.w = this.el.offsetWidth; this.h = this.el.offsetHeight; },
   place() {
-    const headTop = M.floorY - M.charH * 0.98 + jumpY, left = clamp(pos.x - this.w / 2, 8, M.roomW - this.w - 8), top = Math.max(6, headTop - this.h - 18);
+    // on phones the photobooth viewer fills the left side, so the bubble moves to its right
+    const pv = M.roomW <= 600 && room.classList.contains('photo-open') ? $('#photoView') : null, minL = pv ? pv.offsetLeft + pv.offsetWidth + 8 : 8;
+    const headTop = M.floorY - M.charH * 0.98 + jumpY, left = clamp(pos.x - this.w / 2, minL, Math.max(minL, M.roomW - this.w - 8)), top = Math.max(6, headTop - this.h - 18);
     this.el.style.transform = `translate(${Math.round(left)}px, ${Math.round(top)}px)`;
     this.el.style.setProperty('--tail', clamp(pos.x - left, 16, this.w - 16) + 'px');
   },
