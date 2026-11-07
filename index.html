@@ -749,7 +749,7 @@ html.ar-lock,html.ar-lock body{overflow:hidden;overscroll-behavior:none}
     <div class="ar-top">
       <button class="ar-chip" id="arClose" type="button" aria-label="Close camera">✕</button>
       <span class="ar-title" id="arTitle">THAYA CAM</span>
-      <span class="ar-top-r"><button class="ar-chip ar-3d" id="arNativeBtn" type="button" aria-label="3D: see half-3D Thaya and put her in your room" hidden>3D</button><button class="ar-chip ar-world" id="arWorld" type="button" aria-pressed="false" aria-label="AR mode: keep Thaya on her spot when the camera moves" hidden>AR</button><button class="ar-chip" id="arFlip" type="button" aria-label="Switch camera" hidden>FLIP</button></span>
+      <span class="ar-top-r"><button class="ar-chip ar-3d" id="arNativeBtn" type="button" aria-label="3D: put Thaya in your room" hidden>3D</button><button class="ar-chip ar-world" id="arWorld" type="button" aria-pressed="false" aria-label="AR mode: keep Thaya on her spot when the camera moves" hidden>AR</button><button class="ar-chip" id="arFlip" type="button" aria-label="Switch camera" hidden>FLIP</button></span>
     </div>
     <div class="ar-size"><button class="ar-chip" id="arBigger" type="button" aria-label="Make Thaya bigger">+</button><button class="ar-chip" id="arSmaller" type="button" aria-label="Make Thaya smaller">−</button><button class="ar-chip ar-spin" id="arTurnL" type="button" aria-label="Turn Thaya to the left">⟲</button><button class="ar-chip ar-spin" id="arTurnR" type="button" aria-label="Turn Thaya to the right">⟳</button></div>
     <div class="ar-hint" id="arHint" role="status"></div>
@@ -780,8 +780,8 @@ html.ar-lock,html.ar-lock body{overflow:hidden;overscroll-behavior:none}
   <div class="ar-native" id="arNative" role="dialog" aria-modal="true" aria-labelledby="arNativeTitle" hidden>
     <div class="ar-native-card">
       <b id="arNativeTitle">THAYA IN YOUR ROOM</b>
-      <canvas class="ar-preview" id="arPreview" aria-label="Half-3D Thaya. Drag to spin her around."></canvas>
-      <p class="ar-native-hint">Drag to spin her: front, side and back.</p>
+      <canvas class="ar-preview" id="arPreview" aria-label="Thaya standee. Drag to spin her around."></canvas>
+      <p class="ar-native-hint">Drag to spin her: front and back.</p>
       <p>On iPhone this opens the AR viewer: Thaya locks onto the floor, grows as you walk closer, and you can walk around her. Tap the shutter there for a photo, hold it for a video.</p>
       <div class="ar-native-size" role="group" aria-label="Size"><button class="ar-pill" type="button" data-qlsize="life" aria-pressed="true">Life-size</button><button class="ar-pill ghost" type="button" data-qlsize="mini" aria-pressed="false">Mini</button></div>
       <a class="ar-ql busy" id="arQL" rel="ar" download="thaya.usdz"><img id="arQLImg" alt="Open the AR viewer"></a>
@@ -5450,7 +5450,7 @@ async function qlBuild() {
   const label = `${AR_POSES[pose].name} pose · ${QL.size === 'life' ? 'life-size, about 155 cm' : 'mini, about 35 cm'}`;
   if (!AR_QL && !QL.forceUSDZ) { $('#arQLStatus').textContent = label; return null; }
   const png = (c, k) => qlPNG(k > 1 ? arUpscale(c, k) : c);
-  const [pF, pB, pS, pBub, pSh] = await Promise.all([png(model.tex.front, 2), png(model.tex.back, 2), png(model.tex.side, 2), png(model.tex.bubble, 1), png(model.tex.shadow, 1)]);
+  const [pF, pB, pBub, pSh] = await Promise.all([png(model.tex.front, 2), png(model.tex.back, 2), png(model.tex.bubble, 1), png(model.tex.shadow, 1)]);
   const G = model.G;
   const usda = `#usda 1.0
 (
@@ -5485,7 +5485,6 @@ def Xform "Root" (
             token preliminary:planeAnchoring:alignment = "horizontal"
 ${qlMesh('Front', 'Front', G.front)}
 ${qlMesh('Back', 'Back', G.back)}
-${qlMesh('Side', 'Side', G.side)}
 ${qlMesh('Bubble', 'Bubble', G.bubble)}
 ${qlMesh('Shadow', 'Shadow', G.shadow)}
         }
@@ -5493,14 +5492,13 @@ ${qlMesh('Shadow', 'Shadow', G.shadow)}
 }
 
 def "Materials"
-{${qlMaterial('Front', 'front.png', 'opaque')}
-${qlMaterial('Back', 'back.png', 'opaque')}
-${qlMaterial('Side', 'side.png', 'opaque')}
+{${qlMaterial('Front', 'front.png', 'cutout')}
+${qlMaterial('Back', 'back.png', 'cutout')}
 ${qlMaterial('Bubble', 'bubble.png', 'cutout')}
 ${qlMaterial('Shadow', 'shadow.png', 'soft')}
 }
 `;
-  const blob = qlZip([{ name: 'thaya.usda', data: new TextEncoder().encode(usda) }, { name: 'textures/front.png', data: pF }, { name: 'textures/back.png', data: pB }, { name: 'textures/side.png', data: pS }, { name: 'textures/bubble.png', data: pBub }, { name: 'textures/shadow.png', data: pSh }]);
+  const blob = qlZip([{ name: 'thaya.usda', data: new TextEncoder().encode(usda) }, { name: 'textures/front.png', data: pF }, { name: 'textures/back.png', data: pB }, { name: 'textures/bubble.png', data: pBub }, { name: 'textures/shadow.png', data: pSh }]);
   if (tok !== QL.token || !QL.open) return null;
   QL.url = URL.createObjectURL(blob); QL.blob = blob;
   const a = $('#arQL'); a.href = QL.url; a.classList.remove('busy');
@@ -5517,118 +5515,26 @@ function arCell(view, i) {
   c.getContext('2d').drawImage(img, (i % AR_COLS) * cw, Math.floor(i / AR_COLS) * ch, cw, ch, 0, 0, c.width, c.height);
   return (AR_CELL_CACHE[key] = c);
 }
-function arAlphaGrid(c, g) {
-  const W = c.width, H = c.height, d = c.getContext('2d').getImageData(0, 0, W, H).data, GW = Math.ceil(W / g), GH = Math.ceil(H / g), m = new Uint8Array(GW * GH);
-  for (let gy = 0; gy < GH; gy++) for (let gx = 0; gx < GW; gx++) {
-    let on = 0, tot = 0;
-    for (let y = gy * g; y < Math.min(H, gy * g + g); y++) for (let x = gx * g; x < Math.min(W, gx * g + g); x++) { tot++; if (d[(y * W + x) * 4 + 3] > 127) on++; }
-    m[gy * GW + gx] = on * 2 >= tot ? 1 : 0;
-  }
-  return { m, GW, GH };
-}
-function arRuns(G, gy) {
-  const r = []; let s = -1;
-  for (let gx = 0; gx <= G.GW; gx++) { const v = gx < G.GW && G.m[gy * G.GW + gx]; if (v && s < 0) s = gx; if (!v && s >= 0) { r.push([s, gx]); s = -1; } }
-  return r.length > 1 ? r.filter((q) => q[1] - q[0] > 1) : r;
-}
-function arPair(X, Z, cx, cz) {
-  // body goes with body and hands with hands, so a raised hand doesn't stretch the whole head forward
-  if (X.length < 2 || Z.length < 2) { const P = []; X.forEach((x) => Z.forEach((z) => P.push([x, z]))); return P; }
-  const main = (R, c) => { let k = R.findIndex((q) => q[0] <= c && c < q[1]); if (k < 0) k = R.reduce((b, q, j) => (q[1] - q[0] > R[b][1] - R[b][0] ? j : b), 0); return k; };
-  const mx = main(X, cx), mz = main(Z, cz), P = [[X[mx], Z[mz]]];
-  X.forEach((x, i) => { if (i !== mx) Z.forEach((z, j) => { if (j !== mz) P.push([x, z]); }); });
-  return P;
-}
-function arHull(pose, g) {
-  // every row of the body is the front drawing's width times the side drawing's depth
-  const F = arAlphaGrid(arCell('front', pose), g), S = arAlphaGrid(arCell('side', AR_SIDE_OF[pose]), g);
-  const GH = Math.min(F.GH, S.GH), boxes = []; let prev = '', open = [];
-  for (let gy = 0; gy <= GH; gy++) {
-    let pairs = [], sig = '';
-    if (gy < GH) { const X = arRuns(F, gy), Z = arRuns(S, gy); if (X.length && Z.length) { pairs = arPair(X, Z, F.GW / 2, S.GW / 2); sig = JSON.stringify(pairs); } }
-    if (sig !== prev) {
-      open.forEach((b) => { b.y1 = gy; boxes.push(b); });
-      open = pairs.map(([x, z]) => ({ x0: x[0], x1: x[1], z0: z[0], z1: z[1], y0: gy, y1: gy })); prev = sig;
-    }
-  }
-  const covers = (B, A) => B.x0 <= A.x0 && B.x1 >= A.x1 && B.z0 <= A.z0 && B.z1 >= A.z1;
-  boxes.forEach((A) => { A.topHidden = boxes.some((B) => B.y1 === A.y0 && covers(B, A)); A.botHidden = boxes.some((B) => B.y0 === A.y1 && covers(B, A)); });
-  return { boxes, g };
-}
-function arBleed(c) {
-  // fill the see-through pixels with the nearest drawn colour, so no seam ever shows a hole
-  const W = c.width, H = c.height, id = c.getContext('2d').getImageData(0, 0, W, H), p = id.data, seen = new Uint8Array(W * H), q = new Int32Array(W * H);
-  let head = 0, tail = 0;
-  for (let i = 0; i < W * H; i++) if (p[i * 4 + 3] > 127) { seen[i] = 1; q[tail++] = i; }
-  if (!tail) { for (let i = 0; i < W * H; i++) { p[i * 4] = 220; p[i * 4 + 1] = 210; p[i * 4 + 2] = 200; } }
-  while (head < tail) {
-    const i = q[head++], x = i % W, y = (i - x) / W;
-    const nb = [x > 0 ? i - 1 : -1, x < W - 1 ? i + 1 : -1, y > 0 ? i - W : -1, y < H - 1 ? i + W : -1];
-    for (const j of nb) if (j >= 0 && !seen[j]) { seen[j] = 1; p[j * 4] = p[i * 4]; p[j * 4 + 1] = p[i * 4 + 1]; p[j * 4 + 2] = p[i * 4 + 2]; q[tail++] = j; }
-  }
-  for (let i = 0; i < W * H; i++) p[i * 4 + 3] = 255;
-  const o = document.createElement('canvas'); o.width = W; o.height = H; o.getContext('2d').putImageData(id, 0, 0);
-  return o;
-}
 function arUpscale(c, k) {
   const o = document.createElement('canvas'); o.width = c.width * k; o.height = c.height * k;
   const x = o.getContext('2d'); x.imageSmoothingEnabled = false; x.drawImage(c, 0, 0, o.width, o.height); return o;
 }
 function arModel(pose, H, text) {
-  // metres; she faces +Z, her left hand is +X, the floor is y = 0
-  const front = arCell('front', pose), cw = front.width, ch = front.height, k = H / ch, hull = arHull(pose, 4), g = hull.g;
-  const X = (gx) => (gx * g - cw / 2) * k, Y = (gy) => Math.max(0, (ch - gy * g) * k);
-  const U = (gx) => Math.min(1, gx * g / cw), V = (gy) => Math.max(0, Math.min(1, (ch - gy * g) / ch));
-  const grp = () => ({ P: [], N: [], T: [] }), G = { front: grp(), back: grp(), side: grp(), bubble: grp(), shadow: grp() };
+  // a flat standee, like a cardboard cutout: the front drawing on the front, her back drawing on the back
+  const front = arCell('front', pose), back = arCell('back', pose), cw = front.width, ch = front.height, w = H * cw / ch;
+  const grp = () => ({ P: [], N: [], T: [] }), G = { front: grp(), back: grp(), bubble: grp(), shadow: grp() };
   const quad = (o, pts, n, uv) => { pts.forEach((pt) => o.P.push(pt)); for (let i = 0; i < 4; i++) o.N.push(n); uv.forEach((t) => o.T.push(t)); };
-  let zMax = 0;
-  // a step between two layers takes its colour from the side of her it sits on, so the skirt shows no stripes
-  const hface = (gx0, gx1, gz0, gz1, gy, v, up, view) => {
-    const a = X(gx0), b2 = X(gx1), c = X(gz0), d = X(gz1), y = Y(gy);
-    if (b2 - a < 1e-6 || d - c < 1e-6) return;
-    const pts = up ? [[a, y, d], [b2, y, d], [b2, y, c], [a, y, c]] : [[a, y, c], [b2, y, c], [b2, y, d], [a, y, d]];
-    const uv = view === 'side' ? pts.map((pt) => [U(pt[2] / k / g + cw / 2 / g), v]) : pts.map((pt) => [U(pt[0] / k / g + cw / 2 / g), v]);
-    quad(G[view], pts, [0, up ? 1 : -1, 0], uv);
-  };
-  const ledges = (A, up) => {
-    const gy = up ? A.y0 : A.y1, v = V(up ? A.y0 + 0.5 : A.y1 - 0.5);
-    const near = hull.boxes.filter((B) => (up ? B.y1 === A.y0 : B.y0 === A.y1) && B.x0 < A.x1 && B.x1 > A.x0 && B.z0 < A.z1 && B.z1 > A.z0);
-    const B = near.length === 1 ? near[0] : null;
-    if (B && B.x0 >= A.x0 && B.x1 <= A.x1 && B.z0 >= A.z0 && B.z1 <= A.z1) {
-      hface(A.x0, A.x1, B.z1, A.z1, gy, v, up, 'front');
-      hface(A.x0, A.x1, A.z0, B.z0, gy, v, up, 'back');
-      hface(A.x0, B.x0, B.z0, B.z1, gy, v, up, 'side');
-      hface(B.x1, A.x1, B.z0, B.z1, gy, v, up, 'side');
-    } else {
-      const zm = (A.z0 + A.z1) / 2;
-      hface(A.x0, A.x1, zm, A.z1, gy, v, up, 'front');
-      hface(A.x0, A.x1, A.z0, zm, gy, v, up, 'back');
-    }
-  };
-  hull.boxes.forEach((b) => {
-    const x0 = X(b.x0), x1 = X(b.x1), z0 = X(b.z0), z1 = X(b.z1), ya = Y(b.y1), yb = Y(b.y0);
-    if (yb - ya < 1e-6) return;
-    const u0 = U(b.x0), u1 = U(b.x1), s0 = U(b.z0), s1 = U(b.z1), va = V(b.y1), vb = V(b.y0);
-    zMax = Math.max(zMax, z1);
-    quad(G.front, [[x0, ya, z1], [x1, ya, z1], [x1, yb, z1], [x0, yb, z1]], [0, 0, 1], [[u0, va], [u1, va], [u1, vb], [u0, vb]]);
-    quad(G.back, [[x1, ya, z0], [x0, ya, z0], [x0, yb, z0], [x1, yb, z0]], [0, 0, -1], [[u1, va], [u0, va], [u0, vb], [u1, vb]]);
-    quad(G.side, [[x0, ya, z0], [x0, ya, z1], [x0, yb, z1], [x0, yb, z0]], [-1, 0, 0], [[s0, va], [s1, va], [s1, vb], [s0, vb]]);
-    quad(G.side, [[x1, ya, z1], [x1, ya, z0], [x1, yb, z0], [x1, yb, z1]], [1, 0, 0], [[s1, va], [s0, va], [s0, vb], [s1, vb]]);
-    if (!b.topHidden) ledges(b, true);
-    if (!b.botHidden && ya > 0.001) ledges(b, false);
-  });
+  quad(G.front, [[-w / 2, 0, 0.001], [w / 2, 0, 0.001], [w / 2, H, 0.001], [-w / 2, H, 0.001]], [0, 0, 1], [[0, 0], [1, 0], [1, 1], [0, 1]]);
+  quad(G.back, [[w / 2, 0, -0.001], [-w / 2, 0, -0.001], [-w / 2, H, -0.001], [w / 2, H, -0.001]], [0, 0, -1], [[1, 0], [0, 0], [0, 1], [1, 1]]);
   // the speech bubble floats above her head and reads the right way from the front and from behind
   const bub = qlBubbleTex(text), bw = H * 0.62, bh = bw * bub.height / bub.width, by = H * 1.04, bz = 0.01;
   const BP = [[-bw / 2, by, bz], [bw / 2, by, bz], [bw / 2, by + bh, bz], [-bw / 2, by + bh, bz]];
   quad(G.bubble, BP, [0, 0, 1], [[0, 0], [1, 0], [1, 1], [0, 1]]);
   quad(G.bubble, [BP[1], BP[0], BP[3], BP[2]].map((pt) => [pt[0], pt[1], pt[2] - 0.002]), [0, 0, -1], [[0, 0], [1, 0], [1, 1], [0, 1]]);
   // her shadow lying on the floor
-  const w = H * cw / ch, sh = qlShadowTex(pose, w, H), y0 = 0.002;
+  const sh = qlShadowTex(pose, w, H), y0 = 0.002;
   quad(G.shadow, [[sh.X0, y0, sh.Zf], [sh.X1, y0, sh.Zf], [sh.X1, y0, sh.Zb], [sh.X0, y0, sh.Zb]], [0, 1, 0], [[0, 0], [1, 0], [1, 1], [0, 1]]);
-  return {
-    G, H, boxes: hull.boxes.length,
-    tex: { front: arBleed(front), back: arBleed(arCell('back', pose)), side: arBleed(arCell('side', AR_SIDE_OF[pose])), bubble: bub, shadow: sh.c },
-  };
+  return { G, H, tex: { front, back, bubble: bub, shadow: sh.c } };
 }
 
 /* a small WebGL turntable of the half-3D Thaya inside the AR sheet: drag to spin her */
@@ -5684,9 +5590,8 @@ function qlvSet(model) {
   QLV.H = model.H;
   QLV.items = [
     mk(model.G.shadow, model.tex.shadow, { blend: true, cut: 0.004, lit: 0, cull: false }),
-    mk(model.G.front, model.tex.front, { nearest: true, cut: 0, lit: 1, cull: true }),
-    mk(model.G.back, model.tex.back, { nearest: true, cut: 0, lit: 1, cull: true }),
-    mk(model.G.side, model.tex.side, { nearest: true, cut: 0, lit: 1, cull: true }),
+    mk(model.G.front, model.tex.front, { nearest: true, cut: 0.5, lit: 1, cull: true }),
+    mk(model.G.back, model.tex.back, { nearest: true, cut: 0.5, lit: 1, cull: true }),
     mk(model.G.bubble, model.tex.bubble, { cut: 0.5, lit: 0.25, cull: true }),
   ];
 }
@@ -5851,7 +5756,7 @@ function fmtAway(ms) { const m = Math.round(ms / 60000); if (m < 60) return `${m
   setTimeout(() => unlockMemory('first_visit'), 2500);
   setInterval(animTick, 100); setInterval(logicTick, 1000); setInterval(save, 5000);
   setTimeout(async () => { const g0 = curGroup(), ak = GROUP_KEYS[g0][1]; try { await loadSheet(ak, SHEET_SRC[ak]); SETS[g0].A = A = buildActSets(ak); } catch (e) { SETS[g0].A = A = null; } sheetsReady = true; }, 600);
-  window.Thaya = { ar: () => AR, arOpen: () => openAR(), qlModel: () => QL.model && { boxes: QL.model.boxes, faces: Object.fromEntries(Object.entries(QL.model.G).map(([k, v]) => [k, v.P.length / 4])) }, qlv: () => QLV, qlDraw: (yaw, pitch) => { QLV.yaw = yaw; QLV.pitch = pitch; qlvDraw(); return document.getElementById('arPreview').toDataURL('image/png'); }, qlTest: async (size) => { QL.open = true; QL.forceUSDZ = true; QL.size = size || 'life'; const b = await qlBuild(); const u = new Uint8Array(await b.arrayBuffer()); let t = ''; for (let i = 0; i < u.length; i += 8192) t += String.fromCharCode.apply(null, u.subarray(i, i + 8192)); return btoa(t); }, state: S, sheets: Sheets, startHobby: (k) => startHobby(k), event: () => randomEvent(), call: () => kidiCall(), sing: () => singEvent(), rage: () => enterRage('sudden'), bathroom: (k) => startBathroom(k || 'pee'), act: () => act.type, say: (t) => say(t), bgmObj: () => BGM, bgm: () => BGM.ctx && { state: BGM.ctx.state, mode: S.bgm, out: BGM.out.gain.value, rain: BGM.rainBus.gain.value, lofi: BGM.lofiBus.gain.value, step: BGM.step }, meow: () => greyMeow(false), wear: (id) => wearOutfit(id), outfit: () => S.outfit, ready: () => sheetsReady, loadGroup: (g) => ensureGroup(g), sets: SETS, show: (f) => { act = { type: 'idle' }; poseUntil = now() + 4000; showFrame(f); }, visit: (id) => catVisit(id), mama: () => mamaCall(), callNow: () => { nextCallAt = 0; kidiCall(); }, callState: () => act.type, inbox: () => openInbox(), mems: () => MEMS, unlock: (id) => unlockMemory(id), book: () => openMemoryBook(), allMems: () => MEMORIES.map((m) => `<div style="width:104px;text-align:center;font:10px monospace">${memSVG(m).replace('<svg ', '<svg width="72" height="64" ')}<br>${m.title}</div>`).join(''), fp: () => FP, allFoods: () => [...FOODS, ...HATED].map((f) => `<div style="width:96px;text-align:center;font:11px monospace">${foodSVG(f).replace('<svg ', '<svg width="80" height="70" ')}<br>${f.name}</div>`).join(''), games: () => openGames(), gm: () => GM, ibState: () => IBS, kidiSends: () => kidiSends(), obj: (id) => { const el = document.querySelector(`[data-obj="${id}"]`); if (el) objTap(id, el); }, visitor: () => visitor && { id: visitor.id, pose: visitor.pose, leaving: !!visitor.leaving } };
+  window.Thaya = { ar: () => AR, arOpen: () => openAR(), qlModel: () => QL.model && { faces: Object.fromEntries(Object.entries(QL.model.G).map(([k, v]) => [k, v.P.length / 4])) }, qlv: () => QLV, qlDraw: (yaw, pitch) => { QLV.yaw = yaw; QLV.pitch = pitch; qlvDraw(); return document.getElementById('arPreview').toDataURL('image/png'); }, qlTest: async (size) => { QL.open = true; QL.forceUSDZ = true; QL.size = size || 'life'; const b = await qlBuild(); const u = new Uint8Array(await b.arrayBuffer()); let t = ''; for (let i = 0; i < u.length; i += 8192) t += String.fromCharCode.apply(null, u.subarray(i, i + 8192)); return btoa(t); }, state: S, sheets: Sheets, startHobby: (k) => startHobby(k), event: () => randomEvent(), call: () => kidiCall(), sing: () => singEvent(), rage: () => enterRage('sudden'), bathroom: (k) => startBathroom(k || 'pee'), act: () => act.type, say: (t) => say(t), bgmObj: () => BGM, bgm: () => BGM.ctx && { state: BGM.ctx.state, mode: S.bgm, out: BGM.out.gain.value, rain: BGM.rainBus.gain.value, lofi: BGM.lofiBus.gain.value, step: BGM.step }, meow: () => greyMeow(false), wear: (id) => wearOutfit(id), outfit: () => S.outfit, ready: () => sheetsReady, loadGroup: (g) => ensureGroup(g), sets: SETS, show: (f) => { act = { type: 'idle' }; poseUntil = now() + 4000; showFrame(f); }, visit: (id) => catVisit(id), mama: () => mamaCall(), callNow: () => { nextCallAt = 0; kidiCall(); }, callState: () => act.type, inbox: () => openInbox(), mems: () => MEMS, unlock: (id) => unlockMemory(id), book: () => openMemoryBook(), allMems: () => MEMORIES.map((m) => `<div style="width:104px;text-align:center;font:10px monospace">${memSVG(m).replace('<svg ', '<svg width="72" height="64" ')}<br>${m.title}</div>`).join(''), fp: () => FP, allFoods: () => [...FOODS, ...HATED].map((f) => `<div style="width:96px;text-align:center;font:11px monospace">${foodSVG(f).replace('<svg ', '<svg width="80" height="70" ')}<br>${f.name}</div>`).join(''), games: () => openGames(), gm: () => GM, ibState: () => IBS, kidiSends: () => kidiSends(), obj: (id) => { const el = document.querySelector(`[data-obj="${id}"]`); if (el) objTap(id, el); }, visitor: () => visitor && { id: visitor.id, pose: visitor.pose, leaving: !!visitor.leaving } };
 })();
 })();
 </script>
