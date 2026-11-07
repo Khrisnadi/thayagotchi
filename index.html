@@ -515,7 +515,15 @@ html.ar-lock,html.ar-lock body{overflow:hidden;overscroll-behavior:none}
 .ar-stage video,.ar-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
 .ar-stage video.mirror{transform:scaleX(-1)}
 .ar-stage video[hidden],.ar-bg[hidden]{display:none}
-.ar-thaya{position:absolute;left:0;top:0;z-index:2;background-repeat:no-repeat;cursor:grab;touch-action:none;transform-origin:50% 100%;filter:drop-shadow(0 6px 5px rgba(0,0,0,.28));outline:none}
+.ar-group{position:absolute;left:0;top:0;width:0;height:0;z-index:2;transform-origin:0 0}
+.ar-thaya{position:absolute;left:0;top:0;background-repeat:no-repeat;cursor:grab;touch-action:none;transform-origin:50% 100%;outline:none;animation:aridle 1.8s steps(2) infinite}
+@keyframes aridle{50%{transform:translateY(-0.7%)}}
+.ar-shadow{position:absolute;background-repeat:no-repeat;pointer-events:none;opacity:.3;filter:brightness(0) blur(2px);transform-origin:50% 100%;transform:skewX(-40deg) scaleY(.32)}
+.ar-contact{position:absolute;pointer-events:none;border-radius:50%;background:radial-gradient(closest-side,rgba(20,10,30,.42),rgba(20,10,30,.2) 55%,rgba(20,10,30,0))}
+.ar-arrow{position:absolute;z-index:4;padding:6px 9px;background:var(--ink);color:#fff;font-family:var(--font-display);font-size:11px;letter-spacing:1px;pointer-events:none;box-shadow:0 0 0 2px #fff}
+.ar-arrow[hidden]{display:none}
+.ar-arrow.l{left:12px;top:50%;transform:translateY(-50%)}.ar-arrow.r{right:12px;top:50%;transform:translateY(-50%)}
+.ar-arrow.t{left:50%;top:calc(env(safe-area-inset-top) + 60px);transform:translateX(-50%)}.ar-arrow.b{left:50%;bottom:40px;transform:translateX(-50%)}
 .ar-thaya.drag{cursor:grabbing}
 .ar-thaya:focus-visible{outline:3px dashed #fff;outline-offset:4px}
 .ar-thaya.pop{animation:arpop .36s steps(3)}
@@ -534,6 +542,9 @@ html.ar-lock,html.ar-lock body{overflow:hidden;overscroll-behavior:none}
 .ar-chip{border:0;cursor:pointer;min-width:40px;height:36px;padding:0 10px;background:#fff8fb;color:var(--ink);font-family:var(--font-display);font-size:13px;font-weight:700;box-shadow:0 0 0 3px var(--ink),0 5px 0 0 var(--ink)}
 .ar-chip:active,.ar-pill:active{transform:translateY(3px);box-shadow:0 0 0 3px var(--ink),0 2px 0 0 var(--ink)}
 .ar-chip[hidden]{display:block;visibility:hidden}
+.ar-top-r{display:flex;gap:12px}
+.ar-world[hidden]{display:none}
+.ar-world[aria-pressed="true"]{background:#ff9cbc}
 .ar-size{position:absolute;left:12px;top:50%;z-index:5;display:flex;flex-direction:column;gap:14px;transform:translateY(-50%)}
 .ar-hint{position:absolute;left:50%;top:calc(env(safe-area-inset-top) + 60px);z-index:6;max-width:calc(100% - 24px);padding:6px 10px;background:var(--ink);color:#fff;font-size:13px;text-align:center;opacity:0;transform:translate(-50%,-8px);transition:opacity .2s,transform .2s;pointer-events:none}
 .ar-hint.show{opacity:1;transform:translate(-50%,0)}
@@ -575,7 +586,7 @@ html.ar-lock,html.ar-lock body{overflow:hidden;overscroll-behavior:none}
 .ar-review img{display:block;flex:0 1 auto;min-height:0;max-width:100%;max-height:calc(100% - 120px);object-fit:contain;box-shadow:0 0 0 3px #fff,0 0 0 6px var(--ink);-webkit-user-select:auto;user-select:auto;-webkit-touch-callout:default}
 .ar-review-tip{margin:0;font-size:12px;color:#d9cbe8;text-align:center}
 @media (max-width:400px){.ar-bubble{font-size:15px}.ar-btn{min-width:50px;font-size:11px}.ar-btn svg{width:22px;height:22px}.ar-shutter{width:64px;height:64px}.ar-shutter i{width:46px;height:46px}}
-@media (prefers-reduced-motion:reduce){.ar-thaya.pop,.ar-bubble.pop,.ar-count.beat,.ar-flash.go{animation:none}.ar-hint{transition:none}}
+@media (prefers-reduced-motion:reduce){.ar-thaya,.ar-thaya.pop,.ar-bubble.pop,.ar-count.beat,.ar-flash.go{animation:none}.ar-hint{transition:none}}
 </style>
 </head>
 <body>
@@ -707,13 +718,14 @@ html.ar-lock,html.ar-lock body{overflow:hidden;overscroll-behavior:none}
   <div class="ar-stage" id="arStage">
     <video id="arVideo" playsinline muted autoplay aria-hidden="true"></video>
     <img class="ar-bg" id="arBg" alt="" hidden>
-    <div class="ar-thaya" id="arThaya" role="button" tabindex="0" aria-label="Thaya"></div>
+    <div class="ar-group" id="arGroup"><div class="ar-contact" id="arContact"></div><div class="ar-shadow" id="arShadow"></div><div class="ar-thaya" id="arThaya" role="button" tabindex="0" aria-label="Thaya"></div></div>
+    <div class="ar-arrow" id="arArrow" aria-hidden="true" hidden></div>
     <div class="ar-bubble" id="arBubble" aria-hidden="true"><span id="arSay"></span><svg class="ar-tail" id="arTail" viewBox="0 0 18 12" aria-hidden="true"></svg></div>
     <div class="ar-mark" id="arMark" aria-hidden="true"><svg id="arMarkHeart" viewBox="0 0 5 4"></svg><span id="arMarkTxt">THAYA·GOTCHI CAM</span></div>
     <div class="ar-top">
       <button class="ar-chip" id="arClose" type="button" aria-label="Close camera">✕</button>
       <span class="ar-title" id="arTitle">THAYA CAM</span>
-      <button class="ar-chip" id="arFlip" type="button" aria-label="Switch camera" hidden>FLIP</button>
+      <span class="ar-top-r"><button class="ar-chip ar-world" id="arWorld" type="button" aria-pressed="false" aria-label="AR mode: keep Thaya on her spot when the camera moves" hidden>AR</button><button class="ar-chip" id="arFlip" type="button" aria-label="Switch camera" hidden>FLIP</button></span>
     </div>
     <div class="ar-size"><button class="ar-chip" id="arBigger" type="button" aria-label="Make Thaya bigger">+</button><button class="ar-chip" id="arSmaller" type="button" aria-label="Make Thaya smaller">−</button></div>
     <div class="ar-hint" id="arHint" role="status"></div>
@@ -4782,16 +4794,19 @@ const AR_HELLO = [
 const AR = {
   open: false, stream: null, facing: 'user', src: 'none', bgImg: null, bgURL: '', sheet: null,
   pose: 4, line: '', auto: true, autoAt: 0, timer: false, counting: false, reviewing: false, shotURL: '', shotBlob: null,
-  cx: 0.74, by: 0.985, h: 0.6, ptrs: new Map(), gesture: null, tickId: 0, shots: 0, hinted: false, starting: false,
+  cx: 0.5, by: 0.82, h: 0.5, ptrs: new Map(), gesture: null, tickId: 0, shots: 0, hinted: false, starting: false,
+  mirror: false, world: false, worldWanted: true, sensorOK: false, ori: null, anchor: null, sm: null, raf: 0, view: null,
 };
+AR.facing = 'environment';
 const arEl = $('#ar'), arStage = $('#arStage'), arVideo = $('#arVideo'), arBg = $('#arBg'), arThaya = $('#arThaya'), arBubble = $('#arBubble'), arSay = $('#arSay');
+const arGroup = $('#arGroup'), arShadow = $('#arShadow'), arContact = $('#arContact'), arArrow = $('#arArrow');
 
 function arLoadSheet() {
   if (AR.sheet) return AR.sheet.ready;
   const img = new Image(); AR.sheet = img;
   img.ready = new Promise((res) => { img.onload = res; img.onerror = res; });
   img.src = AR_SHEET;
-  arThaya.style.backgroundImage = `url("${AR_SHEET}")`;
+  arThaya.style.backgroundImage = arShadow.style.backgroundImage = `url("${AR_SHEET}")`;
   return img.ready;
 }
 function arPoseStyle(el, i, w, h, full) {
@@ -4803,20 +4818,84 @@ function arPoseStyle(el, i, w, h, full) {
 }
 function arDefaults() {
   const r = arStage.getBoundingClientRect(), landscape = r.width > r.height * 1.1;
-  AR.h = landscape ? 0.84 : 0.6; AR.cx = landscape ? 0.78 : 0.74; AR.by = 0.985;
+  if (AR.facing === 'user') { AR.h = landscape ? 0.84 : 0.6; AR.cx = landscape ? 0.78 : 0.74; AR.by = 0.985; }
+  else { AR.h = landscape ? 0.62 : 0.46; AR.cx = 0.5; AR.by = landscape ? 0.9 : 0.84; }
+}
+
+/* ---- AR: pin Thaya to a spot in the real world with the phone's motion sensor ----
+   The page cannot see depth, so she is pinned to a direction: turning or tilting the camera keeps her
+   standing on the same spot, the way a camera filter does. */
+const AR_FOV = 64 * Math.PI / 180;              // long-side field of view of a typical phone camera
+const AR_SHADOW = { skew: Math.tan(-40 * Math.PI / 180), squash: 0.32, alpha: 0.3 };
+function arFocal(W, H) {
+  const v = arVideo;
+  if (AR.src === 'camera' && v.videoWidth) { const sc = Math.max(W / v.videoWidth, H / v.videoHeight); return (Math.max(v.videoWidth, v.videoHeight) / 2) / Math.tan(AR_FOV / 2) * sc; }
+  return (Math.max(W, H) / 2) / Math.tan(AR_FOV / 2);
+}
+function arRot() {
+  // screen axes (x right, y up, z out of the screen) written in world axes (z up), from deviceorientation
+  const o = AR.ori; if (!o) return null;
+  const d = Math.PI / 180, a = o.a * d, b = o.b * d, g = o.g * d;
+  const cA = Math.cos(a), sA = Math.sin(a), cB = Math.cos(b), sB = Math.sin(b), cG = Math.cos(g), sG = Math.sin(g);
+  const R = [[cA * cG - sA * sB * sG, -cB * sA, cG * sA * sB + cA * sG], [cG * sA + cA * sB * sG, cA * cB, sA * sG - cA * cG * sB], [-cB * sG, sB, cB * cG]];
+  const ang = ((screen.orientation && screen.orientation.angle) || window.orientation || 0) * d, c = Math.cos(ang), sn = Math.sin(ang);
+  return R.map((row) => [row[0] * c + row[1] * sn, -row[0] * sn + row[1] * c, row[2]]);
+}
+const arMul = (R, v) => [R[0][0] * v[0] + R[0][1] * v[1] + R[0][2] * v[2], R[1][0] * v[0] + R[1][1] * v[1] + R[1][2] * v[2], R[2][0] * v[0] + R[2][1] * v[1] + R[2][2] * v[2]];
+const arMulT = (R, v) => [R[0][0] * v[0] + R[1][0] * v[1] + R[2][0] * v[2], R[0][1] * v[0] + R[1][1] * v[1] + R[2][1] * v[2], R[0][2] * v[0] + R[1][2] * v[1] + R[2][2] * v[2]];
+const arNorm = (v) => { const n = Math.hypot(v[0], v[1], v[2]) || 1; return [v[0] / n, v[1] / n, v[2] / n]; };
+function arDirFromScreen(x, y, W, H, f) { return arNorm([(x - W / 2) / f, -(y - H / 2) / f, AR.mirror ? 1 : -1]); }
+function arToScreen(v, W, H, f) { const z = v[2] * (AR.mirror ? 1 : -1); if (z < 0.08) return null; return { x: W / 2 + f * v[0] / z, y: H / 2 - f * v[1] / z }; }
+function arAnchorHere() {
+  const R = arRot(); if (!R) return;
+  const r = arStage.getBoundingClientRect(), W = r.width, H = r.height;
+  AR.anchor = arMul(R, arDirFromScreen(AR.cx * W, AR.by * H, W, H, arFocal(W, H))); AR.sm = null;
+}
+function arLoop() {
+  cancelAnimationFrame(AR.raf);
+  const step = () => { if (!AR.open || !AR.world) return; arPlace(); AR.raf = requestAnimationFrame(step); };
+  AR.raf = requestAnimationFrame(step);
 }
 function arPlace() {
   if (!AR.open) return;
   const r = arStage.getBoundingClientRect(), W = r.width, H = r.height;
-  const h = AR.h * H, w = h * 291 / 793, left = AR.cx * W - w / 2, top = AR.by * H - h;
-  Object.assign(arThaya.style, { left: left + 'px', top: top + 'px', width: w + 'px', height: h + 'px' });
-  arPoseStyle(arThaya, AR.pose, w, h, true);
+  let fx = AR.cx * W, fy = AR.by * H, rot = 0, vis = true, away = 0;
+  const h = AR.h * H, w = h * 291 / 793;
+  if (AR.world && AR.anchor && !AR.gesture) {
+    const R = arRot(), f = arFocal(W, H);
+    if (R) {
+      const v = arMulT(R, AR.anchor), p = arToScreen(v, W, H, f);
+      if (!p) { vis = false; away = v[0] >= 0 ? 1 : -1; }
+      else {
+        // which way is "up" for her on screen, so she keeps standing straight when the phone tilts
+        const up = arToScreen(arMulT(R, arNorm([AR.anchor[0], AR.anchor[1], AR.anchor[2] + 0.06])), W, H, f);
+        const tr = up ? Math.atan2(up.x - p.x, -(up.y - p.y)) : 0;
+        const sm = AR.sm || (AR.sm = { x: p.x, y: p.y, r: tr }), k = 0.5;
+        sm.x += (p.x - sm.x) * k; sm.y += (p.y - sm.y) * k;
+        const dr = Math.atan2(Math.sin(tr - sm.r), Math.cos(tr - sm.r)); sm.r += dr * k;
+        fx = sm.x; fy = sm.y; rot = sm.r; AR.cx = fx / W; AR.by = fy / H;
+        if (fx < -w * 0.3) away = -1; else if (fx > W + w * 0.3) away = 1; else if (fy - h > H) away = 2; else if (fy < 0) away = -2;
+      }
+    }
+  }
+  AR.view = { W, H, fx, fy, w, h, rot, vis };
+  arGroup.style.transform = `translate(${fx}px, ${fy}px) rotate(${rot}rad)`;
+  arGroup.style.visibility = vis ? '' : 'hidden';
+  for (const el of [arThaya, arShadow]) { Object.assign(el.style, { left: -w / 2 + 'px', top: -h + 'px', width: w + 'px', height: h + 'px' }); arPoseStyle(el, AR.pose, w, h, true); }
+  Object.assign(arContact.style, { left: -w * 0.35 + 'px', top: -w * 0.09 + 'px', width: w * 0.7 + 'px', height: w * 0.14 + 'px' });
+  // off-screen helper: a little sign pointing to where she is standing
+  arArrow.hidden = !away;
+  if (away) {
+    arArrow.textContent = away === -1 ? '◀ THAYA' : away === 1 ? 'THAYA ▶' : away === 2 ? 'THAYA ▼' : 'THAYA ▲';
+    arArrow.className = 'ar-arrow ' + (away === -1 ? 'l' : away === 1 ? 'r' : away === 2 ? 'b' : 't');
+  }
   // bubble above her head, kept inside the frame and below the top buttons
-  const bw = arBubble.offsetWidth, bh = arBubble.offsetHeight, headX = left + w * 0.5;
-  const bl = clamp(headX - bw / 2, 8, Math.max(8, W - bw - 8)), bt = clamp(top - bh - 16, 58, Math.max(58, H - bh - 8));
+  arBubble.style.visibility = vis && !away ? '' : 'hidden';
+  const bw = arBubble.offsetWidth, bh = arBubble.offsetHeight, hx = fx + Math.sin(rot) * h, hy = fy - Math.cos(rot) * h;
+  const bl = clamp(hx - bw / 2, 8, Math.max(8, W - bw - 8)), bt = clamp(hy - bh - 16, 58, Math.max(58, H - bh - 8));
   arBubble.style.transform = `translate(${Math.round(bl)}px, ${Math.round(bt)}px)`;
-  arBubble.style.setProperty('--tail', clamp(headX - bl, 16, bw - 16) + 'px');
-  arBubble.classList.toggle('no-tail', bt + bh + 10 > top + h * 0.12);
+  arBubble.style.setProperty('--tail', clamp(hx - bl, 16, bw - 16) + 'px');
+  arBubble.classList.toggle('no-tail', bt + bh + 10 > hy + h * 0.12);
 }
 function arPickPose() {
   const late = hourNow >= 22 || hourNow < 4, pool = [];
@@ -4832,6 +4911,7 @@ function arSetPose(i, text) {
   arThaya.setAttribute('aria-label', `Thaya, ${AR_POSES[i].name} pose`);
   document.querySelectorAll('.ar-pose').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.pose === i)));
   arThaya.classList.remove('pop'); void arThaya.offsetWidth; arThaya.classList.add('pop');
+  arThaya.addEventListener('animationend', () => arThaya.classList.remove('pop'), { once: true });
   arBubble.classList.remove('pop'); void arBubble.offsetWidth; arBubble.classList.add('pop');
   for (let k = 0; k < 3; k++) SFX.tone(1150 + k * 90, 0.02, { delay: k * 0.06, vol: 0.012 });
   AR.autoAt = now() + 4800;
@@ -4861,10 +4941,15 @@ async function arStartCamera() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: AR.facing }, width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false });
     if (!AR.open) { stream.getTracks().forEach((t) => t.stop()); return; }
-    AR.stream = stream; arVideo.srcObject = stream; arVideo.classList.toggle('mirror', AR.facing === 'user');
+    AR.stream = stream; arVideo.srcObject = stream;
+    const tset = (stream.getVideoTracks()[0] && stream.getVideoTracks()[0].getSettings && stream.getVideoTracks()[0].getSettings()) || {};
+    // phones report which camera this is; desktop webcams usually don't, and they look right mirrored
+    AR.mirror = tset.facingMode ? tset.facingMode === 'user' : (AR.facing === 'user' || !matchMedia('(pointer: coarse)').matches);
+    arVideo.classList.toggle('mirror', AR.mirror);
     await arVideo.play().catch(() => {});
     AR.src = 'camera'; arBg.hidden = true; arVideo.hidden = false; arMsg(null);
     $('#arFlip').hidden = false;
+    if (AR.sensorOK && AR.worldWanted) arSetWorld(true, true); else if (AR.world) arAnchorHere();
   } catch (e) {
     const n = e && e.name;
     if (n === 'NotAllowedError' || n === 'SecurityError') arMsg('Camera blocked', 'Camera access was blocked. Allow the camera for this site in your browser settings, then tap Try again. Or use a photo from your gallery.', true);
@@ -4879,6 +4964,7 @@ function arUseImage(file) {
     if (AR.bgURL) URL.revokeObjectURL(AR.bgURL);
     arStopStream(); AR.bgURL = url; AR.bgImg = img; AR.src = 'image';
     arBg.src = url; arBg.hidden = false; arVideo.hidden = true; $('#arFlip').hidden = true; arMsg(null);
+    if (AR.world) arSetWorld(false, true);
   };
   img.onerror = () => { URL.revokeObjectURL(url); arToast("That file isn't a photo I can open."); };
   img.src = url;
@@ -4886,10 +4972,40 @@ function arUseImage(file) {
 let arToastT = 0;
 function arToast(msg, ms) { const el = $('#arHint'); el.textContent = msg; el.classList.add('show'); clearTimeout(arToastT); arToastT = setTimeout(() => el.classList.remove('show'), ms || 2600); }
 
+function arOrient(e) {
+  if (e.alpha == null && e.beta == null && e.gamma == null) return;
+  AR.ori = { a: e.alpha || 0, b: e.beta || 0, g: e.gamma || 0 };
+  if (!AR.sensorOK) { AR.sensorOK = true; $('#arWorld').hidden = false; if (AR.open && AR.worldWanted && AR.src === 'camera') arSetWorld(true, true); }
+}
+let arSensorAsked = false;
+function arAskSensors() {
+  // must run inside a tap: iPhones ask for motion permission here
+  if (arSensorAsked) return; arSensorAsked = true;
+  const DOE = window.DeviceOrientationEvent; if (!DOE) return;
+  // listen right away (Android sends events freely); iPhones only start sending them once the person allows it
+  window.addEventListener('deviceorientation', arOrient);
+  if (typeof DOE.requestPermission === 'function') { try { DOE.requestPermission().catch(() => {}); } catch (e) { /* not allowed here */ } }
+}
+function arSetWorld(on, quiet) {
+  if (on && (!AR.sensorOK || AR.src !== 'camera')) {
+    if (!quiet) arToast(!AR.sensorOK ? 'No motion sensor here, so Thaya sticks to the screen.' : 'AR needs the live camera.');
+    on = false;
+  }
+  AR.world = on; $('#arWorld').setAttribute('aria-pressed', String(on));
+  if (on && quiet && !AR.worldHinted) { AR.worldHinted = true; setTimeout(() => AR.open && AR.world && arToast('AR is on: move your phone around and Thaya stays on her spot.', 4000), 3800); }
+  if (on) { arAnchorHere(); arLoop(); if (!quiet) arToast('AR on: Thaya stays on her spot when you move the camera. Tap the floor or a table to put her there.', 4200); }
+  else {
+    cancelAnimationFrame(AR.raf); AR.sm = null;
+    AR.cx = clamp(AR.cx, 0.1, 0.9); AR.by = clamp(AR.by, 0.35, 1.2); arPlace();
+    if (!quiet) arToast('AR off: Thaya sticks to the screen.');
+  }
+}
+
 function openAR() {
   touch(); SFX.init();
   if (AR.open) return;
   if (!F.happy) return;
+  arAskSensors();
   if (bath) { toast(awayMsg()); return; }
   if (sleepingNow()) { toast('Thaya is asleep. Take photos with her after her nap!'); return; }
   if (rage.active) { SFX.play('angry'); say(line('ragePhoto')); return; }
@@ -4910,12 +5026,12 @@ function openAR() {
   arSetAuto(AR.auto);
   clearInterval(AR.tickId); AR.tickId = setInterval(arTick, 250);
   requestAnimationFrame(() => { arPlace(); $('#arClose').focus({ preventScroll: true }); });
-  if (!AR.hinted) { AR.hinted = true; setTimeout(() => AR.open && arToast('Drag Thaya to move her. Pinch or scroll to resize.', 3600), 600); }
+  if (!AR.hinted) { AR.hinted = true; setTimeout(() => AR.open && arToast('Tap the floor to place Thaya. Drag to move her, pinch or scroll to resize.', 3600), 600); }
   if (AR.src === 'image' && AR.bgImg) { arBg.hidden = false; arVideo.hidden = true; } else arStartCamera();
 }
 function closeAR(returnFocus, fromAct) {
   if (!AR.open) return;
-  AR.open = false; clearInterval(AR.tickId); arStopStream(); arCloseReview();
+  AR.open = false; clearInterval(AR.tickId); cancelAnimationFrame(AR.raf); AR.world = false; arStopStream(); arCloseReview();
   arEl.hidden = true; AR.ptrs.clear(); AR.gesture = null; AR.counting = false;
   document.documentElement.classList.remove('ar-lock'); document.querySelector('.wrap').inert = false;
   if (!fromAct && act.type === 'photo') { act.onEnd = null; endAct(); }
@@ -4924,29 +5040,29 @@ function closeAR(returnFocus, fromAct) {
   if (returnFocus) $('#actPhoto').focus({ preventScroll: true });
 }
 
-/* drag to move, pinch or scroll to resize, tap to shuffle */
-arThaya.addEventListener('pointerdown', (e) => {
-  if (AR.reviewing) return;
-  e.preventDefault(); arThaya.setPointerCapture(e.pointerId);
+/* drag Thaya to move her, tap the ground to put her there, pinch or scroll to resize, tap her to shuffle */
+const arIsUI = (t) => !!t.closest('.ar-top, .ar-size, .ar-msg, .ar-review, .ar-hint');
+arStage.addEventListener('pointerdown', (e) => {
+  if (AR.reviewing || arIsUI(e.target) || e.button > 0) return;
+  e.preventDefault(); try { arStage.setPointerCapture(e.pointerId); } catch (err) { /* old browsers */ }
   AR.ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
   const r = arStage.getBoundingClientRect();
-  if (AR.ptrs.size === 1) AR.gesture = { type: 'drag', sx: e.clientX, sy: e.clientY, cx: AR.cx, by: AR.by, moved: false, W: r.width, H: r.height };
+  if (AR.ptrs.size === 1) AR.gesture = { type: e.target === arThaya ? 'drag' : 'tap', sx: e.clientX, sy: e.clientY, cx: AR.cx, by: AR.by, moved: false, W: r.width, H: r.height, L: r.left, T: r.top };
   else if (AR.ptrs.size === 2) { const [a, b] = [...AR.ptrs.values()]; AR.gesture = { type: 'pinch', d0: Math.hypot(a.x - b.x, a.y - b.y) || 1, h0: AR.h, moved: true }; }
-  arThaya.classList.add('drag');
+  if (AR.gesture && AR.gesture.type === 'drag') arThaya.classList.add('drag');
 });
-arThaya.addEventListener('pointermove', (e) => {
+arStage.addEventListener('pointermove', (e) => {
   if (!AR.ptrs.has(e.pointerId) || !AR.gesture) return;
   AR.ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
   const g = AR.gesture;
-  if (g.type === 'drag') {
+  if (g.type === 'drag' || g.type === 'tap') {
     const dx = e.clientX - g.sx, dy = e.clientY - g.sy;
-    if (Math.abs(dx) + Math.abs(dy) > 6) g.moved = true;
-    AR.cx = clamp(g.cx + dx / g.W, 0.02, 0.98); AR.by = clamp(g.by + dy / g.H, 0.3, 1.8);
+    if (Math.abs(dx) + Math.abs(dy) > 8) g.moved = true;
+    if (g.type === 'drag') { AR.cx = clamp(g.cx + dx / g.W, 0.02, 0.98); AR.by = clamp(g.by + dy / g.H, 0.3, 1.8); arPlace(); }
   } else if (AR.ptrs.size >= 2) {
     const [a, b] = [...AR.ptrs.values()];
-    AR.h = clamp(g.h0 * (Math.hypot(a.x - b.x, a.y - b.y) / g.d0), 0.22, 1.6);
+    AR.h = clamp(g.h0 * (Math.hypot(a.x - b.x, a.y - b.y) / g.d0), 0.22, 1.6); arPlace();
   }
-  arPlace();
 });
 function arPtrEnd(e) {
   if (!AR.ptrs.has(e.pointerId)) return;
@@ -4954,21 +5070,28 @@ function arPtrEnd(e) {
   const g = AR.gesture;
   if (AR.ptrs.size === 0) {
     arThaya.classList.remove('drag'); AR.gesture = null;
-    if (g && g.type === 'drag' && !g.moved && e.type === 'pointerup') { touch(); arShuffle(); }
-    else AR.autoAt = now() + 4800;
+    if (g && e.type === 'pointerup' && !g.moved && g.type === 'drag') { touch(); arShuffle(); }
+    else if (g && e.type === 'pointerup' && !g.moved && g.type === 'tap') {
+      // put her feet where the ground was tapped
+      touch(); AR.cx = clamp((e.clientX - g.L) / g.W, 0.02, 0.98); AR.by = clamp((e.clientY - g.T) / g.H, 0.3, 1.8);
+      SFX.tone(660, 0.05, { vol: 0.025 }); arThaya.classList.remove('pop'); void arThaya.offsetWidth; arThaya.classList.add('pop');
+      arThaya.addEventListener('animationend', () => arThaya.classList.remove('pop'), { once: true });
+    }
+    if (AR.world) arAnchorHere();
+    AR.autoAt = now() + 4800; arPlace();
   } else if (AR.ptrs.size === 1) {
     const [p] = [...AR.ptrs.values()], r = arStage.getBoundingClientRect();
-    AR.gesture = { type: 'drag', sx: p.x, sy: p.y, cx: AR.cx, by: AR.by, moved: true, W: r.width, H: r.height };
+    AR.gesture = { type: 'drag', sx: p.x, sy: p.y, cx: AR.cx, by: AR.by, moved: true, W: r.width, H: r.height, L: r.left, T: r.top };
   }
 }
-arThaya.addEventListener('pointerup', arPtrEnd);
-arThaya.addEventListener('pointercancel', arPtrEnd);
-arStage.addEventListener('wheel', (e) => { if (!AR.open || AR.reviewing) return; e.preventDefault(); AR.h = clamp(AR.h * Math.exp(-e.deltaY * 0.0012), 0.22, 1.6); arPlace(); }, { passive: false });
+arStage.addEventListener('pointerup', arPtrEnd);
+arStage.addEventListener('pointercancel', arPtrEnd);
+arStage.addEventListener('wheel', (e) => { if (!AR.open || AR.reviewing || arIsUI(e.target)) return; e.preventDefault(); AR.h = clamp(AR.h * Math.exp(-e.deltaY * 0.0012), 0.22, 1.6); arPlace(); }, { passive: false });
 arThaya.addEventListener('keydown', (e) => {
   const k = e.key, st = 0.02;
   if (k === 'Enter' || k === ' ') { e.preventDefault(); arShuffle(); return; }
   const mv = { ArrowLeft: [-st, 0], ArrowRight: [st, 0], ArrowUp: [0, -st], ArrowDown: [0, st] }[k];
-  if (mv) { e.preventDefault(); AR.cx = clamp(AR.cx + mv[0], 0.02, 0.98); AR.by = clamp(AR.by + mv[1], 0.3, 1.8); arPlace(); }
+  if (mv) { e.preventDefault(); AR.cx = clamp(AR.cx + mv[0], 0.02, 0.98); AR.by = clamp(AR.by + mv[1], 0.3, 1.8); if (AR.world) arAnchorHere(); arPlace(); }
   if (k === '+' || k === '=') { AR.h = clamp(AR.h * 1.1, 0.22, 1.6); arPlace(); }
   if (k === '-') { AR.h = clamp(AR.h / 1.1, 0.22, 1.6); arPlace(); }
 });
@@ -4989,7 +5112,7 @@ async function arRender() {
   try { await Promise.all([document.fonts.load('600 32px "Pixelify Sans"'), document.fonts.load('700 24px "Silkscreen"')]); } catch (e) { /* fonts optional */ }
   const r = arStage.getBoundingClientRect(), W = r.width, H = r.height;
   let src = null, sw = 0, shh = 0, mirror = false;
-  if (AR.src === 'camera' && arVideo.videoWidth) { src = arVideo; sw = arVideo.videoWidth; shh = arVideo.videoHeight; mirror = AR.facing === 'user'; }
+  if (AR.src === 'camera' && arVideo.videoWidth) { src = arVideo; sw = arVideo.videoWidth; shh = arVideo.videoHeight; mirror = AR.mirror; }
   else if (AR.src === 'image' && AR.bgImg) { src = AR.bgImg; sw = src.naturalWidth; shh = src.naturalHeight; }
   let ow = W, oh = H;
   if (src) { const sc = Math.max(W / sw, H / shh); ow = W / sc; oh = H / sc; }
@@ -5004,11 +5127,21 @@ async function arRender() {
     const s = 24 * f; g.fillStyle = '#ffe3ee'; g.fillRect(0, 0, ow, oh); g.fillStyle = '#f3e9ff';
     for (let y = 0; y < oh; y += s) for (let x = ((y / s) % 2) * s; x < ow; x += 2 * s) g.fillRect(x, y, s, s);
   }
-  // Thaya
-  const tr = arThaya.getBoundingClientRect(), img = AR.sheet, cw = img.naturalWidth / AR_COLS, ch = img.naturalHeight / AR_ROWS;
-  const col = AR.pose % AR_COLS, row = Math.floor(AR.pose / AR_COLS);
-  g.save(); g.shadowColor = 'rgba(0,0,0,.28)'; g.shadowBlur = 8 * f; g.shadowOffsetY = 6 * f; g.imageSmoothingQuality = 'high';
-  g.drawImage(img, col * cw, row * ch, cw, ch, (tr.left - r.left) * f, (tr.top - r.top) * f, tr.width * f, tr.height * f); g.restore();
+  // Thaya with her shadows, drawn from the same layout the frame shows (position, size, tilt)
+  const V = AR.view, img = AR.sheet, cw = img.naturalWidth / AR_COLS, ch = img.naturalHeight / AR_ROWS;
+  if (V && V.vis) {
+    const w = V.w * f, h = V.h * f;
+    g.save(); g.translate(V.fx * f, V.fy * f); g.rotate(V.rot);
+    g.save(); g.translate(0, -w * 0.02); g.scale(1, 0.2);
+    const cg = g.createRadialGradient(0, 0, 0, 0, 0, w * 0.35);
+    cg.addColorStop(0, 'rgba(20,10,30,.42)'); cg.addColorStop(0.55, 'rgba(20,10,30,.2)'); cg.addColorStop(1, 'rgba(20,10,30,0)');
+    g.fillStyle = cg; g.fillRect(-w * 0.35, -w * 0.35, w * 0.7, w * 0.7); g.restore();
+    g.save(); g.globalAlpha = AR_SHADOW.alpha; g.transform(1, 0, AR_SHADOW.skew * AR_SHADOW.squash, AR_SHADOW.squash, 0, 0);
+    g.imageSmoothingEnabled = true; g.drawImage(arSilhouette(AR.pose), -w / 2, -h, w, h); g.restore();
+    g.imageSmoothingQuality = 'high';
+    g.drawImage(img, (AR.pose % AR_COLS) * cw, Math.floor(AR.pose / AR_COLS) * ch, cw, ch, -w / 2, -h, w, h);
+    g.restore();
+  }
   // speech bubble
   const br = arBubble.getBoundingClientRect(), b = 3 * f, padX = 12 * f, padY = 8 * f, fs = parseFloat(getComputedStyle(arBubble).fontSize) * f, lh = fs * 1.3;
   g.font = `600 ${fs}px "Pixelify Sans", ui-monospace, monospace`;
@@ -5030,6 +5163,16 @@ async function arRender() {
   heart(mx + 8 * f, my + mh / 2 - 4 * f, 2 * f);
   g.fillStyle = '#ffffff'; g.fillText($('#arMarkTxt').textContent, mx + 22 * f, my + mh / 2 + 0.5 * f);
   return new Promise((res) => cv.toBlob((blob) => res(blob), 'image/jpeg', 0.92));
+}
+const AR_SIL = {};
+function arSilhouette(i) {
+  // a tiny dark copy of the pose; drawn big it turns soft, like a blurred shadow
+  if (AR_SIL[i]) return AR_SIL[i];
+  const img = AR.sheet, cw = img.naturalWidth / AR_COLS, ch = img.naturalHeight / AR_ROWS, sw = 48, sh = Math.round(48 * ch / cw);
+  const c = document.createElement('canvas'); c.width = sw; c.height = sh; const x = c.getContext('2d');
+  x.drawImage(img, (i % AR_COLS) * cw, Math.floor(i / AR_COLS) * ch, cw, ch, 0, 0, sw, sh);
+  x.globalCompositeOperation = 'source-in'; x.fillStyle = '#140a1e'; x.fillRect(0, 0, sw, sh);
+  return (AR_SIL[i] = c);
 }
 function arStamp() {
   const d = new Date(), p = (n) => String(n).padStart(2, '0');
@@ -5106,10 +5249,11 @@ async function arShareShot() {
   $('#arRetry').addEventListener('click', () => arStartCamera());
   $('#arFlip').addEventListener('click', async () => {
     touch(); const prev = AR.facing; AR.facing = prev === 'user' ? 'environment' : 'user';
-    await arStartCamera();
+    await arStartCamera(); if (AR.stream) { arDefaults(); if (AR.world) arAnchorHere(); arPlace(); }
     if (!AR.stream && AR.open) { AR.facing = prev; arToast('No other camera found.'); arStartCamera(); }
   });
   $('#arClose').addEventListener('click', () => closeAR(true));
+  $('#arWorld').addEventListener('click', () => { touch(); arAskSensors(); AR.worldWanted = !AR.world; arSetWorld(!AR.world); });
   $('#arRetake').addEventListener('click', arCloseReview);
   $('#arSave').addEventListener('click', arSave);
   $('#arShare').addEventListener('click', arShareShot);
