@@ -543,7 +543,19 @@ html.ar-lock,html.ar-lock body{overflow:hidden;overscroll-behavior:none}
 .ar-chip:active,.ar-pill:active{transform:translateY(3px);box-shadow:0 0 0 3px var(--ink),0 2px 0 0 var(--ink)}
 .ar-chip[hidden]{display:block;visibility:hidden}
 .ar-top-r{display:flex;gap:12px}
-.ar-world[hidden]{display:none}
+.ar-world[hidden],.ar-3d[hidden]{display:none}
+.ar-3d{background:#c9f0dc}
+.ar-native{position:absolute;inset:0;z-index:25;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(20,15,28,.82)}
+.ar-native[hidden]{display:none}
+.ar-native-card{width:min(360px,100%);display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px 16px 18px;background:#fff8fb;color:var(--ink);text-align:center;box-shadow:0 0 0 3px var(--ink),0 8px 0 0 rgba(0,0,0,.3)}
+.ar-native-card b{font-family:var(--font-display);font-size:13px;letter-spacing:1px}
+.ar-native-card p{margin:0;font-size:14px;line-height:1.4}
+.ar-native-size{display:flex;gap:12px}
+.ar-native-size .ar-pill{font-size:13px;padding:7px 12px}
+.ar-ql{display:block;width:260px;max-width:100%;line-height:0}
+.ar-ql img{display:block;width:100%;height:auto}
+.ar-ql.busy{opacity:.45;pointer-events:none}
+.ar-native-status{font-size:12px!important;color:var(--ink-soft)}
 .ar-world[aria-pressed="true"]{background:#ff9cbc}
 .ar-size{position:absolute;left:12px;top:50%;z-index:5;display:flex;flex-direction:column;gap:14px;transform:translateY(-50%)}
 .ar-hint{position:absolute;left:50%;top:calc(env(safe-area-inset-top) + 60px);z-index:6;max-width:calc(100% - 24px);padding:6px 10px;background:var(--ink);color:#fff;font-size:13px;text-align:center;opacity:0;transform:translate(-50%,-8px);transition:opacity .2s,transform .2s;pointer-events:none}
@@ -725,7 +737,7 @@ html.ar-lock,html.ar-lock body{overflow:hidden;overscroll-behavior:none}
     <div class="ar-top">
       <button class="ar-chip" id="arClose" type="button" aria-label="Close camera">✕</button>
       <span class="ar-title" id="arTitle">THAYA CAM</span>
-      <span class="ar-top-r"><button class="ar-chip ar-world" id="arWorld" type="button" aria-pressed="false" aria-label="AR mode: keep Thaya on her spot when the camera moves" hidden>AR</button><button class="ar-chip" id="arFlip" type="button" aria-label="Switch camera" hidden>FLIP</button></span>
+      <span class="ar-top-r"><button class="ar-chip ar-3d" id="arNativeBtn" type="button" aria-label="3D: open Thaya in the iPhone AR viewer" hidden>3D</button><button class="ar-chip ar-world" id="arWorld" type="button" aria-pressed="false" aria-label="AR mode: keep Thaya on her spot when the camera moves" hidden>AR</button><button class="ar-chip" id="arFlip" type="button" aria-label="Switch camera" hidden>FLIP</button></span>
     </div>
     <div class="ar-size"><button class="ar-chip" id="arBigger" type="button" aria-label="Make Thaya bigger">+</button><button class="ar-chip" id="arSmaller" type="button" aria-label="Make Thaya smaller">−</button></div>
     <div class="ar-hint" id="arHint" role="status"></div>
@@ -752,6 +764,16 @@ html.ar-lock,html.ar-lock body{overflow:hidden;overscroll-behavior:none}
     <img id="arShot" alt="Your photo with Thaya">
     <p class="ar-review-tip">Tip: you can also long-press the photo to save it.</p>
     <div class="ar-review-btns"><button class="ar-pill ghost" id="arRetake" type="button">Retake</button><button class="ar-pill" id="arSave" type="button">Save photo</button><button class="ar-pill" id="arShare" type="button" hidden>Share</button></div>
+  </div>
+  <div class="ar-native" id="arNative" role="dialog" aria-modal="true" aria-labelledby="arNativeTitle" hidden>
+    <div class="ar-native-card">
+      <b id="arNativeTitle">THAYA IN YOUR ROOM</b>
+      <p>Opens the iPhone AR viewer. Thaya locks onto the floor: walk closer and she gets bigger, walk around her to see her from every side. Tap the shutter there for a photo, hold it for a video.</p>
+      <div class="ar-native-size" role="group" aria-label="Size"><button class="ar-pill" type="button" data-qlsize="life" aria-pressed="true">Life-size</button><button class="ar-pill ghost" type="button" data-qlsize="mini" aria-pressed="false">Mini</button></div>
+      <a class="ar-ql busy" id="arQL" rel="ar" download="thaya.usdz"><img id="arQLImg" alt="Open the AR viewer"></a>
+      <p class="ar-native-status" id="arQLStatus" aria-live="polite">Getting Thaya ready…</p>
+      <button class="ar-pill ghost" id="arNativeClose" type="button">Back to Thaya Cam</button>
+    </div>
   </div>
   <p class="sr-only" id="arSr" aria-live="polite"></p>
 </div>
@@ -4602,6 +4624,7 @@ const MEMI = {
   whale: () => P(2, 5, 11, 4, '#3f6fd1') + P(3, 4, 8, 1, '#3f6fd1') + P(0, 3, 2, 2, '#3f6fd1') + P(1, 5, 2, 1, '#3f6fd1') + P(3, 8, 9, 2, '#9cc3f5') + P(10, 5, 1, 1, '#ffffff') + P(7, 1, 1, 2, '#bfe3ff') + P(6, 0, 1, 1, '#bfe3ff') + P(8, 0, 1, 1, '#bfe3ff') + P(1, 12, 14, 1, '#8fbff5'),
   storm: () => P(3, 2, 10, 4, '#8a95ad') + P(5, 1, 5, 1, '#8a95ad') + P(2, 4, 12, 3, '#a7b1c6') + P(7, 7, 3, 1, '#ffd36e') + P(6, 8, 3, 1, '#ffd36e') + P(7, 9, 2, 1, '#ffd36e') + P(6, 10, 2, 1, '#ffd36e') + P(3, 9, 1, 2, '#5f9be8') + P(12, 9, 1, 2, '#5f9be8'),
   stars: () => P(9, 1, 3, 1, '#ffe7a3') + P(11, 2, 2, 3, '#ffe7a3') + P(9, 5, 3, 1, '#ffe7a3') + P(10, 4, 1, 1, '#ffe7a3') + P(3, 3, 1, 1, '#ffffff') + P(2, 4, 3, 1, '#ffffff') + P(3, 5, 1, 1, '#ffffff') + P(6, 8, 1, 1, '#ffffff') + P(13, 9, 1, 1, '#ffffff') + P(2, 10, 12, 3, '#2a3760') + P(4, 9, 3, 1, '#2a3760'),
+  standee: () => P(6, 1, 4, 4, '#d9b99b') + P(7, 2, 2, 2, '#f6d3bd') + P(5, 5, 6, 4, '#8db6ef') + P(5, 9, 6, 3, '#f2f0e6') + P(6, 12, 1, 1, '#c98f4f') + P(9, 12, 1, 1, '#c98f4f') + P(1, 13, 14, 1, '#9fabc6') + P(10, 13, 4, 1, '#6f7a93') + P(12, 2, 1, 1, '#ffd36e') + P(13, 1, 1, 1, '#ffd36e') + P(13, 3, 1, 1, '#ffd36e'),
   camera: () => P(2, 5, 12, 8, '#ff9cbc') + P(5, 3, 4, 2, '#ff9cbc') + P(3, 6, 2, 1, '#ffd6e4') + P(6, 6, 5, 5, '#3d2b4f') + P(7, 7, 3, 3, '#7d9df0') + P(7, 7, 1, 1, '#ffffff') + P(12, 6, 1, 1, '#ffe7a3') + heartPx(11, 0),
   food: (name) => { const f = [...FOODS, ...HATED].find((x) => x.name === name); return f ? f.icon() : ''; },
 };
@@ -4633,6 +4656,7 @@ const MEMORIES = [
   { id: 'whale', title: 'Blue whale dreams', desc: 'The gentlest giant. My favorite animal, framed on my wall.', icon: MEMI.whale, hint: 'Her favorite animal is on the wall.' },
   { id: 'thunder', title: 'Thunder scare', desc: 'The sky went BOOM and I jumped. Totally not scared. Okay, a little.', icon: MEMI.storm, hint: 'Bogor weather can be loud.' },
   { id: 'ar_photo', title: 'Selfie with Thaya', desc: "Our first photo together on Thaya Cam. I'm basically a filter now. A cute one.", icon: MEMI.camera, hint: 'Take a photo with her.' },
+  { id: 'ar_room', title: 'Thaya in your world', desc: "I stood in your room through the AR viewer. Walked around me yet? All sides are my good side.", icon: MEMI.standee, hint: 'Open the 3D view in Thaya Cam on an iPhone.' },
   { id: 'late_night', title: 'Up past midnight', desc: 'Still awake past midnight, hanging out with you. Worth it.', icon: MEMI.stars, hint: 'Stay up very late with her.' },
 ];
 const MEM_BY_ID = Object.fromEntries(MEMORIES.map((m) => [m.id, m]));
@@ -4921,7 +4945,7 @@ const arShuffle = () => arSetPose(arPickPose());
 function arSetAuto(on) { AR.auto = on; $('#arAuto').setAttribute('aria-pressed', String(on)); AR.autoAt = now() + 4800; }
 function arTick() {
   if (!AR.open) return;
-  if (AR.auto && !AR.reviewing && !AR.counting && !AR.gesture && now() >= AR.autoAt) arShuffle();
+  if (AR.auto && !AR.reviewing && !AR.counting && !AR.gesture && !QL.open && now() >= AR.autoAt) arShuffle();
 }
 function arMsg(title, text, showRetry) {
   const m = $('#arMsg');
@@ -5026,11 +5050,12 @@ function openAR() {
   arSetAuto(AR.auto);
   clearInterval(AR.tickId); AR.tickId = setInterval(arTick, 250);
   requestAnimationFrame(() => { arPlace(); $('#arClose').focus({ preventScroll: true }); });
-  if (!AR.hinted) { AR.hinted = true; setTimeout(() => AR.open && arToast('Tap the floor to place Thaya. Drag to move her, pinch or scroll to resize.', 3600), 600); }
+  if (!AR.hinted) { AR.hinted = true; setTimeout(() => AR.open && arToast(AR_QL ? 'Tip: tap 3D to put Thaya in your room for real (she locks onto the floor).' : 'Tap the floor to place Thaya. Drag to move her, pinch or scroll to resize.', 4200), 600); }
   if (AR.src === 'image' && AR.bgImg) { arBg.hidden = false; arVideo.hidden = true; } else arStartCamera();
 }
 function closeAR(returnFocus, fromAct) {
   if (!AR.open) return;
+  if (QL.open) closeNative();
   AR.open = false; clearInterval(AR.tickId); cancelAnimationFrame(AR.raf); AR.world = false; arStopStream(); arCloseReview();
   arEl.hidden = true; AR.ptrs.clear(); AR.gesture = null; AR.counting = false;
   document.documentElement.classList.remove('ar-lock'); document.querySelector('.wrap').inert = false;
@@ -5229,6 +5254,222 @@ async function arShareShot() {
   try { await navigator.share({ files: [new File([AR.shotBlob], AR.shotName, { type: 'image/jpeg' })], title: 'Thaya Cam' }); } catch (e) { /* share cancelled */ }
 }
 
+/* ---- Native AR on iPhone (AR Quick Look). ARKit tracks the room (with LiDAR when the phone has it):
+   Thaya locks onto the floor, gets bigger as you walk closer and can be seen from every side.
+   The page builds a little USDZ standee of the current pose on the fly. ---- */
+const AR_QL = (() => { try { const a = document.createElement('a'); return !!(a.relList && a.relList.supports && a.relList.supports('ar')); } catch (e) { return false; } })();
+const QL = { url: '', size: 'life', token: 0, opened: false, open: false };
+const QL_HEIGHT = { life: 1.55, mini: 0.35 };     // metres
+const QL_CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+function qlCrc(d) { let c = 0xffffffff; for (let i = 0; i < d.length; i++) c = QL_CRC[(c ^ d[i]) & 0xff] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0; }
+function qlZip(files) {
+  // USDZ is a plain zip: stored (not compressed) and every file's data starts on a 64-byte boundary
+  const enc = new TextEncoder(), parts = [], dir = []; let off = 0;
+  files.forEach((f) => {
+    const name = enc.encode(f.name), crc = qlCrc(f.data), base = off + 30 + name.length, pad = (64 - ((base + 4) % 64)) % 64, xl = 4 + pad;
+    const h = new DataView(new ArrayBuffer(30));
+    h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(8, 0, true); h.setUint16(12, 0x21, true);
+    h.setUint32(14, crc, true); h.setUint32(18, f.data.length, true); h.setUint32(22, f.data.length, true); h.setUint16(26, name.length, true); h.setUint16(28, xl, true);
+    const x = new Uint8Array(xl), xv = new DataView(x.buffer); xv.setUint16(0, 0x3039, true); xv.setUint16(2, pad, true);
+    parts.push(new Uint8Array(h.buffer), name, x, f.data); dir.push({ name, crc, size: f.data.length, off });
+    off += 30 + name.length + xl + f.data.length;
+  });
+  const cdStart = off;
+  dir.forEach((d) => {
+    const c = new DataView(new ArrayBuffer(46));
+    c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint16(14, 0x21, true);
+    c.setUint32(16, d.crc, true); c.setUint32(20, d.size, true); c.setUint32(24, d.size, true); c.setUint16(28, d.name.length, true); c.setUint32(42, d.off, true);
+    parts.push(new Uint8Array(c.buffer), d.name); off += 46 + d.name.length;
+  });
+  const e = new DataView(new ArrayBuffer(22));
+  e.setUint32(0, 0x06054b50, true); e.setUint16(8, dir.length, true); e.setUint16(10, dir.length, true); e.setUint32(12, off - cdStart, true); e.setUint32(16, cdStart, true);
+  parts.push(new Uint8Array(e.buffer));
+  return new Blob(parts, { type: 'model/vnd.usdz+zip' });
+}
+const qlPNG = (cv) => new Promise((res) => cv.toBlob((b) => b.arrayBuffer().then((buf) => res(new Uint8Array(buf))), 'image/png'));
+function qlThayaTex(i) {
+  // the pose at twice its size with hard pixels, so she stays crisp at life size
+  const img = AR.sheet, cw = img.naturalWidth / AR_COLS, ch = img.naturalHeight / AR_ROWS;
+  const c = document.createElement('canvas'); c.width = Math.round(cw * 2); c.height = Math.round(ch * 2);
+  const x = c.getContext('2d'); x.imageSmoothingEnabled = false;
+  x.drawImage(img, (i % AR_COLS) * cw, Math.floor(i / AR_COLS) * ch, cw, ch, 0, 0, c.width, c.height);
+  return c;
+}
+function qlBubbleTex(text) {
+  const W = 640, pad = 34, fs = 40, lh = fs * 1.3, b = 8;
+  const m = document.createElement('canvas').getContext('2d'); m.font = `600 ${fs}px "Pixelify Sans", ui-monospace, monospace`;
+  const lines = arWrap(m, text, W - pad * 2 - b * 2), boxH = lines.length * lh + pad * 1.4, H = Math.ceil(boxH + b * 2 + 34);
+  const c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
+  x.fillStyle = '#3d2b4f'; x.fillRect(0, b, W, boxH); x.fillRect(b, 0, W - 2 * b, boxH + 2 * b);
+  x.fillStyle = '#ffffff'; x.fillRect(b, b, W - 2 * b, boxH);
+  const tx = W / 2 - 27, ty = boxH + b;    // the stepped tail, three times the size of the camera bubble's
+  AR_TAIL.forEach(([px, py, w, h, col]) => { x.fillStyle = col; x.fillRect(tx + px * 3, ty + py * 3 - (col === '#ffffff' ? b : 0), w * 3, h * 3 + (col === '#ffffff' && py === 0 ? b : 0)); });
+  x.fillStyle = '#3d2b4f'; x.font = m.font; x.textBaseline = 'top';
+  lines.forEach((l, k) => x.fillText(l, b + pad, b + pad * 0.7 + k * lh + (lh - fs) / 2));
+  return c;
+}
+function qlShadowTex(i, w, h) {
+  // soft shadow lying on the floor: a contact blob under her shoes and her silhouette falling behind and to the right
+  const X0 = -0.45 * h, X1 = 0.75 * h, Zb = -0.62 * h, Zf = 0.14 * h, S = 512, kx = S / (X1 - X0), kz = S / (Zf - Zb), s = 0.46, sk = Math.tan(40 * Math.PI / 180);
+  const c = document.createElement('canvas'); c.width = S; c.height = S; const x = c.getContext('2d');
+  x.setTransform(kx, 0, -kx * sk * s, kz * s, -X0 * kx, -Zb * kz);
+  x.globalAlpha = 0.34; x.imageSmoothingEnabled = true; x.drawImage(arSilhouette(i), -w / 2, -h, w, h);
+  x.setTransform(kx, 0, 0, kz, -X0 * kx, -Zb * kz); x.globalAlpha = 1;
+  x.save(); x.scale(1, 0.22); const g = x.createRadialGradient(0, 0, 0, 0, 0, w * 0.4);
+  g.addColorStop(0, 'rgba(10,5,15,.55)'); g.addColorStop(0.55, 'rgba(10,5,15,.25)'); g.addColorStop(1, 'rgba(10,5,15,0)');
+  x.fillStyle = g; x.fillRect(-w * 0.4, -w * 0.4, w * 0.8, w * 0.8); x.restore();
+  return { c, X0, X1, Zb, Zf };
+}
+const qlF = (n) => (Math.round(n * 100000) / 100000).toString();
+const qlV3 = (v) => `(${v.map(qlF).join(', ')})`;
+function qlQuad(name, mat, P, uv, n, back) {
+  // one or two faces (front and back) made of four corners; the back can carry its own UVs
+  const pts = back ? [...P, ...P.map((p) => [p[0] - n[0] * 0.002, p[1] - n[1] * 0.002, p[2] - n[2] * 0.002])] : P;
+  const nrm = back ? [n, n, n, n, n.map((t) => -t), n.map((t) => -t), n.map((t) => -t), n.map((t) => -t)] : [n, n, n, n];
+  const st = back ? [...uv, ...back] : uv;
+  return `
+            def Mesh "${name}" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                int[] faceVertexCounts = [${back ? '4, 4' : '4'}]
+                int[] faceVertexIndices = [0, 1, 2, 3${back ? ', 5, 4, 7, 6' : ''}]
+                rel material:binding = </Materials/${mat}>
+                normal3f[] normals = [${nrm.map(qlV3).join(', ')}] (
+                    interpolation = "vertex"
+                )
+                point3f[] points = [${pts.map(qlV3).join(', ')}]
+                texCoord2f[] primvars:st = [${st.map((t) => `(${qlF(t[0])}, ${qlF(t[1])})`).join(', ')}] (
+                    interpolation = "vertex"
+                )
+                uniform token subdivisionScheme = "none"
+            }`;
+}
+function qlMaterial(name, tex, lit) {
+  const p = `/Materials/${name}`;
+  return `
+    def Material "${name}"
+    {
+        token outputs:surface.connect = <${p}/Surface.outputs:surface>
+
+        def Shader "Surface"
+        {
+            uniform token info:id = "UsdPreviewSurface"
+            color3f inputs:diffuseColor${lit ? `.connect = <${p}/Tex.outputs:rgb>` : ' = (0, 0, 0)'}
+            float inputs:metallic = 0
+            float inputs:opacity.connect = <${p}/Tex.outputs:a>
+            float inputs:opacityThreshold = ${lit ? '0.5' : '0'}
+            float inputs:roughness = 1
+            int inputs:useSpecularWorkflow = 0
+            token outputs:surface
+        }
+
+        def Shader "Reader"
+        {
+            uniform token info:id = "UsdPrimvarReader_float2"
+            float2 inputs:fallback = (0, 0)
+            string inputs:varname = "st"
+            float2 outputs:result
+        }
+
+        def Shader "Tex"
+        {
+            uniform token info:id = "UsdUVTexture"
+            asset inputs:file = @textures/${tex}@
+            float2 inputs:st.connect = <${p}/Reader.outputs:result>
+            token inputs:sourceColorSpace = "sRGB"
+            token inputs:wrapS = "clamp"
+            token inputs:wrapT = "clamp"
+            float outputs:a
+            float3 outputs:rgb
+        }
+    }`;
+}
+async function qlBuild() {
+  const tok = ++QL.token, pose = AR.pose, text = AR.line;
+  QL.url && URL.revokeObjectURL(QL.url); QL.url = ''; $('#arQL').removeAttribute('href'); $('#arQL').classList.add('busy');
+  $('#arQLStatus').textContent = 'Getting Thaya ready…';
+  await arLoadSheet();
+  try { await Promise.all([document.fonts.load('600 40px "Pixelify Sans"'), document.fonts.load('700 24px "Silkscreen"')]); } catch (e) { /* fonts optional */ }
+  const img = AR.sheet, h = QL_HEIGHT[QL.size], w = h * (img.naturalWidth / AR_COLS) / (img.naturalHeight / AR_ROWS);
+  const bub = qlBubbleTex(text), bw = h * 0.62, bh = bw * bub.height / bub.width, by = h * 1.03;
+  const sh = qlShadowTex(pose, w, h), y0 = 0.002;
+  const [pThaya, pBub, pShadow] = await Promise.all([qlPNG(qlThayaTex(pose)), qlPNG(bub), qlPNG(sh.c)]);
+  const usda = `#usda 1.0
+(
+    customLayerData = {
+        string creator = "Thaya-gotchi"
+    }
+    defaultPrim = "Root"
+    metersPerUnit = 1
+    upAxis = "Y"
+)
+
+def Xform "Root" (
+    assetInfo = {
+        string name = "Thaya"
+    }
+    kind = "component"
+)
+{
+    def Scope "Scenes" (
+        kind = "sceneLibrary"
+    )
+    {
+        def Xform "Scene" (
+            customData = {
+                bool preliminary_collidesWithEnvironment = 0
+                string sceneName = "Scene"
+            }
+            sceneName = "Scene"
+        )
+        {
+            token preliminary:anchoring:type = "plane"
+            token preliminary:planeAnchoring:alignment = "horizontal"
+${qlQuad('Thaya', 'Thaya', [[-w / 2, 0, 0], [w / 2, 0, 0], [w / 2, h, 0], [-w / 2, h, 0]], [[0, 0], [1, 0], [1, 1], [0, 1]], [0, 0, 1], [[0, 0], [1, 0], [1, 1], [0, 1]])}
+${qlQuad('Bubble', 'Bubble', [[-bw / 2, by, 0.01], [bw / 2, by, 0.01], [bw / 2, by + bh, 0.01], [-bw / 2, by + bh, 0.01]], [[0, 0], [1, 0], [1, 1], [0, 1]], [0, 0, 1], [[1, 0], [0, 0], [0, 1], [1, 1]])}
+${qlQuad('Shadow', 'Shadow', [[sh.X0, y0, sh.Zf], [sh.X1, y0, sh.Zf], [sh.X1, y0, sh.Zb], [sh.X0, y0, sh.Zb]], [[0, 0], [1, 0], [1, 1], [0, 1]], [0, 1, 0], null)}
+        }
+    }
+}
+
+def "Materials"
+{${qlMaterial('Thaya', 'thaya.png', true)}
+${qlMaterial('Bubble', 'bubble.png', true)}
+${qlMaterial('Shadow', 'shadow.png', false)}
+}
+`;
+  const blob = qlZip([{ name: 'thaya.usda', data: new TextEncoder().encode(usda) }, { name: 'textures/thaya.png', data: pThaya }, { name: 'textures/bubble.png', data: pBub }, { name: 'textures/shadow.png', data: pShadow }]);
+  if (tok !== QL.token || !QL.open) return null;
+  QL.url = URL.createObjectURL(blob); QL.blob = blob;
+  const a = $('#arQL'); a.href = QL.url; a.classList.remove('busy');
+  $('#arQLStatus').textContent = `${AR_POSES[pose].name} pose · ${QL.size === 'life' ? 'life-size, about 155 cm' : 'mini, about 35 cm'}`;
+  return blob;
+}
+function qlButtonImage() {
+  const c = document.createElement('canvas'), W = 520, H = 120; c.width = W; c.height = H; const x = c.getContext('2d');
+  x.fillStyle = '#3d2b4f'; x.fillRect(0, 6, W, H - 18); x.fillRect(6, 0, W - 12, H - 6);
+  x.fillStyle = '#ff9cbc'; x.fillRect(6, 6, W - 12, H - 24); x.fillStyle = 'rgba(0,0,0,.14)'; x.fillRect(6, H - 30, W - 12, 12);
+  x.fillStyle = '#3d2b4f'; x.font = '700 38px "Silkscreen", ui-monospace, monospace'; x.textAlign = 'center'; x.textBaseline = 'middle';
+  x.fillText('OPEN AR VIEW', W / 2, (H - 18) / 2 + 2);
+  return c.toDataURL('image/png');
+}
+async function openNative() {
+  if (!AR.open) return;
+  touch(); QL.open = true; QL.opened = false;
+  try { await document.fonts.load('700 38px "Silkscreen"'); } catch (e) { /* fonts optional */ }
+  $('#arQLImg').src = qlButtonImage();
+  document.querySelectorAll('[data-qlsize]').forEach((b) => { const on = b.dataset.qlsize === QL.size; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('ghost', !on); });
+  $('#arNative').hidden = false; setTimeout(() => $('#arNativeClose').focus({ preventScroll: true }), 30);
+  qlBuild();
+}
+function closeNative() {
+  if (!QL.open) return;
+  QL.open = false; QL.token++; $('#arNative').hidden = true;
+  if (QL.opened && AR.open && AR.src === 'camera' && !AR.stream) arStartCamera();
+  AR.autoAt = now() + 4800;
+}
+
 (function buildAR() {
   $('#arTail').innerHTML = AR_TAIL.map(([x, y, w, h, c]) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${c}"/>`).join('');
   $('#arMarkHeart').innerHTML = [[0, 0, 2], [3, 0, 2], [0, 1, 5], [1, 2, 3], [2, 3, 1]].map(([x, y, w]) => `<rect x="${x}" y="${y}" width="${w}" height="1" fill="#ff7fab"/>`).join('');
@@ -5253,6 +5494,17 @@ async function arShareShot() {
     if (!AR.stream && AR.open) { AR.facing = prev; arToast('No other camera found.'); arStartCamera(); }
   });
   $('#arClose').addEventListener('click', () => closeAR(true));
+  if (AR_QL) $('#arNativeBtn').hidden = false;
+  $('#arNativeBtn').addEventListener('click', openNative);
+  $('#arNativeClose').addEventListener('click', closeNative);
+  document.querySelectorAll('[data-qlsize]').forEach((b) => b.addEventListener('click', () => {
+    QL.size = b.dataset.qlsize; document.querySelectorAll('[data-qlsize]').forEach((o) => { o.setAttribute('aria-pressed', String(o === b)); o.classList.toggle('ghost', o !== b); }); qlBuild();
+  }));
+  $('#arQL').addEventListener('click', (e) => {
+    if (!QL.url) { e.preventDefault(); return; }
+    // the AR viewer needs the camera, so let go of ours until she comes back
+    QL.opened = true; arStopStream(); unlockMemory('ar_room'); S.mood = Math.min(100, S.mood + 4);
+  });
   $('#arWorld').addEventListener('click', () => { touch(); arAskSensors(); AR.worldWanted = !AR.world; arSetWorld(!AR.world); });
   $('#arRetake').addEventListener('click', arCloseReview);
   $('#arSave').addEventListener('click', arSave);
@@ -5260,7 +5512,7 @@ async function arShareShot() {
   $('#actPhoto').addEventListener('click', openAR);
   document.addEventListener('keydown', (e) => {
     if (!AR.open) return;
-    if (e.key === 'Escape') { e.preventDefault(); if (AR.reviewing) arCloseReview(); else closeAR(true); }
+    if (e.key === 'Escape') { e.preventDefault(); if (QL.open) closeNative(); else if (AR.reviewing) arCloseReview(); else closeAR(true); }
   });
   window.addEventListener('resize', () => requestAnimationFrame(arPlace));
   document.addEventListener('visibilitychange', () => {
@@ -5324,7 +5576,7 @@ function fmtAway(ms) { const m = Math.round(ms / 60000); if (m < 60) return `${m
   setTimeout(() => unlockMemory('first_visit'), 2500);
   setInterval(animTick, 100); setInterval(logicTick, 1000); setInterval(save, 5000);
   setTimeout(async () => { const g0 = curGroup(), ak = GROUP_KEYS[g0][1]; try { await loadSheet(ak, SHEET_SRC[ak]); SETS[g0].A = A = buildActSets(ak); } catch (e) { SETS[g0].A = A = null; } sheetsReady = true; }, 600);
-  window.Thaya = { ar: () => AR, arOpen: () => openAR(), state: S, sheets: Sheets, startHobby: (k) => startHobby(k), event: () => randomEvent(), call: () => kidiCall(), sing: () => singEvent(), rage: () => enterRage('sudden'), bathroom: (k) => startBathroom(k || 'pee'), act: () => act.type, say: (t) => say(t), bgmObj: () => BGM, bgm: () => BGM.ctx && { state: BGM.ctx.state, mode: S.bgm, out: BGM.out.gain.value, rain: BGM.rainBus.gain.value, lofi: BGM.lofiBus.gain.value, step: BGM.step }, meow: () => greyMeow(false), wear: (id) => wearOutfit(id), outfit: () => S.outfit, ready: () => sheetsReady, loadGroup: (g) => ensureGroup(g), sets: SETS, show: (f) => { act = { type: 'idle' }; poseUntil = now() + 4000; showFrame(f); }, visit: (id) => catVisit(id), mama: () => mamaCall(), callNow: () => { nextCallAt = 0; kidiCall(); }, callState: () => act.type, inbox: () => openInbox(), mems: () => MEMS, unlock: (id) => unlockMemory(id), book: () => openMemoryBook(), allMems: () => MEMORIES.map((m) => `<div style="width:104px;text-align:center;font:10px monospace">${memSVG(m).replace('<svg ', '<svg width="72" height="64" ')}<br>${m.title}</div>`).join(''), fp: () => FP, allFoods: () => [...FOODS, ...HATED].map((f) => `<div style="width:96px;text-align:center;font:11px monospace">${foodSVG(f).replace('<svg ', '<svg width="80" height="70" ')}<br>${f.name}</div>`).join(''), games: () => openGames(), gm: () => GM, ibState: () => IBS, kidiSends: () => kidiSends(), obj: (id) => { const el = document.querySelector(`[data-obj="${id}"]`); if (el) objTap(id, el); }, visitor: () => visitor && { id: visitor.id, pose: visitor.pose, leaving: !!visitor.leaving } };
+  window.Thaya = { ar: () => AR, arOpen: () => openAR(), qlTest: async (size) => { QL.open = true; QL.size = size || 'life'; const b = await qlBuild(); const u = new Uint8Array(await b.arrayBuffer()); let t = ''; for (let i = 0; i < u.length; i += 8192) t += String.fromCharCode.apply(null, u.subarray(i, i + 8192)); return btoa(t); }, state: S, sheets: Sheets, startHobby: (k) => startHobby(k), event: () => randomEvent(), call: () => kidiCall(), sing: () => singEvent(), rage: () => enterRage('sudden'), bathroom: (k) => startBathroom(k || 'pee'), act: () => act.type, say: (t) => say(t), bgmObj: () => BGM, bgm: () => BGM.ctx && { state: BGM.ctx.state, mode: S.bgm, out: BGM.out.gain.value, rain: BGM.rainBus.gain.value, lofi: BGM.lofiBus.gain.value, step: BGM.step }, meow: () => greyMeow(false), wear: (id) => wearOutfit(id), outfit: () => S.outfit, ready: () => sheetsReady, loadGroup: (g) => ensureGroup(g), sets: SETS, show: (f) => { act = { type: 'idle' }; poseUntil = now() + 4000; showFrame(f); }, visit: (id) => catVisit(id), mama: () => mamaCall(), callNow: () => { nextCallAt = 0; kidiCall(); }, callState: () => act.type, inbox: () => openInbox(), mems: () => MEMS, unlock: (id) => unlockMemory(id), book: () => openMemoryBook(), allMems: () => MEMORIES.map((m) => `<div style="width:104px;text-align:center;font:10px monospace">${memSVG(m).replace('<svg ', '<svg width="72" height="64" ')}<br>${m.title}</div>`).join(''), fp: () => FP, allFoods: () => [...FOODS, ...HATED].map((f) => `<div style="width:96px;text-align:center;font:11px monospace">${foodSVG(f).replace('<svg ', '<svg width="80" height="70" ')}<br>${f.name}</div>`).join(''), games: () => openGames(), gm: () => GM, ibState: () => IBS, kidiSends: () => kidiSends(), obj: (id) => { const el = document.querySelector(`[data-obj="${id}"]`); if (el) objTap(id, el); }, visitor: () => visitor && { id: visitor.id, pose: visitor.pose, leaving: !!visitor.leaving } };
 })();
 })();
 </script>
