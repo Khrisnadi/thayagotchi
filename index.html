@@ -181,6 +181,35 @@ button{font:inherit;color:inherit}
 .curtain.r{right:calc(var(--px) * -8)}
 .curtain::after{content:"";position:absolute;left:calc(var(--px) * -1);right:calc(var(--px) * -1);top:58%;height:calc(var(--px) * 2);background:var(--blue);box-shadow:0 0 0 calc(var(--px) * .5) var(--ink-soft)}
 .valance{position:absolute;left:calc(var(--px) * -9);right:calc(var(--px) * -9);top:calc(var(--px) * -4);height:calc(var(--px) * 4);background:var(--curtain-d);box-shadow:0 calc(var(--px) * 1) 0 var(--curtain),0 0 0 calc(var(--px) * .5) var(--ink-soft);z-index:4}
+.calendar{position:absolute;left:calc(6% + var(--px) * 21);top:calc(var(--px) * 18);width:calc(var(--px) * 14);height:calc(var(--px) * 17);z-index:2;font-family:var(--font-display)}
+.calendar svg{position:absolute;inset:0}
+.cal-m{position:absolute;left:0;right:0;top:calc(var(--px) * 3.2);text-align:center;color:#fff;font-size:calc(var(--px) * 2.3);line-height:1;letter-spacing:.5px;pointer-events:none}
+.cal-d{position:absolute;left:0;right:0;top:calc(var(--px) * 7.4);text-align:center;color:var(--ink);font-size:calc(var(--px) * 5.2);line-height:1;pointer-events:none}
+.calendar .badge{position:absolute;top:-6px;right:-8px;min-width:18px;height:18px;padding:0 4px;display:flex;align-items:center;justify-content:center;background:#ff5c93;color:#fff;font-size:10px;box-shadow:0 0 0 2px var(--ink)}
+.calendar .badge[hidden]{display:none}
+.mem-book{width:min(390px,calc(100% - 20px))}
+.mb-month{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:8px 8px 4px;flex:none}
+.mb-month span{font-family:var(--font-display);font-size:11px;letter-spacing:1px}
+.mb-nav{border:0;cursor:pointer;width:28px;height:26px;background:#f4effb;box-shadow:0 0 0 2px var(--ink);font-weight:700;color:var(--ink)}
+.mb-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;padding:2px 8px 8px;flex:none}
+.mb-wd{font-family:var(--font-display);font-size:9px;text-align:center;color:var(--ink-soft)}
+.mb-day{position:relative;display:flex;align-items:center;justify-content:center;height:26px;font-family:var(--font-display);font-size:10px;color:var(--ink-soft);background:#f6f2fb;border:0;padding:0}
+.mb-day.today{box-shadow:inset 0 0 0 2px #7d9df0;color:var(--ink)}
+.mb-day.has{cursor:pointer;background:var(--pink-soft);color:var(--ink);box-shadow:0 0 0 2px var(--ink)}
+.mb-day.has i{position:absolute;right:1px;top:-1px;font-style:normal;font-size:9px;color:#ff5c93}
+.mb-day.sel{background:#ff9cbc;color:#fff}
+.mb-cards{overflow:auto;padding:4px 8px 10px;display:grid;gap:8px;align-content:start;min-height:0;flex:1;border-top:2px dashed #ecdff0}
+.mem-card{display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px;align-items:center;background:#fff;padding:7px 9px;box-shadow:0 0 0 2px var(--ink)}
+.mem-card svg{width:52px;height:46px}
+.mem-card small{display:block;font-family:var(--font-display);font-size:9px;letter-spacing:1px;color:var(--ink-soft)}
+.mem-card b{display:block;font-size:14px;line-height:1.2;margin:1px 0 2px}
+.mem-card p{margin:0;font-size:13px;line-height:1.3;color:var(--ink)}
+.mem-card.locked{background:#f4f1f8;box-shadow:0 0 0 2px #b9adc9}
+.mem-card.locked b,.mem-card.locked p{color:var(--ink-soft)}
+.mem-q{display:flex;align-items:center;justify-content:center;width:46px;height:42px;background:#e5dff0;color:#9a8db0;font-family:var(--font-display);font-size:20px}
+.mb-filter{border:0;cursor:pointer;font-family:var(--font-body);font-weight:700;font-size:12px;padding:4px 8px;background:#f4effb;box-shadow:0 0 0 2px var(--ink)}
+.mb-filter[hidden]{display:none}
+.mb-day:focus-visible,.mb-nav:focus-visible,.mb-filter:focus-visible{outline:3px dashed var(--pink);outline-offset:2px}
 .vinyl{position:absolute;left:6%;top:calc(var(--px) * 17);width:calc(var(--px) * 18);height:calc(var(--px) * 18);z-index:2}
 .whale{position:absolute;left:5%;top:calc(var(--px) * 40);width:calc(var(--px) * 30);height:calc(var(--px) * 20);z-index:2}
 .sillvase{position:absolute;right:calc(var(--px) * 3);bottom:calc(var(--px) * 3);width:calc(var(--px) * 9);height:calc(var(--px) * 12);z-index:3}
@@ -468,6 +497,7 @@ button{font:inherit;color:inherit}
             <div class="sillvase" data-obj="sillvase" role="button" tabindex="0" aria-label="Tulips on the windowsill. Ask Thaya about them."><svg id="sillVaseSvg" viewBox="0 0 9 12" width="100%" height="100%" aria-hidden="true"></svg></div>
             <div class="cat" id="cat" role="button" tabindex="0" aria-label="Grey the cat, napping on the windowsill"><svg id="catSvg" viewBox="0 0 17 10" width="100%" height="100%" aria-hidden="true"></svg></div>
           </div>
+          <div class="calendar" id="calendar" data-obj="calendar" role="button" tabindex="0" aria-label="Calendar and Memory Book. Tap to open."><svg viewBox="0 0 14 17" width="100%" height="100%" aria-hidden="true" id="calSvg"></svg><span class="cal-m" id="calMonth">NOV</span><span class="cal-d" id="calDay">8</span><b class="badge" id="calBadge" hidden>0</b></div>
           <div class="vinyl" data-obj="vinyl" role="button" tabindex="0" aria-label="A vinyl record on the wall. Ask Thaya about it."><svg id="vinylSvg" viewBox="0 0 18 18" width="100%" height="100%" aria-hidden="true"></svg></div>
           <div class="whale" data-obj="whale" role="button" tabindex="0" aria-label="Framed blue whale picture. Ask Thaya about it."><svg id="whaleSvg" viewBox="0 0 30 20" width="100%" height="100%" aria-hidden="true"></svg></div>
           <div class="clock" data-obj="clock" role="button" tabindex="0" aria-label="Clock on Bogor time. Ask Thaya about it."><span id="clockH">00</span><span class="colon">:</span><span id="clockM">00</span><small>BOGOR</small></div>
@@ -509,6 +539,12 @@ button{font:inherit;color:inherit}
           <div class="photo-view" id="photoView" role="dialog" aria-label="Photobooth with Kidi, Jogja" hidden>
             <div class="pv-head"><span>PHOTOBOOTH · JOGJA</span><button class="cp-x" id="photoClose" type="button" aria-label="Close photo">&#x2715;</button></div>
             <div class="pv-body"><img id="photoFull" alt="Photobooth strip: Thaya and Kidi in six poses, taken when Thaya visited Kidi in Jogja"></div>
+          </div>
+          <div class="inbox-panel mem-book" id="memBook" role="dialog" aria-labelledby="mbTitle" hidden>
+            <div class="ib-head"><span class="ib-title" id="mbTitle">MEMORY BOOK</span><span class="gm-score" id="mbCount">0 / 0</span><button class="cp-x" id="mbClose" type="button" aria-label="Close Memory Book">&#x2715;</button></div>
+            <div class="mb-month"><button class="mb-nav" id="mbPrev" type="button" aria-label="Previous month">‹</button><span id="mbMonth">NOVEMBER</span><button class="mb-filter" id="mbFilter" type="button" hidden>All memories</button><button class="mb-nav" id="mbNext" type="button" aria-label="Next month">›</button></div>
+            <div class="mb-grid" id="mbGrid"></div>
+            <div class="mb-cards" id="mbCards" aria-live="polite"></div>
           </div>
           <div class="inbox-panel food-panel" id="foodPanel" role="dialog" aria-labelledby="fpTitle" hidden>
             <div class="ib-head"><span class="ib-title" id="fpTitle"><svg viewBox="0 0 8 8" data-icon="cookie" aria-hidden="true"></svg>WHAT SHOULD THAYA EAT?</span><button class="cp-x" id="fpClose" type="button" aria-label="Close food menu">&#x2715;</button></div>
@@ -2259,6 +2295,8 @@ function buildDecor() {
   [[1, 3], [7, 0], [15, 2], [16, 7], [2, 1], [11, 1], [9, 5]].forEach(([x, y]) => { bq += R(x, y, 1, 1, '#ffffff'); });
   bq += R(5, 16, 8, 2, '#5b8fe0') + R(3, 15, 3, 2, '#5b8fe0') + R(12, 15, 3, 2, '#5b8fe0') + R(8, 16, 2, 2, '#3d6fc4') + R(7, 18, 1, 3, '#5b8fe0') + R(10, 18, 1, 3, '#5b8fe0');
   $('#bouquetSvg').innerHTML = bq;
+  // wall calendar (doubles as the Memory Book)
+  $('#calSvg').innerHTML = R(0, 2, 14, 15, ink) + R(1, 3, 12, 13, '#ffffff') + R(1, 3, 12, 4, '#ff7fab') + R(1, 6, 12, 1, '#f58fb3') + R(3, 0, 1, 4, '#9aa4b8') + R(10, 0, 1, 4, '#9aa4b8') + R(2, 14, 10, 1, '#f1ecf6') + R(11, 15, 2, 1, '#e3dcee');
   // the air conditioner above the window (just decoration for now)
   let ac = R(0, 0, 36, 9, ink) + R(1, 1, 34, 7, '#f7f8fc') + R(1, 1, 34, 1, '#ffffff') + R(1, 6, 34, 2, '#e3e6ef');
   for (let x = 3; x < 33; x += 2) ac += R(x, 7, 1, 1, '#c3c8d6');
@@ -2633,6 +2671,7 @@ function startHobby(kind, invited) {
     SFX.play('tune');
     const tr = pickTrack(0.45); tr.src = 'hobby'; setNowPlaying(tr);
     let text;
+    if (tr.olivia) unlockMemory('olivia');
     if (tr.kon || tr.jpop) text = musicLine(tr.kon ? 'startKon' : 'startJpop', tr);
     else if (tr.olivia) text = musicLine('startOlivia', tr);
     else if (!tr.title) text = musicLine('recent', tr);
@@ -2804,6 +2843,9 @@ function giveSnack(auto, food) {
   if (act.type === 'hobby') act = { type: 'idle' };
   walk.active = false;
   const snack = food;
+  if (snack.hated) unlockMemory('peanut');
+  else if (snack.name === 'matcha latte') unlockMemory('matcha');
+  else if (snack.name === 'rendang') unlockMemory('rendang');
   if (snack.hated) {
     // peanuts: a big mood drop and no food for five seconds
     const d = -Math.round(rand(18, 26)); S.mood += d; flashMood(d);
@@ -2864,6 +2906,7 @@ function mamaCall() {
   const onCall = mamaDuringCallOK();
   if (!onCall && !mamaOK()) return false;
   if (GM.open) { closeGames(false, false, true); toast('Game paused: Mama is calling!'); }
+  unlockMemory('mama');
   if (act.type === 'hobby') act = { type: 'idle' };
   walk.active = false;
   $('#mamaText').textContent = line('mamaCall');
@@ -2937,6 +2980,7 @@ function bathroomTick(t) {
 }
 function startNap(auto) {
   if (sleepingNow()) return;
+  unlockMemory('nap');
   if (!auto) touch();
   if (act.type === 'hobby') act = { type: 'idle' };
   walk.active = false; sleepTalked = false;
@@ -2964,7 +3008,7 @@ function yawn() { startAct('react', 1500, F.yawn, 1500); }
 function thunder() {
   const flash = (el, peak) => el.animate([{ opacity: 0 }, { opacity: peak, offset: 0.1 }, { opacity: 0, offset: 0.3 }, { opacity: peak * 0.7, offset: 0.4 }, { opacity: 0 }], { duration: 900, easing: 'steps(9)' });
   flash($('#winFlash'), 0.9); if (!reduceMotion) flash($('#roomFlash'), 0.25);
-  setTimeout(() => { SFX.play('thunder'); BGM.thunderSwell(); }, 350);
+  setTimeout(() => { SFX.play('thunder'); BGM.thunderSwell(); unlockMemory('thunder'); }, 350);
   if (act.type === 'sleep') { if (!Bubble.visible) say('...zzz... huh? ...zzz...'); return; }
   if (act.type === 'hobby') { if (!Bubble.reading()) setTimeout(() => say(line('thunder')), 400); return; }
   if (act.type !== 'idle' && act.type !== 'react') return;
@@ -3011,6 +3055,7 @@ function endRage(calmed) {
   room.classList.remove('rage'); $('#moodbar').classList.remove('rage'); $('#ragebar').classList.remove('show');
   if (act.type === 'rage') act = { type: 'idle' };
   if (calmed) {
+    unlockMemory('made_up');
     S.mood = Math.max(S.mood, 58); SFX.play('heart'); flashMood(1); hop(14);
     const hp = headPoint(); spawn('heart', hp.x, hp.y - M.charH * 0.1, 7, { spread: M.charW * 0.45, rise: 100, stagger: 80 });
     startAct('react', 3200, [pick(F.calm), pick(F.lovely)], 1600); say(line('rageCalm'));
@@ -3087,6 +3132,7 @@ function singEvent() {
   else { text = musicLine(tr.olivia ? 'singOlivia' : 'sing', tr); delta = rand(4, 10); }
   delta = Math.round(delta); S.mood += delta; if (Math.abs(delta) >= 3) flashMood(delta);
   setNowPlaying(Object.assign(tr, { src: 'sing' }));
+  unlockMemory('sing'); if (tr.olivia) unlockMemory('olivia');
   const seq = A ? shuffle([...A.sing, ...A.sing, ...A.music.slice(0, 4)]) : F.happy;
   startAct('sing', clamp(3500 + text.length * 45, 6000, 11000), seq, 1300, () => { poseUntil = 0; });
   hop(12); SFX.play('tune');
@@ -3112,6 +3158,7 @@ function kidiCall() {
   setTimeout(() => ph.classList.remove('ring'), 900);
 }
 function endCall() {
+  unlockMemory('first_call');
   $('#callbar').classList.remove('show');
   S.mood += 6; flashMood(1); SFX.play('heart');
   const hp = headPoint(); spawn('heart', hp.x, hp.y - M.charH * 0.1, 6, { spread: M.charW * 0.4, rise: 90 });
@@ -3197,6 +3244,7 @@ function logicTick() {
   }
   if (S.energy < 5 && t >= collapseBlockUntil && !sleepingNow() && !rage.active && !bath && !IB.open && !GM.open && !['call', 'eat', 'bathroom', 'inbox', 'game'].includes(act.type)) startNap(true);
   if (t >= nextSwingAt) { nextSwingAt = t + rand(18000, 32000); randomEvent(); }
+  if (hourNow < 4 && F.happy) unlockMemory('late_night');
   if (t >= nextMeowAt) { nextMeowAt = t + rand(18000, 45000); greyMeow(false); }
   if (t >= nextVisitAt) { nextVisitAt = t + rand(70000, 150000); catVisit(); }
   if (t >= nextCallAt) { nextCallAt = t + rand(55000, 110000); kidiCall(); }
@@ -3296,6 +3344,7 @@ async function wearOutfit(id) {
   spawn('heart', hp2.x, hp2.y - M.charH * 0.1, 2, { spread: M.charW * 0.3, rise: 80 });
   if (['idle', 'hobby', 'react'].includes(act.type)) startAct('react', 2600, [pick(F.gesture), pick(F.happy)], 1300);
   say(line('fit_' + id));
+  if (id === 'yui' || id === 'casual') unlockMemory(id);
 }
 syncFits();
 
@@ -3493,6 +3542,7 @@ function greyMeow(byTap) {
 function catTap(e) {
   if (e) e.preventDefault();
   touch();
+  { const h = new Date().getHours(); if (h >= 11 && h < 19) unlockMemory('rain_grey'); else if (h >= 20 || h < 4) unlockMemory('night_grey'); }
   const r = $('#cat').getBoundingClientRect(), rr = room.getBoundingClientRect();
   spawn('heart2', r.left - rr.left + r.width / 2, r.top - rr.top, 3, { spread: 14, rise: 50 });
   greyMeow(true);
@@ -3561,6 +3611,7 @@ function catVisit(id) {
 }
 function catArrive() {
   const v = visitor; if (!v) return; const c = CATS[v.id];
+  unlockMemory(v.id);
   const rest = sleepingNow() ? 'loaf' : c.rest;
   vEl.classList.toggle('flip', rest === 'loaf' && v.dir > 0);
   vPose(rest); vMeow(false);
@@ -3633,6 +3684,12 @@ document.addEventListener('pointerdown', (e) => { if (!photoView.hidden && !phot
 
 /* ---------- the room is a museum: every object has a story ---------- */
 const OBJECTS = {
+  calendar: [
+    "My calendar doubles as a memory book. Every heart is a day I want to remember.",
+    "Look! A girl's room is a museum, and this calendar is the museum's diary.",
+    "Some days are just days. Some days get a heart. You're in a lot of the hearts.",
+    "I write down the little things. Matcha days, rainy days, Kidi days.",
+  ],
   photo: [
     "This is from when I went to Jogja to see Kidi. We found a photobooth and... yeah. Six photos, six levels of chaos.",
     "Photobooth with Kidi in Jogja! Look at his 'shh' pose. So mysterious. So Kidi.",
@@ -3742,6 +3799,11 @@ objTap.token = 0;
 function objTap(id, el) {
   const lines = OBJECTS[id]; if (!lines) return;
   if (id === 'photo') openPhoto();
+  if (id === 'calendar') openMemoryBook();
+  if (id !== 'calendar') unlockMemory('museum');
+  if (id === 'bouquet' || id === 'plant') unlockMemory('flowers');
+  if (id === 'photo') unlockMemory('photobooth');
+  if (id === 'whale') unlockMemory('whale');
   touch(); SFX.init(); SFX.play('click');
   const cls = BIG_OBJ.includes(id) ? 'obj-flash' : 'obj-poke';
   el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); setTimeout(() => el.classList.remove(cls), 520);
@@ -3765,7 +3827,7 @@ function objTap(id, el) {
   tell();
 }
 room.addEventListener('click', (e) => {
-  if (e.target.closest('#cat, #visitor, #closet, #closetPanel, .bubble, .sprite')) return;
+  if (e.target.closest('#cat, #visitor, #closet, #closetPanel, #memBook, .bubble, .sprite')) return;
   const el = e.target.closest('[data-obj]'); if (el && room.contains(el)) objTap(el.dataset.obj, el);
 });
 room.addEventListener('keydown', (e) => {
@@ -4026,6 +4088,7 @@ function ibOpenMsg(id) {
 }
 function thayaReadsMsg(e, first) {
   const c = INBOX_CATS.find((x) => x.k === e.cat) || INBOX_FALLBACK, sp = !!(KIDI_BY_ID[e.id] && KIDI_BY_ID[e.id].sp);
+  if (sp) unlockMemory('special_convo');
   const sweet = c.tone === 'sweet' || c.tone === 'deep' || sp;
   if (act.type === 'inbox') { act.seq = inboxFrames(sweet); act.i = 0; act.nextFrameAt = 0; }
   const hp = headPoint();
@@ -4107,6 +4170,7 @@ function gmMenu() {
 }
 // a finished round: update score, mood, Thaya's reaction
 function gmRound(outcome, game) {
+  if (outcome === 'thaya') unlockMemory('game_win'); else if (outcome === 'you') unlockMemory('game_lose');
   if (outcome === 'thaya') { GM.thaya++; GM.streak = GM.streak > 0 ? GM.streak + 1 : 1; }
   else if (outcome === 'you') { GM.you++; GM.streak = GM.streak < 0 ? GM.streak - 1 : -1; }
   gmScore();
@@ -4325,6 +4389,157 @@ $('#fpBody').addEventListener('click', (e) => {
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && FP.open) { e.preventDefault(); closeFoodPicker(true); } });
 document.addEventListener('pointerdown', (e) => { if (FP.open && !e.target.closest('#foodPanel, #actSnack')) closeFoodPicker(false); });
 
+/* =========================================================
+   Memory Book: the wall calendar keeps a card for every special moment
+   ========================================================= */
+const heartPx = (x, y, c = '#ff5c93') => P(x, y, 2, 1, c) + P(x + 3, y, 2, 1, c) + P(x, y + 1, 5, 1, c) + P(x + 1, y + 2, 3, 1, c) + P(x + 2, y + 3, 1, 1, c);
+const catFace = (body, dark, eye = '#f2c94c', oneEye = false) => P(3, 1, 2, 2, body) + P(11, 1, 2, 2, body) + P(2, 3, 12, 8, body) + P(4, 2, 8, 1, body) + P(3, 11, 10, 1, body)
+  + P(5, 5, 2, 2, oneEye ? dark : eye) + P(9, 5, 2, 2, eye) + P(7, 8, 2, 1, '#ff9cbc') + P(6, 9, 1, 1, dark) + P(9, 9, 1, 1, dark) + P(4, 2, 1, 1, '#ffb3cd') + P(11, 2, 1, 1, '#ffb3cd');
+const MEMI = {
+  door: () => P(4, 3, 8, 10, '#c98f4f') + P(5, 4, 6, 4, '#d9a75e') + P(5, 9, 6, 3, '#d9a75e') + P(10, 8, 1, 1, '#f2c94c') + P(2, 13, 12, 1, '#9fabc6') + heartPx(10, 0),
+  note: () => P(8, 1, 2, 9, '#7f6bd1') + P(10, 1, 3, 2, '#7f6bd1') + P(12, 3, 1, 2, '#7f6bd1') + P(4, 8, 5, 4, '#7f6bd1') + P(5, 9, 2, 1, '#b8a8f0') + heartPx(1, 1, '#c792ea'),
+  greyRain: () => catFace('#a3a9b4', '#4b4f5a', '#7fd6a8') + P(0, 0, 1, 2, '#5f9be8') + P(14, 4, 1, 2, '#5f9be8') + P(1, 7, 1, 2, '#5f9be8') + P(15, 9, 1, 2, '#5f9be8'),
+  greyMoon: () => catFace('#a3a9b4', '#4b4f5a', '#7fd6a8') + P(13, 0, 2, 1, '#ffe7a3') + P(14, 1, 2, 2, '#ffe7a3') + P(13, 3, 2, 1, '#ffe7a3') + P(0, 1, 1, 1, '#ffffff'),
+  flowers: () => P(6, 7, 1, 5, '#4f9d6f') + P(8, 6, 1, 6, '#4f9d6f') + P(10, 7, 1, 5, '#4f9d6f') + P(4, 3, 4, 4, '#ff7fab') + P(5, 4, 2, 2, '#ffe7a3') + P(8, 2, 4, 4, '#8db6ef') + P(9, 3, 2, 2, '#ffffff') + P(10, 5, 4, 3, '#ffb3cd') + P(5, 9, 7, 4, '#ffd6e4') + P(7, 10, 3, 1, '#ff7fab'),
+  phone: () => P(5, 1, 6, 12, '#3d2b4f') + P(6, 2, 4, 9, '#ffc0d3') + P(7, 11, 2, 1, '#9fabc6') + heartPx(6, 5, '#ff5c93') + P(12, 2, 1, 1, '#ffd36e') + P(13, 1, 1, 1, '#ffd36e') + P(12, 5, 2, 1, '#ffd36e'),
+  letter: (mark = 'heart') => P(1, 4, 14, 9, '#ffffff') + P(1, 4, 14, 1, '#c7d6f5') + P(2, 5, 2, 1, '#c7d6f5') + P(12, 5, 2, 1, '#c7d6f5') + P(4, 6, 2, 1, '#c7d6f5') + P(10, 6, 2, 1, '#c7d6f5') + P(6, 7, 4, 1, '#c7d6f5') + (mark === 'heart' ? heartPx(6, 9) : P(7, 8, 2, 4, '#f2c94c') + P(6, 9, 4, 2, '#f2c94c')),
+  trophy: () => P(4, 1, 8, 6, '#f2c94c') + P(2, 2, 2, 3, '#f2c94c') + P(12, 2, 2, 3, '#f2c94c') + P(5, 2, 2, 3, '#fff1a8') + P(7, 7, 2, 3, '#d9a43a') + P(5, 10, 6, 2, '#a0682e') + P(4, 12, 8, 1, '#7a4a20'),
+  pad: () => P(2, 4, 12, 7, '#9be3bf') + P(1, 6, 2, 5, '#9be3bf') + P(13, 6, 2, 5, '#9be3bf') + P(4, 6, 1, 3, '#2f7d5b') + P(3, 7, 3, 1, '#2f7d5b') + P(11, 6, 1, 1, '#ff7fab') + P(12, 8, 1, 1, '#ffd36e') + P(10, 8, 1, 1, '#7f9fe0'),
+  guitar: () => P(9, 0, 2, 2, '#3d2b4f') + P(9, 2, 1, 6, '#5a3a22') + P(6, 7, 6, 3, '#c0392b') + P(5, 9, 8, 4, '#c0392b') + P(7, 8, 3, 2, '#f39c5a') + P(6, 12, 6, 1, '#8e2a20') + P(8, 10, 2, 1, '#f2c94c') + heartPx(1, 1),
+  tee: () => P(1, 3, 4, 4, '#1c1c22') + P(11, 3, 4, 4, '#1c1c22') + P(4, 2, 8, 11, '#1c1c22') + P(6, 2, 4, 1, '#3a3a46') + P(8, 5, 2, 1, '#d63440') + P(7, 6, 2, 1, '#d63440') + P(6, 7, 3, 1, '#d63440') + P(7, 8, 1, 1, '#d63440'),
+  house: () => P(3, 6, 10, 7, '#ffe3ee') + P(2, 5, 12, 1, '#c2477a') + P(3, 4, 10, 1, '#c2477a') + P(5, 3, 6, 1, '#c2477a') + P(7, 2, 2, 1, '#c2477a') + P(7, 9, 2, 4, '#c98f4f') + P(4, 7, 2, 2, '#8db6ef') + P(10, 7, 2, 2, '#8db6ef') + heartPx(11, 0),
+  onyon: () => catFace('#a39684', '#4f4640', '#c9c25a') + P(7, 10, 2, 2, '#f6f3ee') + P(5, 3, 1, 2, '#4f4640') + P(10, 3, 1, 2, '#4f4640'),
+  usro: () => catFace('#93805f', '#3a2e25', '#cbbf5c', true) + P(7, 3, 2, 1, '#4d3e2e'),
+  unyil: () => catFace('#26222c', '#0d0b10', '#e5c84a') + P(7, 8, 2, 1, '#6a4a54'),
+  photo: () => P(2, 1, 12, 12, '#ffffff') + P(3, 2, 10, 8, '#dfe6fb') + P(4, 4, 3, 3, '#3d2b4f') + P(4, 7, 3, 3, '#1c1c22') + P(8, 4, 3, 3, '#c6c6cc') + P(9, 5, 1, 2, '#f6d3bd') + P(8, 7, 3, 3, '#e8e4ee') + P(6, 11, 4, 1, '#ff9cbc'),
+  mic: () => P(6, 1, 4, 5, '#9aa4b8') + P(7, 2, 2, 1, '#d5dcea') + P(5, 6, 6, 1, '#5b4f6e') + P(7, 7, 2, 4, '#5b4f6e') + P(5, 11, 6, 1, '#5b4f6e') + P(12, 1, 1, 3, '#7f6bd1') + P(13, 1, 1, 1, '#7f6bd1') + P(11, 3, 2, 2, '#7f6bd1') + P(1, 3, 1, 3, '#5b8fe0') + P(2, 3, 1, 1, '#5b8fe0') + P(0, 5, 2, 2, '#5b8fe0'),
+  nap: () => P(4, 2, 3, 1, '#ffe7a3') + P(3, 3, 2, 1, '#ffe7a3') + P(2, 4, 2, 5, '#ffe7a3') + P(3, 9, 2, 1, '#ffe7a3') + P(4, 10, 3, 1, '#ffe7a3') + P(9, 1, 4, 1, '#7f9fe0') + P(11, 2, 1, 1, '#7f9fe0') + P(10, 3, 1, 1, '#7f9fe0') + P(9, 4, 4, 1, '#7f9fe0') + P(13, 6, 2, 1, '#9cb4ec') + P(14, 7, 1, 1, '#9cb4ec') + P(13, 8, 2, 1, '#9cb4ec'),
+  mended: () => heartPx(1, 2, '#ff5c93') + P(0, 3, 1, 1, '#ff5c93') + P(1, 1, 2, 1, '#ff5c93') + P(4, 1, 2, 1, '#ff5c93') + P(6, 3, 1, 1, '#ff5c93') + P(2, 6, 3, 1, '#ff5c93') + P(3, 7, 1, 1, '#ff5c93') + P(2, 4, 3, 1, '#ffe3c2') + P(9, 3, 5, 4, '#ff7fab') + P(8, 4, 7, 2, '#ff7fab') + P(10, 7, 3, 2, '#ff7fab') + P(11, 9, 1, 1, '#ff7fab') + P(9, 5, 5, 1, '#ffe3c2'),
+  easel: () => P(3, 1, 10, 8, '#c98f4f') + P(4, 2, 8, 6, '#ffffff') + P(5, 4, 3, 3, '#8db6ef') + P(8, 5, 3, 2, '#4f9d6f') + P(9, 3, 2, 1, '#ffd36e') + P(4, 9, 1, 4, '#a0682e') + P(11, 9, 1, 4, '#a0682e') + P(7, 9, 2, 3, '#a0682e'),
+  whale: () => P(2, 5, 11, 4, '#3f6fd1') + P(3, 4, 8, 1, '#3f6fd1') + P(0, 3, 2, 2, '#3f6fd1') + P(1, 5, 2, 1, '#3f6fd1') + P(3, 8, 9, 2, '#9cc3f5') + P(10, 5, 1, 1, '#ffffff') + P(7, 1, 1, 2, '#bfe3ff') + P(6, 0, 1, 1, '#bfe3ff') + P(8, 0, 1, 1, '#bfe3ff') + P(1, 12, 14, 1, '#8fbff5'),
+  storm: () => P(3, 2, 10, 4, '#8a95ad') + P(5, 1, 5, 1, '#8a95ad') + P(2, 4, 12, 3, '#a7b1c6') + P(7, 7, 3, 1, '#ffd36e') + P(6, 8, 3, 1, '#ffd36e') + P(7, 9, 2, 1, '#ffd36e') + P(6, 10, 2, 1, '#ffd36e') + P(3, 9, 1, 2, '#5f9be8') + P(12, 9, 1, 2, '#5f9be8'),
+  stars: () => P(9, 1, 3, 1, '#ffe7a3') + P(11, 2, 2, 3, '#ffe7a3') + P(9, 5, 3, 1, '#ffe7a3') + P(10, 4, 1, 1, '#ffe7a3') + P(3, 3, 1, 1, '#ffffff') + P(2, 4, 3, 1, '#ffffff') + P(3, 5, 1, 1, '#ffffff') + P(6, 8, 1, 1, '#ffffff') + P(13, 9, 1, 1, '#ffffff') + P(2, 10, 12, 3, '#2a3760') + P(4, 9, 3, 1, '#2a3760'),
+  food: (name) => { const f = [...FOODS, ...HATED].find((x) => x.name === name); return f ? f.icon() : ''; },
+};
+const MEMORIES = [
+  { id: 'first_visit', title: 'First time Kidi visited', desc: 'You opened the door to my little room for the very first time. Welcome in, Kidi!', icon: MEMI.door, hint: 'Open the door to her room.' },
+  { id: 'matcha', title: 'Her favorite matcha', desc: 'A matcha latte, milky and green. Someone knows me way too well.', icon: () => MEMI.food('matcha latte'), hint: 'Give her the drink she loves most.' },
+  { id: 'olivia', title: 'Olivia Rodrigo hour', desc: 'Olivia Rodrigo came on and I sang every word. Emotionally. Loudly.', icon: MEMI.note, hint: 'Her favorite artist, on her playlist.' },
+  { id: 'rain_grey', title: 'Rainy afternoon with Grey', desc: 'Rain on the window, Grey purring on the sill. A perfect slow afternoon.', icon: MEMI.greyRain, hint: 'Say hi to Grey on a rainy afternoon.' },
+  { id: 'night_grey', title: 'Midnight with Grey', desc: 'Late at night, just me, the rain, and one very sleepy grey cat.', icon: MEMI.greyMoon, hint: 'Visit Grey late at night.' },
+  { id: 'flowers', title: 'Thaya received flowers', desc: 'The bouquet from my thesis defense. Dried now, but still the main exhibit.', icon: MEMI.flowers, hint: 'Ask about the flowers on her desk.' },
+  { id: 'special_convo', title: 'A special conversation with Kidi', desc: 'Kidi sent something I want to keep forever. The sweetest message in my inbox.', icon: () => MEMI.letter('heart'), hint: 'Read a special message from Kidi.' },
+  { id: 'first_call', title: 'First call with Kidi', desc: 'We talked until my cheeks hurt from smiling.', icon: MEMI.phone, hint: 'Wait for Kidi to call.' },
+  { id: 'saved_msg', title: 'Saved forever', desc: "I saved one of Kidi's messages as a memory. Don't tell him. Okay, tell him.", icon: () => MEMI.letter('star'), hint: 'Save a message from the inbox.' },
+  { id: 'rendang', title: 'Rendang day', desc: 'My favorite food in the whole universe. Pure happiness on a plate.', icon: () => MEMI.food('rendang'), hint: 'Her favorite food of all time.' },
+  { id: 'peanut', title: 'The great peanut betrayal', desc: 'Someone offered me peanut sauce. I will remember this. Forever.', icon: () => MEMI.food('batagor'), hint: 'Something she really, really hates.' },
+  { id: 'game_win', title: 'Champion of Bogor', desc: 'Beat you at a game. Victory tastes like matcha.', icon: MEMI.trophy, hint: 'Let her win a game.' },
+  { id: 'game_lose', title: 'A worthy opponent', desc: 'Lost a game to you. I demand a rematch. This card is evidence.', icon: MEMI.pad, hint: 'Beat her at a game.' },
+  { id: 'yui', title: 'Light Music Club', desc: 'Cosplayed Yui Hirasawa! Yataaa! Hair clips, ribbon, imaginary Gitah.', icon: MEMI.guitar, hint: 'Something otaku in the wardrobe.' },
+  { id: 'casual', title: 'Hair-down day', desc: 'Comfy black tee, hair down. Casual Thaya, rare sighting.', icon: MEMI.tee, hint: 'Pick a comfy outfit.' },
+  { id: 'mama', title: 'Dedeee!', desc: 'Mama called me from the other room. I came running, like always.', icon: MEMI.house, hint: 'Mama needs Dede for something.' },
+  { id: 'onyon', title: 'Onyon came to visit', desc: 'My fluffy little menace wandered onto the desk and stole the show.', icon: MEMI.onyon, hint: 'A fluffy visitor.' },
+  { id: 'usro', title: 'Usro dropped by', desc: 'One eye, full heart. The calmest cat in Bogor.', icon: MEMI.usro, hint: 'A calm visitor.' },
+  { id: 'unyil', title: "Unyil's desk nap", desc: 'A tiny black void fell asleep right on my desk.', icon: MEMI.unyil, hint: 'A sleepy visitor.' },
+  { id: 'photobooth', title: 'Jogja photobooth', desc: 'Six photos, six levels of chaos. The day I went to Jogja to see Kidi.', icon: MEMI.photo, hint: 'Look closely at the shelf.' },
+  { id: 'sing', title: 'Concert for one', desc: 'Sang my heart out in my room. Grey was the only audience.', icon: MEMI.mic, hint: 'Sometimes she sings.' },
+  { id: 'nap', title: 'Rainy nap', desc: 'Drifted off to the sound of rain. The best kind of sleep.', icon: MEMI.nap, hint: 'Let her rest.' },
+  { id: 'made_up', title: 'Made up after a storm', desc: 'I was so mad. Then you stayed and tapped until I smiled again.', icon: MEMI.mended, hint: 'Calm her down when she is furious.' },
+  { id: 'museum', title: 'Welcome to the museum', desc: 'Gave my first tour of the Museum of Thaya. Every object has a story.', icon: MEMI.easel, hint: 'Tap something in her room.' },
+  { id: 'whale', title: 'Blue whale dreams', desc: 'The gentlest giant. My favorite animal, framed on my wall.', icon: MEMI.whale, hint: 'Her favorite animal is on the wall.' },
+  { id: 'thunder', title: 'Thunder scare', desc: 'The sky went BOOM and I jumped. Totally not scared. Okay, a little.', icon: MEMI.storm, hint: 'Bogor weather can be loud.' },
+  { id: 'late_night', title: 'Up past midnight', desc: 'Still awake past midnight, hanging out with you. Worth it.', icon: MEMI.stars, hint: 'Stay up very late with her.' },
+];
+const MEM_BY_ID = Object.fromEntries(MEMORIES.map((m) => [m.id, m]));
+const MEM_KEY = 'thayagotchi.memories.v1';
+const MEMS = (() => { try { const d = JSON.parse(localStorage.getItem(MEM_KEY) || 'null'); if (d && d.got) return d; } catch (e) { /* ignore */ } return { got: {}, unseen: 0 }; })();
+const saveMems = () => { try { localStorage.setItem(MEM_KEY, JSON.stringify(MEMS)); } catch (e) { /* storage unavailable */ } };
+function memSVG(m) {
+  const key = 'mem:' + m.id;
+  if (!FOOD_SVG_CACHE[key]) foodSVG({ name: key, icon: m.icon });
+  return `<svg viewBox="0 0 18 16" shape-rendering="crispEdges" aria-hidden="true">${FOOD_SVG_CACHE[key]}</svg>`;
+}
+let memQueue = [], memToastBusy = false;
+function unlockMemory(id) {
+  const m = MEM_BY_ID[id]; if (!m || MEMS.got[id]) return false;
+  MEMS.got[id] = Date.now(); MEMS.unseen = (MEMS.unseen || 0) + 1; saveMems(); syncCalendar();
+  if (MB.open) { MEMS.unseen = 0; saveMems(); syncCalendar(); mbRender(); SFX.play('tune'); return true; }
+  memQueue.push(m); showMemToast();
+  return true;
+}
+function showMemToast() {
+  if (memToastBusy || !memQueue.length) return;
+  memToastBusy = true; const m = memQueue.shift();
+  setTimeout(() => {
+    if (MB.open) { memToastBusy = false; return; }
+    toast(`✦ New memory: ${m.title}`); SFX.play('tune');
+    const r = $('#calendar').getBoundingClientRect(), rr = room.getBoundingClientRect();
+    spawn('sparkle', r.left - rr.left + r.width / 2, r.top - rr.top + r.height / 3, 4, { spread: r.width / 2, rise: 40, size: 4 });
+    setTimeout(() => { memToastBusy = false; showMemToast(); }, 2900);
+  }, 900);
+}
+/* the calendar on the wall */
+const MONTHS_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+function syncCalendar() {
+  const d = new Date();
+  $('#calMonth').textContent = MONTHS[d.getMonth()].toUpperCase();
+  $('#calDay').textContent = d.getDate();
+  const n = MEMS.unseen || 0, b = $('#calBadge'); b.hidden = !n; b.textContent = n > 9 ? '9+' : String(n);
+  $('#calendar').setAttribute('aria-label', `Calendar and Memory Book${n ? `, ${n} new memor${n === 1 ? 'y' : 'ies'}` : ''}. Tap to open.`);
+}
+/* the Memory Book panel */
+const MB = { open: false, y: 0, m: 0, day: null };
+const dayKey = (t) => { const d = new Date(t); return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`; };
+const fmtMemDate = (t) => { const d = new Date(t); return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; };
+function mbRender() {
+  const got = Object.keys(MEMS.got).filter((id) => MEM_BY_ID[id]);
+  $('#mbCount').textContent = `${got.length} / ${MEMORIES.length}`;
+  $('#mbMonth').textContent = `${MONTHS_LONG[MB.m].toUpperCase()} ${MB.y}`;
+  const byDay = {}; got.forEach((id) => { const k = dayKey(MEMS.got[id]); (byDay[k] = byDay[k] || []).push(id); });
+  const first = new Date(MB.y, MB.m, 1).getDay(), days = new Date(MB.y, MB.m + 1, 0).getDate(), todayK = dayKey(Date.now());
+  let cells = ['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((w) => `<span class="mb-wd">${w}</span>`).join('');
+  for (let i = 0; i < first; i++) cells += '<span></span>';
+  for (let d = 1; d <= days; d++) {
+    const k = `${MB.y}-${MB.m}-${d}`, has = byDay[k], sel = MB.day === k;
+    cells += has
+      ? `<button class="mb-day has${k === todayK ? ' today' : ''}${sel ? ' sel' : ''}" type="button" data-day="${k}" aria-pressed="${sel}" aria-label="${d} ${MONTHS_LONG[MB.m]}: ${has.length} memor${has.length === 1 ? 'y' : 'ies'}">${d}<i aria-hidden="true">♥</i></button>`
+      : `<span class="mb-day${k === todayK ? ' today' : ''}">${d}</span>`;
+  }
+  $('#mbGrid').innerHTML = cells;
+  let list = got.slice().sort((a, b) => MEMS.got[b] - MEMS.got[a]);
+  if (MB.day) list = list.filter((id) => dayKey(MEMS.got[id]) === MB.day);
+  let html = list.map((id) => { const m = MEM_BY_ID[id]; return `<article class="mem-card">${memSVG(m)}<div><small>${fmtMemDate(MEMS.got[id])}</small><b>${m.title}</b><p>${m.desc}</p></div></article>`; }).join('');
+  if (!MB.day) html += MEMORIES.filter((m) => !MEMS.got[m.id]).map((m) => `<article class="mem-card locked"><span class="mem-q" aria-hidden="true">?</span><div><small>NOT FOUND YET</small><b>???</b><p>Hint: ${m.hint}</p></div></article>`).join('');
+  $('#mbCards').innerHTML = html || '<p class="ib-empty">No memories on this day.</p>';
+  $('#mbFilter').hidden = !MB.day;
+}
+function openMemoryBook() {
+  if (closetOpen) closeCloset(false);
+  if (GM.open) closeGames(false);
+  if (FP.open) closeFoodPicker(false);
+  const d = new Date(); MB.y = d.getFullYear(); MB.m = d.getMonth(); MB.day = null;
+  MB.open = true; MEMS.unseen = 0; saveMems(); syncCalendar(); mbRender();
+  memQueue.length = 0; if (/New memory/.test($('#toast').textContent)) $('#toast').classList.remove('show');
+  const p = $('#memBook'); p.hidden = false; requestAnimationFrame(() => p.classList.add('show'));
+  setTimeout(() => $('#mbClose').focus({ preventScroll: true }), 30);
+}
+function closeMemoryBook(returnFocus) {
+  if (!MB.open) return;
+  MB.open = false; const p = $('#memBook'); p.classList.remove('show'); p.hidden = true;
+  if (returnFocus) $('#calendar').focus({ preventScroll: true });
+}
+$('#mbClose').addEventListener('click', (e) => { e.stopPropagation(); closeMemoryBook(true); });
+$('#memBook').addEventListener('click', (e) => {
+  e.stopPropagation();
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.id === 'mbPrev' || b.id === 'mbNext') { MB.m += b.id === 'mbPrev' ? -1 : 1; if (MB.m < 0) { MB.m = 11; MB.y--; } if (MB.m > 11) { MB.m = 0; MB.y++; } MB.day = null; mbRender(); }
+  else if (b.dataset.day) { MB.day = MB.day === b.dataset.day ? null : b.dataset.day; mbRender(); }
+  else if (b.id === 'mbFilter') { MB.day = null; mbRender(); }
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && MB.open) { e.preventDefault(); closeMemoryBook(true); } });
+document.addEventListener('pointerdown', (e) => { if (MB.open && !e.target.closest('#memBook, #calendar')) closeMemoryBook(false); });
+syncCalendar(); setInterval(syncCalendar, 60000);
+
 $('#actGym').addEventListener('click', () => {
   touch(); SFX.init(); SFX.play('click');
   toast('Gym is coming soon! (Work in progress)');
@@ -4346,6 +4561,7 @@ ibPanel.addEventListener('click', (e) => {
   else if (id === 'ibSave') {
     const e2 = IBS.list.find((x) => x.id === IB.cur); if (!e2) return;
     e2.saved = !e2.saved; saveInbox(); ibRender();
+    if (e2.saved) unlockMemory('saved_msg');
     if (e2.saved) { SFX.play('heart'); const hp = headPoint(); spawn('heart', hp.x, hp.y - M.charH * 0.1, 4, { spread: M.charW * 0.3, rise: 80 }); if (!e2.memBonus) { e2.memBonus = true; S.mood += 2; saveInbox(); } }
     say(line(e2.saved ? 'memSave' : 'memUnsave'));
     const b = $('#ibSave'); if (b) b.focus({ preventScroll: true });
@@ -4382,9 +4598,10 @@ function fmtAway(ms) { const m = Math.round(ms / 60000); if (m < 60) return `${m
   } catch (e) { $('#loader').textContent = 'Could not load Thaya. Please reload the page.'; return; }
   updateHud();
   setTimeout(() => { hop(14); say(greeting); }, 400);
+  setTimeout(() => unlockMemory('first_visit'), 2500);
   setInterval(animTick, 100); setInterval(logicTick, 1000); setInterval(save, 5000);
   setTimeout(async () => { const g0 = curGroup(), ak = GROUP_KEYS[g0][1]; try { await loadSheet(ak, SHEET_SRC[ak]); SETS[g0].A = A = buildActSets(ak); } catch (e) { SETS[g0].A = A = null; } sheetsReady = true; }, 600);
-  window.Thaya = { state: S, sheets: Sheets, startHobby: (k) => startHobby(k), event: () => randomEvent(), call: () => kidiCall(), sing: () => singEvent(), rage: () => enterRage('sudden'), bathroom: (k) => startBathroom(k || 'pee'), act: () => act.type, say: (t) => say(t), bgmObj: () => BGM, bgm: () => BGM.ctx && { state: BGM.ctx.state, mode: S.bgm, out: BGM.out.gain.value, rain: BGM.rainBus.gain.value, lofi: BGM.lofiBus.gain.value, step: BGM.step }, meow: () => greyMeow(false), wear: (id) => wearOutfit(id), outfit: () => S.outfit, ready: () => sheetsReady, loadGroup: (g) => ensureGroup(g), sets: SETS, show: (f) => { act = { type: 'idle' }; poseUntil = now() + 4000; showFrame(f); }, visit: (id) => catVisit(id), mama: () => mamaCall(), callNow: () => { nextCallAt = 0; kidiCall(); }, callState: () => act.type, inbox: () => openInbox(), fp: () => FP, allFoods: () => [...FOODS, ...HATED].map((f) => `<div style="width:96px;text-align:center;font:11px monospace">${foodSVG(f).replace('<svg ', '<svg width="80" height="70" ')}<br>${f.name}</div>`).join(''), games: () => openGames(), gm: () => GM, ibState: () => IBS, kidiSends: () => kidiSends(), obj: (id) => { const el = document.querySelector(`[data-obj="${id}"]`); if (el) objTap(id, el); }, visitor: () => visitor && { id: visitor.id, pose: visitor.pose, leaving: !!visitor.leaving } };
+  window.Thaya = { state: S, sheets: Sheets, startHobby: (k) => startHobby(k), event: () => randomEvent(), call: () => kidiCall(), sing: () => singEvent(), rage: () => enterRage('sudden'), bathroom: (k) => startBathroom(k || 'pee'), act: () => act.type, say: (t) => say(t), bgmObj: () => BGM, bgm: () => BGM.ctx && { state: BGM.ctx.state, mode: S.bgm, out: BGM.out.gain.value, rain: BGM.rainBus.gain.value, lofi: BGM.lofiBus.gain.value, step: BGM.step }, meow: () => greyMeow(false), wear: (id) => wearOutfit(id), outfit: () => S.outfit, ready: () => sheetsReady, loadGroup: (g) => ensureGroup(g), sets: SETS, show: (f) => { act = { type: 'idle' }; poseUntil = now() + 4000; showFrame(f); }, visit: (id) => catVisit(id), mama: () => mamaCall(), callNow: () => { nextCallAt = 0; kidiCall(); }, callState: () => act.type, inbox: () => openInbox(), mems: () => MEMS, unlock: (id) => unlockMemory(id), book: () => openMemoryBook(), allMems: () => MEMORIES.map((m) => `<div style="width:104px;text-align:center;font:10px monospace">${memSVG(m).replace('<svg ', '<svg width="72" height="64" ')}<br>${m.title}</div>`).join(''), fp: () => FP, allFoods: () => [...FOODS, ...HATED].map((f) => `<div style="width:96px;text-align:center;font:11px monospace">${foodSVG(f).replace('<svg ', '<svg width="80" height="70" ')}<br>${f.name}</div>`).join(''), games: () => openGames(), gm: () => GM, ibState: () => IBS, kidiSends: () => kidiSends(), obj: (id) => { const el = document.querySelector(`[data-obj="${id}"]`); if (el) objTap(id, el); }, visitor: () => visitor && { id: visitor.id, pose: visitor.pose, leaving: !!visitor.leaving } };
 })();
 })();
 </script>
